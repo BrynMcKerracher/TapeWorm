@@ -41,6 +41,7 @@ add_executable(TapeWorm
         AST/OptimiserVisitor.h
         ScannerOptimiser.cpp
         ScannerOptimiser.h
+        Token.cpp
 )
 
 target_link_libraries(TapeWorm Boost::headers)

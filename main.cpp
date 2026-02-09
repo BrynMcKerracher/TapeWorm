@@ -28,13 +28,14 @@ int main(int argc, char** argv) {
     TapeWorm::AST::Debug::ASTAnalyser ASTanalyser;
 
     //const std::string fileString = TapeWorm::Util::FileToString(argv[1]);
-    const std::string fileString = TapeWorm::Util::FileToString("bf/mandelbrot.bf");
+    const std::string fileString = TapeWorm::Util::FileToString("bf/mandel.b");
     //const std::string fileString = TapeWorm::Util::FileToString("bf/stack.bf");
+    //const std::string fileString = TapeWorm::Util::FileToString("bf/brackets.b");
     auto c1 = std::chrono::high_resolution_clock::now();
 
     const auto tokens = scanner.Scan(fileString);
     const auto optTokens = scannerOpt.Optimise(tokens);
-    auto ast = builder.BuildAST(optTokens);
+    auto ast = builder.BuildAST(tokens);
     //optimiser.Optimise(ast);
     //ASTanalyser.Analyse(ast);
 

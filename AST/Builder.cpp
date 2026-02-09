@@ -11,56 +11,51 @@
 namespace TapeWorm::AST {
      Global Builder::BuildAST(const std::vector<InterWorm::Token> &tokens) {
         tokenStream = tokens;
+        tokenStream.pop_back();
+        blockNodes = {};
         Global globalNode = std::make_unique<GlobalNode>();
         current = 0;
 
-        while (!AtEndOfStream()) {
+        while (current < tokenStream.size()) {
             globalNode->subNodes.emplace_back(BuildNextNode());
         }
 
-        return std::move(globalNode);
+        return globalNode;
     }
 
     Node Builder::BuildNextNode() {
-        if (Match({InterWorm::Token::Type::JumpIfZero})) {
-            Block block = std::make_unique<BlockNode>();
-            if (!blockNodes.empty()) blockNodes.top()->isLeaf = false;
-            blockNodes.push(block.get());
-            while (Peek().type != InterWorm::Token::Type::JumpNotZero) {
-                Node expr = BuildNextNode();
-
-                if (AtEndOfStream()) {
-                    throw std::exception("Parse Error: Unmatched '['\n");
-                }
-
-                block->subNodes.emplace_back(std::move(expr));
-            }
-            Consume(InterWorm::Token::Type::JumpNotZero);
-            blockNodes.pop();
-            UpdateStatementStatus(block);
-            return block;
+        Node node = nullptr;
+        if (Match(InterWorm::Token::Type::JumpIfZero)) {
+            node = BuildBlockNode();
         }
+        else node = std::make_unique<AtomicNode>(Current());
         Advance();
-        return std::make_unique<AtomicNode>(Previous());
+        return node;
     }
 
-    bool Builder::Match(const std::initializer_list<InterWorm::Token::Type> types) {
-        for (const InterWorm::Token::Type token : types) {
-            if (Check(token)) {
-                Advance();
-                return true;
-            }
+    Block Builder::BuildBlockNode() {
+         Block block = std::make_unique<BlockNode>();
+         while (Current().type != InterWorm::Token::JumpNotZero) {
+             block->subNodes.push_back(BuildNextNode());
+         }
+         return block;
+    }
+
+    bool Builder::Match(const InterWorm::Token::Type token) {
+        if (Check(token)) {
+            Advance();
+            return true;
         }
         return false;
     }
 
     bool Builder::Check(const InterWorm::Token::Type type) const {
         if (AtEndOfStream()) return false;
-        return Peek().type == type;
+        return Current().type == type;
     }
 
     bool Builder::AtEndOfStream() const {
-        return Peek().type == InterWorm::Token::Type::EndOfFile;
+        return Current().type == InterWorm::Token::Type::EndOfFile;
     }
 
     InterWorm::Token Builder::Advance() {
@@ -73,7 +68,7 @@ namespace TapeWorm::AST {
         throw std::exception("Parse Error!");
     }
 
-    const InterWorm::Token& Builder::Peek() const {
+    const InterWorm::Token& Builder::Current() const {
         return tokenStream[current];
     }
 

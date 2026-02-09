@@ -6,6 +6,7 @@
 #define TAPEWORM_TOKEN_H
 
 #include <cstdint>
+#include <string>
 
 namespace TapeWorm::InterWorm {
     struct Token {
@@ -27,6 +28,9 @@ namespace TapeWorm::InterWorm {
 
         Type type = None;
         int64_t length = 0;
+
+        [[nodiscard]] std::string ToString() const;
+        static std::string ToString(const Token& token);
     };
 }
 

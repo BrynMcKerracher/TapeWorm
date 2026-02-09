@@ -17,24 +17,12 @@ namespace TapeWorm::AST::Debug {
     }
 
     std::any ASTAnalyser::VisitAtomic(AtomicNode *node) {
-        switch (node->token.type) {
-            case InterWorm::Token::IncPointer:  return std::string(">");
-            case InterWorm::Token::DecPointer:  return std::string("<");
-            case InterWorm::Token::IncCell:     return std::string("+");
-            case InterWorm::Token::DecCell:     return std::string("-");
-            case InterWorm::Token::ClearCell:   return std::string("X");
-            case InterWorm::Token::InputCell:   return std::string(",");
-            case InterWorm::Token::OutputCell:  return std::string(".");
-            case InterWorm::Token::JumpIfZero:  return std::string("[");
-            case InterWorm::Token::JumpNotZero: return std::string("]");
-            case InterWorm::Token::Move:        return std::string("A");
-            case InterWorm::Token::Difference:  return std::string("S");
-            default: break;
-        }
-        return std::string("E");
+        nodesVisited++;
+        return InterWorm::Token::ToString(node->token);
     }
 
     std::any ASTAnalyser::VisitBlock(BlockNode *node) {
+        nodesVisited++;
         std::string block = "[";
         for (const Node& subNode : node->subNodes) {
             block += std::any_cast<std::string>(subNode->Accept(this));
@@ -45,6 +33,7 @@ namespace TapeWorm::AST::Debug {
     }
 
     std::any ASTAnalyser::VisitGlobal(GlobalNode *node) {
+        nodesVisited++;
         for (const Node& subNodes : node->subNodes) {
             subNodes->Accept(this);
         }
@@ -64,6 +53,7 @@ namespace TapeWorm::AST::Debug {
         for (const auto& [block, frequency] : pairs) {
             std::cout << block << "\t" << frequency << "\t" << (100.f * (float)frequency / (float)totalBlocks) << "%\n";
         }
+        std::cout << "ASTAnalysis visited " << nodesVisited << " nodes\n";
         return 0;
     }
 }

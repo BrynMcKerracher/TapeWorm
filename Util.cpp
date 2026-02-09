@@ -19,6 +19,15 @@ namespace TapeWorm {
 
         std::stringstream fileBuffer;
         fileBuffer << sourceFile.rdbuf();
-        return fileBuffer.str();
+
+        std::string temp;
+        for (auto c : fileBuffer.str()) {
+            if (c == '+' or c == '-' or c == '[' or c == ']' or
+                c == '.' or c == ',' or c == '<' or c == '>') {
+                temp += c;
+            }
+        }
+
+        return temp;
     }
 } // TapeWorm
