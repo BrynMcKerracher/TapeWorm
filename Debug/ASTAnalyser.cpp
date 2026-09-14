@@ -16,23 +16,23 @@ namespace TapeWorm::AST::Debug {
         globalNode->Accept(this);
     }
 
-    std::any ASTAnalyser::VisitAtomic(AtomicNode *node) {
+    void ASTAnalyser::VisitAtomic(AtomicNode *node) {
         nodesVisited++;
-        return InterWorm::Token::ToString(node->token);
+        std::cout << InterWorm::Token::ToString(node->token);
     }
 
-    std::any ASTAnalyser::VisitBlock(BlockNode *node) {
+    void ASTAnalyser::VisitBlock(BlockNode *node) {
         nodesVisited++;
         std::string block = "[";
         for (const Node& subNode : node->subNodes) {
-            block += std::any_cast<std::string>(subNode->Accept(this));
+            subNode->Accept(this);
         }
         block += "]";
         blockMap[block]++;
-        return block;
+        std::cout << block;
     }
 
-    std::any ASTAnalyser::VisitGlobal(GlobalNode *node) {
+    void ASTAnalyser::VisitGlobal(GlobalNode *node) {
         nodesVisited++;
         for (const Node& subNodes : node->subNodes) {
             subNodes->Accept(this);
@@ -54,6 +54,9 @@ namespace TapeWorm::AST::Debug {
             std::cout << block << "\t" << frequency << "\t" << (100.f * (float)frequency / (float)totalBlocks) << "%\n";
         }
         std::cout << "ASTAnalysis visited " << nodesVisited << " nodes\n";
-        return 0;
+    }
+
+    void ASTAnalyser::VisitLeafStatement(LeafStatementNode *node) {
+
     }
 }

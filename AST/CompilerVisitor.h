@@ -14,13 +14,14 @@ namespace TapeWorm::AST {
     private:
         std::vector<InterWorm::Op::Type> ops;
 
-        std::any VisitAtomic(AtomicNode* node) override;
-        std::any VisitBlock(BlockNode* node) override;
-        std::any VisitGlobal(GlobalNode* node) override;
+        void VisitAtomic(AtomicNode* node) override;
+        void VisitBlock(BlockNode* node) override;
+        void VisitGlobal(GlobalNode* node) override;
+        void VisitLeafStatement(LeafStatementNode *node) override;
 
+        void WriteInt64(int64_t n);
         void WriteOps(std::initializer_list<InterWorm::Op::Type> bytes);
         void WriteOp(InterWorm::Op::Type op);
-        void CompileStatement(const BlockNode* block);
     };
 } // TapeWorm
 

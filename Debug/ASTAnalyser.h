@@ -18,9 +18,10 @@ namespace TapeWorm::AST::Debug {
         std::map<std::string, std::size_t> blockMap;
         std::size_t nodesVisited = 0;
 
-        std::any VisitAtomic(AtomicNode* node) override;
-        std::any VisitBlock(BlockNode* node) override;
-        std::any VisitGlobal(GlobalNode* node) override;
+        void VisitAtomic(AtomicNode* node) override;
+        void VisitBlock(BlockNode* node) override;
+        void VisitGlobal(GlobalNode* node) override;
+        void VisitLeafStatement(LeafStatementNode *node) override;
     };
 }
 

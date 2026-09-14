@@ -3,7 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include <stack>
-#include <chrono>
 #include <asmjit/x86.h>
 #include <asmjit/x86/x86assembler.h>
 #include <asmjit/arm/a64operand.h>
@@ -108,22 +107,27 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::Multiply: {
-                    const auto addr = static_cast<int8_t>(interwormStream[i + 1]);
-                    const auto factor = static_cast<int8_t>(interwormStream[i + 2]);
+                    int64_t addr = 0;
+                    for (int n = 0; n < 8; ++n) {
+                        addr |= interwormStream[i + n + 1] << (8 * n);
+                    }
+                    //const auto addr = static_cast<int8_t>(interwormStream[i + 1]);
+                    const auto factor = static_cast<uint8_t>(interwormStream[i + 9]);
 
-                    assembler.movzx(x86::al, x86::r14);
-                    assembler.mov(x86::r14,factor);
-                    assembler.imul(x86::r14);
+                    std::cout << "addr: " << addr << "\n";
+                    std::cout << "factor: " << (int)factor << "\n";
 
-                    assembler.mov(x86::r14, cellPointer);
-                    assembler.add(x86::r14, addr);
-                    assembler.mov(x86::byte_ptr(x86::r14), x86::al);
+                    assembler.add(cellPointer, addr);
+                    assembler.mov(arithRegister, x86::byte_ptr(cellPointer));
+                    assembler.imul(arithRegister, factor);
+                    assembler.sub(cellPointer, addr);
+                    assembler.movzx(cellPointer, x86::rax);
 
-                    i += 2;
+                    i += 9;
                     break;
                 }
                 case InterWorm::Op::LoadPointer: {
-                    assembler.movzx(x86::r14, x86::byte_ptr(cellPointer));
+                    assembler.movzx(loadRegister, x86::byte_ptr(cellPointer));
                     break;
                 }
                 default: break;
@@ -137,17 +141,13 @@ namespace TapeWorm::JIT {
         MainEntry mainEntry;
         runtime.add(&mainEntry, &code);
 
-        auto e1 = std::chrono::high_resolution_clock::now();
         mainEntry(reinterpret_cast<uintptr_t>(runtimeMemory.data()));
-        auto e2 = std::chrono::high_resolution_clock::now();
-
-        std::cout << "Execute: " << std::chrono::duration_cast<std::chrono::milliseconds>(e2 - e1) << "\n";
 
         runtime.release(mainEntry);
     }
 
-    void Compiler::WriteCharacter(uint8_t character) {
-        std::putchar(character);
+    void Compiler::WriteCharacter(const uint8_t character) {
+        std::cout.put(character);
     }
 
     uint8_t Compiler::ReadCharacter() {

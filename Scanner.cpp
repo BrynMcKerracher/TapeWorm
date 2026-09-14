@@ -11,30 +11,22 @@ namespace TapeWorm::InterWorm {
         start = current = 0;
         sourceCode = source;
         tokens.clear();
+        tokens.reserve(source.size());
 
-        for (current = 0; !AtEndOfSource(); ++current) {
+        for (current = 0; current < sourceCode.size(); ++current) {
             start = current;
             switch (sourceCode[current]) {
-
                 case '>': tokens.push_back(MakeConsecutiveToken(Token::Type::IncPointer, '>')); break;
                 case '<': tokens.push_back(MakeConsecutiveToken(Token::Type::DecPointer, '<')); break;
                 case '+': tokens.push_back(MakeConsecutiveToken(Token::Type::IncCell, '+')); break;
                 case '-': tokens.push_back(MakeConsecutiveToken(Token::Type::DecCell, '-')); break;
                 case '.': tokens.push_back({Token::OutputCell, 1}); break;
                 case ',': tokens.push_back({Token::InputCell, 1}); break;
-                case '[': tokens.push_back(MakeOpenControlFlowToken()); break;
+                case '[': tokens.push_back({Token::JumpIfZero, 1}); break;
                 case ']': tokens.push_back({Token::JumpNotZero, 1}); break;
                 default: break;
             }
-            /*
-            if (tokens.size() > 1) {
-                if (tokens.back().type == tokens[tokens.size() - 2].type) {
-                    std::cout << "Double up! " << tokens.back().type << " \n";
-                }
-            }
-            */
         }
-        tokens.push_back({Token::Type::EndOfFile, 0});
         return tokens;
     }
 
@@ -44,30 +36,11 @@ namespace TapeWorm::InterWorm {
         return {type, current - start + 1};
     }
 
-    Token Scanner::MakeOpenControlFlowToken() {
-        if (Match('+', ']') or Match('-', ']')) {
-            return {Token::Type::ClearCell, 1};
-        }
-        return {Token::Type::JumpIfZero, 1};
-    }
-
-    bool Scanner::AtEndOfSource() const {
-        return current >= sourceCode.size();
-    }
-
     bool Scanner::Match(const char expected) {
-        if (AtEndOfSource()) return false;
+        if (current >= sourceCode.size()) return false;
         if (sourceCode[current] != expected) return false;
 
         current++;
-        return true;
-    }
-
-    bool Scanner::Match(const char a, const char b) {
-        if (current + 1 >= sourceCode.size()) return false;
-        if (sourceCode[current] != a or sourceCode[current + 1] != b) return false;
-
-        current += 2;
         return true;
     }
 }

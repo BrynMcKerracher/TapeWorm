@@ -8,7 +8,7 @@
 #include <fstream>
 
 namespace TapeWorm {
-    std::string Util::FileToString(const std::string &fileName) {
+    std::string Util::BrainFuckFileToString(const std::string &fileName) {
         std::ifstream sourceFile(fileName);
 
         if (!sourceFile.is_open()) {
@@ -29,5 +29,20 @@ namespace TapeWorm {
         }
 
         return temp;
+    }
+
+    std::string Util::FileToString(const std::string &fileName) {
+        std::ifstream sourceFile(fileName);
+
+        if (!sourceFile.is_open()) {
+            throw std::exception {
+                ("Unable to open source file '" + fileName + "'\n").c_str()
+            };
+        }
+
+        std::stringstream fileBuffer;
+        fileBuffer << sourceFile.rdbuf();
+
+        return fileBuffer.str();
     }
 } // TapeWorm

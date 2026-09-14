@@ -14,13 +14,15 @@ namespace TapeWorm::AST {
             None,
             Atomic,
             Block,
-            Global
+            Global,
+            LeafStatement
         };
 
         Type nodeType = None;
 
         virtual ~NodeBase() = default;
-        virtual std::any Accept(struct NodeVisitor* visitor) = 0;
+        virtual void Accept(struct NodeVisitor* visitor) = 0;
+        virtual NodeBase* AcceptEditor(struct NodeEditor* editor) = 0;
     };
 
     typedef std::unique_ptr<NodeBase> Node;

@@ -18,7 +18,8 @@ namespace TapeWorm::AST {
         AtomicNode();
         explicit AtomicNode(const InterWorm::Token& token);
 
-        std::any Accept(NodeVisitor *visitor) override;
+        void Accept(NodeVisitor *visitor) override;
+        NodeBase* AcceptEditor(NodeEditor *editor) override;
     };
     typedef std::unique_ptr<AtomicNode> Atomic;
 }

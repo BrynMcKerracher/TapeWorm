@@ -20,10 +20,7 @@ namespace TapeWorm::InterWorm {
         std::vector<Token> tokens;
 
         [[nodiscard]] Token MakeConsecutiveToken(Token::Type type, char c);
-        [[nodiscard]] Token MakeOpenControlFlowToken();
-        [[nodiscard]] bool AtEndOfSource() const;
         [[nodiscard]] bool Match(char expected);
-        [[nodiscard]] bool Match(char a, char b);
     };
 }
 

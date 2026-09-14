@@ -6,37 +6,32 @@
 #include "Util.h"
 #include "Debug/ASTAnalyser.h"
 #include "AST/CompilerVisitor.h"
-#include "AST/Builder.h"
-#include "AST/OptimiserVisitor.h"
+#include "AST/TreeBuilder.h"
+#include "AST/TreeOptimiser.h"
 #include "JIT/Compiler.h"
 
 int main(int argc, char** argv) {
     //Check correct number of arguments
-    /*
     if (argc < 2) {
         std::cout << "Usage: TapeWorm <filename>";
         return 0;
     }
-    */
 
     TapeWorm::InterWorm::Scanner scanner;
     TapeWorm::ScannerOptimiser scannerOpt;
-    TapeWorm::AST::Builder builder;
+    TapeWorm::AST::TreeBuilder treeBuilder;
+    TapeWorm::AST::TreeOptimiser treeOptimiser;
     TapeWorm::AST::CompilerVisitor compilerVisitor;
-    TapeWorm::AST::OptimiserVisitor optimiser;
     TapeWorm::JIT::Compiler jitCompiler;
     TapeWorm::AST::Debug::ASTAnalyser ASTanalyser;
 
-    //const std::string fileString = TapeWorm::Util::FileToString(argv[1]);
-    const std::string fileString = TapeWorm::Util::FileToString("bf/mandel.b");
-    //const std::string fileString = TapeWorm::Util::FileToString("bf/stack.bf");
-    //const std::string fileString = TapeWorm::Util::FileToString("bf/brackets.b");
+    const std::string fileString = TapeWorm::Util::BrainFuckFileToString(argv[1]);
     auto c1 = std::chrono::high_resolution_clock::now();
 
     const auto tokens = scanner.Scan(fileString);
     const auto optTokens = scannerOpt.Optimise(tokens);
-    auto ast = builder.BuildAST(tokens);
-    //optimiser.Optimise(ast);
+    auto ast = treeBuilder.BuildAST(optTokens);
+    ast = treeOptimiser.Optimise(ast);
     //ASTanalyser.Analyse(ast);
 
     const auto ops = compilerVisitor.Visit(ast);

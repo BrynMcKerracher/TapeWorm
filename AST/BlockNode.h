@@ -12,14 +12,16 @@
 #include <memory>
 
 namespace TapeWorm::AST {
-    struct BlockNode final : NodeBase {
+    struct BlockNode : NodeBase {
         std::vector<Node> subNodes;
         bool isLeaf = true;
         bool isStatement = false;
+        bool isReadWrite = false;
 
         BlockNode();
 
-        std::any Accept(NodeVisitor* visitor) override;
+        void Accept(NodeVisitor* visitor) override;
+        NodeBase* AcceptEditor(NodeEditor *editor) override;
     };
 
     typedef std::unique_ptr<BlockNode> Block;

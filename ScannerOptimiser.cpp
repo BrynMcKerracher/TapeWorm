@@ -4,6 +4,7 @@ namespace TapeWorm {
     ScannerOptimiser::ScannerOptimiser() {
         using InterWorm::Token;
         //Add right
+        /*
         optimisations.push_back({
             Token::Type::Move,
             {Token::DecCell, Token::IncPointer, Token::IncCell, Token::DecPointer, Token::JumpNotZero},
@@ -11,13 +12,14 @@ namespace TapeWorm {
             1
         });
         //Add left
+        /*
         optimisations.push_back({
             Token::Type::Move,
             {Token::DecCell, Token::DecPointer, Token::IncCell, Token::IncPointer, Token::JumpNotZero},
             {{0, 2}, {1, 3}},
             1,
             -1
-        });
+        }); */
         //Sub Right
         optimisations.push_back({
             Token::Type::Difference,
@@ -87,8 +89,8 @@ namespace TapeWorm {
 
     bool ScannerOptimiser::Match(const std::vector<InterWorm::Token> &tokens, const std::size_t index, const std::vector<InterWorm::Token::Type> &types) {
         if (index + types.size() >= tokens.size()) return false;
-        for (std::size_t i = index; i < types.size() + index; ++i) {
-            if (tokens[i].type != types[i - index]) return false;
+        for (std::size_t i = 0; i < types.size(); ++i) {
+            if (tokens[i + index].type != types[i]) return false;
         }
         return true;
     }

@@ -7,13 +7,16 @@
 
 #include "GlobalNode.h"
 #include "BlockNode.h"
+#include "LeafStatementNode.h"
 #include "NodeVisitor.h"
 #include "../Token.h"
 
 #include <stack>
 
+#include "AtomicNode.h"
+
 namespace TapeWorm::AST {
-    class Builder {
+    class TreeBuilder {
     public:
         Global BuildAST(const std::vector<InterWorm::Token>& tokens);
     private:
@@ -22,14 +25,16 @@ namespace TapeWorm::AST {
         std::vector<InterWorm::Token> tokenStream;
         std::stack<BlockNode*> blockNodes;
 
+        Global BuildGlobalNode();
+        Atomic BuildAtomicNode();
         Node BuildNextNode();
-        Block BuildBlockNode();
+        Node BuildBlockNode();
+        static LeafStatement BuildLeafStatement(const Block& block);
 
         bool Match(InterWorm::Token::Type token);
         [[nodiscard]] bool Check(InterWorm::Token::Type type) const;
         [[nodiscard]] bool AtEndOfStream() const;
         InterWorm::Token Advance();
-        InterWorm::Token Consume(InterWorm::Token::Type type);
         [[nodiscard]] const InterWorm::Token& Current() const;
         [[nodiscard]] const InterWorm::Token& Previous() const;
 

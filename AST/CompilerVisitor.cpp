@@ -9,6 +9,7 @@
 
 #include <map>
 
+#include "LeafStatementNode.h"
 #include "asmjit/support/arena.h"
 
 namespace TapeWorm::AST {
@@ -18,7 +19,7 @@ namespace TapeWorm::AST {
         return ops;
     }
 
-    std::any CompilerVisitor::VisitAtomic(AtomicNode* node) {
+    void CompilerVisitor::VisitAtomic(AtomicNode* node) {
         const InterWorm::Token::Type tokenType = node->token.type;
         const std::size_t data = node->token.length;
         switch (tokenType) {
@@ -69,30 +70,40 @@ namespace TapeWorm::AST {
                 ops.push_back(static_cast<InterWorm::Op::Type>(data));
                 break;
             }
-            default: return 0;
+            default: break;
         }
-        return 0;
     }
 
-    std::any CompilerVisitor::VisitBlock(BlockNode* node) {
-        if (node->isStatement and node->isLeaf) {
-            CompileStatement(node);
-            return 0;
-        }
-
+    void CompilerVisitor::VisitBlock(BlockNode* node) {
         WriteOp(InterWorm::Op::JumpIfZero);
         for (const Node& subNode : node->subNodes) {
             subNode->Accept(this);
         }
         WriteOp(InterWorm::Op::JumpNotZero);
-        return 0;
     }
 
-    std::any CompilerVisitor::VisitGlobal(GlobalNode* node) {
+    void CompilerVisitor::VisitGlobal(GlobalNode* node) {
         for (const Node& subNode : node->subNodes) {
             subNode->Accept(this);
         }
-        return 0;
+    }
+
+    void CompilerVisitor::VisitLeafStatement(LeafStatementNode *node) {
+        for (auto& [addr, factor] : node->addresses) {
+            WriteOp(InterWorm::Op::Add);
+
+            std::cout << "CV Addr: " << addr << "\n";
+            std::cout << "CV Factor: " << (int)factor << "\n";
+
+            WriteInt64(addr);
+            WriteOp(static_cast<InterWorm::Op::Type>(factor));
+        }
+    }
+
+    void CompilerVisitor::WriteInt64(const int64_t n) {
+        for (uint64_t i = 0; i < sizeof(n); ++i) {
+            WriteOp(static_cast<InterWorm::Op::Type>(n >> (8 * i)));
+        }
     }
 
     void CompilerVisitor::WriteOps(const std::initializer_list<InterWorm::Op::Type> bytes) {
@@ -103,53 +114,5 @@ namespace TapeWorm::AST {
 
     void CompilerVisitor::WriteOp(const InterWorm::Op::Type op) {
         ops.push_back(op);
-    }
-
-    void CompilerVisitor::CompileStatement(const BlockNode* block) {
-        WriteOp(InterWorm::Op::LoadPointer);
-        std::map<int64_t, int64_t> addressFactors;
-        int64_t address = 0;
-        int64_t value = 0;
-        std::string nodeStr;
-        for (const auto & subNode : block->subNodes) {
-            const AtomicNode* atomic = reinterpret_cast<AtomicNode*>(subNode.get());
-            switch (atomic->token.type) {
-                case InterWorm::Token::IncPointer: {
-                    addressFactors[address] += value;
-                    address += atomic->token.length;
-                    value = 0;
-                    nodeStr += ">";
-                    break;
-                }
-                case InterWorm::Token::DecPointer: {
-                    addressFactors[address] += value;
-                    address -= atomic->token.length;;
-                    value = 0;
-                    nodeStr += "<";
-                    break;
-                }
-                case InterWorm::Token::IncCell: {
-                    value += atomic->token.length;
-                    nodeStr += "+";
-                    break;
-                }
-                case InterWorm::Token::DecCell: {
-                    value -= atomic->token.length;
-                    nodeStr += "-";
-                    break;
-                }
-                default: break;
-            }
-        }
-        addressFactors.erase(0);
-        std::cout << nodeStr << "\n";
-        for (auto [offset, factor] : addressFactors) {
-            WriteOp(InterWorm::Op::Multiply);
-            WriteOps({static_cast<InterWorm::Op::Type>(offset),
-                           static_cast<InterWorm::Op::Type>(factor)});
-            std::cout << "MUL " << offset << ", " << factor << "\n";
-        }
-        std::cout << "\n";
-        WriteOp(InterWorm::Op::ClearCell);
     }
 }

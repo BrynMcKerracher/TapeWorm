@@ -3,6 +3,8 @@
  * @author brynm
  */
 #include "BlockNode.h"
+
+#include "NodeEditor.h"
 #include "NodeVisitor.h"
 
 namespace TapeWorm::AST {
@@ -10,7 +12,11 @@ namespace TapeWorm::AST {
         nodeType = Block;
     }
 
-    std::any BlockNode::Accept(NodeVisitor* visitor) {
-        return visitor->VisitBlock(this);
+    void BlockNode::Accept(NodeVisitor* visitor) {
+        visitor->VisitBlock(this);
+    }
+
+    NodeBase *BlockNode::AcceptEditor(NodeEditor *editor) {
+        return editor->VisitBlock(this);
     }
 } // TapeWorm

@@ -1,4 +1,6 @@
 #include "AtomicNode.h"
+
+#include "NodeEditor.h"
 #include "NodeVisitor.h"
 
 namespace TapeWorm::AST {
@@ -11,7 +13,11 @@ namespace TapeWorm::AST {
         this->token = token;
     }
 
-    std::any AtomicNode::Accept(NodeVisitor* visitor) {
-        return visitor->VisitAtomic(this);
+    void AtomicNode::Accept(NodeVisitor* visitor) {
+        visitor->VisitAtomic(this);
+    }
+
+    NodeBase* AtomicNode::AcceptEditor(NodeEditor *editor) {
+        return editor->VisitAtomic(this);
     }
 }

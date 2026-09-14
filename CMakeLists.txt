@@ -24,8 +24,8 @@ add_executable(TapeWorm
         JIT/Compiler.cpp
         JIT/Compiler.h
         AST/NodeBase.h
-        AST/Builder.cpp
-        AST/Builder.h
+        AST/TreeBuilder.cpp
+        AST/TreeBuilder.h
         AST/BlockNode.cpp
         AST/BlockNode.h
         AST/GlobalNode.cpp
@@ -37,11 +37,11 @@ add_executable(TapeWorm
         AST/CompilerVisitor.h
         Debug/ASTAnalyser.cpp
         Debug/ASTAnalyser.h
-        AST/OptimiserVisitor.cpp
-        AST/OptimiserVisitor.h
         ScannerOptimiser.cpp
         ScannerOptimiser.h
         Token.cpp
+        AST/LeafStatementNode.cpp
+        AST/LeafStatementNode.h
 )
 
 target_link_libraries(TapeWorm Boost::headers)
