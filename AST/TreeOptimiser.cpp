@@ -3,9 +3,6 @@
  * @author Bryn McKerracher
  */
 #include "TreeOptimiser.h"
-
-#include <iostream>
-
 #include "LeafStatementNode.h"
 
 namespace TapeWorm::AST {

@@ -10,7 +10,6 @@
 #include <map>
 
 #include "LeafStatementNode.h"
-#include "asmjit/support/arena.h"
 
 namespace TapeWorm::AST {
     std::vector<InterWorm::Op::Type> CompilerVisitor::Visit(const Global& node) {

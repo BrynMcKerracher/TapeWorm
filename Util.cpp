@@ -12,9 +12,7 @@ namespace TapeWorm {
         std::ifstream sourceFile(fileName);
 
         if (!sourceFile.is_open()) {
-            throw std::exception {
-                ("Unable to open source file '" + fileName + "'\n").c_str()
-            };
+            throw std::ios_base::failure("Unable to open source file '" + fileName + "'\n");
         }
 
         std::stringstream fileBuffer;
@@ -35,7 +33,7 @@ namespace TapeWorm {
         std::ifstream sourceFile(fileName);
 
         if (!sourceFile.is_open()) {
-            throw std::exception {
+            throw std::ios_base::failure {
                 ("Unable to open source file '" + fileName + "'\n").c_str()
             };
         }

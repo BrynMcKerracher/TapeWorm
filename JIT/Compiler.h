@@ -8,8 +8,8 @@
 #include <vector>
 
 #include "../Op.h"
-#include "asmjit/core/jitruntime.h"
-#include "asmjit/x86/x86assembler.h"
+#include "asmjit/core/jit_runtime.h"
+#include "asmjit/x86/x86_assembler.h"
 
 namespace TapeWorm::JIT {
     using MainEntry = void(*)(uintptr_t);
@@ -23,12 +23,12 @@ namespace TapeWorm::JIT {
         constexpr static std::size_t RuntimeMemorySize = 30000;
 
         struct ControlFlowPair {
-            ControlFlowPair(const asmjit::v1_21::Label& open, const asmjit::v1_21::Label& close) :
+            ControlFlowPair(const asmjit::Label& open, const asmjit::Label& close) :
                 open(open), close(close)
             {}
 
-            asmjit::v1_21::Label open;
-            asmjit::v1_21::Label close;
+            asmjit::Label open;
+            asmjit::Label close;
         };
 
         int64_t ReadInt64();

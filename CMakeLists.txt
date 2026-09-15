@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 4.0)
 project(TapeWorm CXX)
 
-set(CMAKE_CXX_STANDARD 26)
+set(CMAKE_CXX_STANDARD 23 REQUIRED)
 
 # Set Boost variables
-set(Boost_DIR "C:\\Boost\\lib\\cmake\\Boost-1.89.0")
-find_package(Boost 1.89.0 REQUIRED)
+# set(Boost_DIR "C:\\Boost\\lib\\cmake\\Boost-1.89.0")
+# find_package(Boost 1.89.0 REQUIRED)
 
 # Set AsmJit variables
 set(ASMJIT_DIR "asmjit-master")
@@ -16,6 +16,7 @@ add_executable(TapeWorm
         main.cpp
         Util.cpp
         Util.h
+        Token.cpp
         Token.h
         Scanner.cpp
         Scanner.h
@@ -39,10 +40,10 @@ add_executable(TapeWorm
         Debug/ASTAnalyser.h
         ScannerOptimiser.cpp
         ScannerOptimiser.h
-        Token.cpp
         AST/LeafStatementNode.cpp
         AST/LeafStatementNode.h
+        AST/TreeOptimiser.cpp
 )
 
-target_link_libraries(TapeWorm Boost::headers)
+# target_link_libraries(TapeWorm Boost::headers)
 target_link_libraries(TapeWorm asmjit::asmjit)

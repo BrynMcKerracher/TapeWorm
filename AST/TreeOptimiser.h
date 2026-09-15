@@ -5,8 +5,6 @@
 #ifndef TAPEWORMTESTS_TREEOPTIMISER_H
 #define TAPEWORMTESTS_TREEOPTIMISER_H
 
-#include <any>
-
 #include "GlobalNode.h"
 #include "NodeEditor.h"
 #include "NodeVisitor.h"

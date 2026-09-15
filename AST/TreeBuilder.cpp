@@ -48,19 +48,24 @@ namespace TapeWorm::AST {
     }
 
      Node TreeBuilder::BuildBlockNode() {
-        if (!blockNodes.empty()) blockNodes.top()->isLeaf = false;
+        //if (!blockNodes.empty()) blockNodes.top()->isLeaf = false;
 
         Block block = std::make_unique<BlockNode>();
+
+        std::cout << "BLOCK OPENED: Depth " << blockNodes.size() << "\n";
+        const std::size_t blockDepth = blockNodes.size();
         blockNodes.emplace(block.get());
-        while (Current().type != InterWorm::Token::JumpNotZero) {
+        while (Current().type != InterWorm::Token::JumpNotZero and blockNodes.size() > blockDepth) {
             block->subNodes.push_back(BuildNextNode());
         }
         //Update block properties
-        UpdateStatementStatus(block);
+        //UpdateStatementStatus(block)
         blockNodes.pop();
 
+         std::cout << "BLOCK CLOSED: Depth " << blockNodes.size() << "\n";
+
         if (block->isStatement and block->isLeaf and not block->isReadWrite) {
-            return BuildLeafStatement(block);
+          //  return BuildLeafStatement(block);
         }
 
         return block;

@@ -12,10 +12,11 @@
 
 int main(int argc, char** argv) {
     //Check correct number of arguments
-    if (argc < 2) {
+    /*if (argc < 2) {
         std::cout << "Usage: TapeWorm <filename>";
         return 0;
-    }
+    } */
+    std::string fileName = "BF/hello.b";
 
     TapeWorm::InterWorm::Scanner scanner;
     TapeWorm::ScannerOptimiser scannerOpt;
@@ -25,13 +26,14 @@ int main(int argc, char** argv) {
     TapeWorm::JIT::Compiler jitCompiler;
     TapeWorm::AST::Debug::ASTAnalyser ASTanalyser;
 
-    const std::string fileString = TapeWorm::Util::BrainFuckFileToString(argv[1]);
+    const std::string fileString = TapeWorm::Util::BrainFuckFileToString(fileName);
+    //const std::string fileString = TapeWorm::Util::BrainFuckFileToString(argv[1]);
     auto c1 = std::chrono::high_resolution_clock::now();
 
     const auto tokens = scanner.Scan(fileString);
-    const auto optTokens = scannerOpt.Optimise(tokens);
-    auto ast = treeBuilder.BuildAST(optTokens);
-    ast = treeOptimiser.Optimise(ast);
+    //const auto optTokens = scannerOpt.Optimise(tokens);
+    auto ast = treeBuilder.BuildAST(tokens);
+    //ast = treeOptimiser.Optimise(ast);
     //ASTanalyser.Analyse(ast);
 
     const auto ops = compilerVisitor.Visit(ast);
