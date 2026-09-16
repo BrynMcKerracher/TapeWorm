@@ -13,7 +13,7 @@ Note: No AI was used at any point during development.
 ## Installation
 ### Pre-compiled Binaries
 Pre-compiled binaries for both 
-Windows and Linux exist under the [releases](https://github.com/BrynMcKerracher/TapeWorm/releases) tab. It's recommended you use the latest release whenever possible. 
+Windows and Linux exist under the [releases](https://github.com/BrynMcKerracher/TapeWorm/releases) tab. It's recommended you use the latest release. 
 
 ### Manual
 You can also build the project from source using `Make`/`CMake` in the [usual way](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html).
@@ -39,5 +39,5 @@ Creates a sequence of instructions in TapeWorm's intermediate language _InterWor
 #### 4. Assembly Generation
 Lastly _InterWorm_ is jitted into x86 assembly and executed.
 
-### InterWorm 
+### InterWorm ISA
 Documentation for the _InterWorm_ ISA is still in the works and will be made available on the project wiki at a later date.
