@@ -5,7 +5,7 @@
 
 namespace TapeWorm::InterWorm {
     std::string Token::ToString() const {
-        return Token::ToString(*this);
+        return ToString(*this);
     }
 
     std::string Token::ToString(const Token& token) {

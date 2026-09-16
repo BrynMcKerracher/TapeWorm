@@ -9,7 +9,6 @@
 #include "../Token.h"
 
 #include <memory>
-#include <any>
 
 namespace TapeWorm::AST {
     struct AtomicNode final : NodeBase {

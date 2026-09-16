@@ -5,7 +5,6 @@
 #ifndef TAPEWORM_TOKEN_H
 #define TAPEWORM_TOKEN_H
 
-#include <cstdint>
 #include <string>
 
 namespace TapeWorm::InterWorm {

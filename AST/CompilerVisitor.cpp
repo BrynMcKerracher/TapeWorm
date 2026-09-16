@@ -92,7 +92,7 @@ namespace TapeWorm::AST {
             WriteOp(InterWorm::Op::Add);
 
             std::cout << "CV Addr: " << addr << "\n";
-            std::cout << "CV Factor: " << (int)factor << "\n";
+            std::cout << "CV Factor: " << static_cast<int>(factor) << "\n";
 
             WriteInt64(addr);
             WriteOp(static_cast<InterWorm::Op::Type>(factor));

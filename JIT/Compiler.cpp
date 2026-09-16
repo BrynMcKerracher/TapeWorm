@@ -25,7 +25,7 @@ namespace TapeWorm::JIT {
         constexpr x86::Gp arithRegister = x86::r13;
 
         //Calling conventions decide which registers to use for syscalls
-        #if defined _WIN32 || defined __CYGWIN__
+        #if defined (_WIN32) || defined (__CYGWIN__)
         constexpr x86::Gp firstArgRegister = x86::rcx;
         #else
         constexpr x86::Gp firstArgRegister = x86::rdi;
