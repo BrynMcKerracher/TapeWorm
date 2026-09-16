@@ -52,7 +52,6 @@ namespace TapeWorm::AST {
 
         Block block = std::make_unique<BlockNode>();
 
-        std::cout << "BLOCK OPENED: Depth " << blockNodes.size() << "\n";
         const std::size_t blockDepth = blockNodes.size();
         blockNodes.emplace(block.get());
         while (Current().type != InterWorm::Token::JumpNotZero and blockNodes.size() > blockDepth) {
@@ -61,8 +60,6 @@ namespace TapeWorm::AST {
         //Update block properties
         //UpdateStatementStatus(block)
         blockNodes.pop();
-
-         std::cout << "BLOCK CLOSED: Depth " << blockNodes.size() << "\n";
 
         if (block->isStatement and block->isLeaf and not block->isReadWrite) {
           //  return BuildLeafStatement(block);

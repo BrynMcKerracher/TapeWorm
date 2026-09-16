@@ -12,11 +12,10 @@
 
 int main(int argc, char** argv) {
     //Check correct number of arguments
-    /*if (argc < 2) {
+    if (argc < 2) {
         std::cout << "Usage: TapeWorm <filename>";
         return 0;
-    } */
-    std::string fileName = "BF/hello.b";
+    }
 
     TapeWorm::InterWorm::Scanner scanner;
     TapeWorm::ScannerOptimiser scannerOpt;
@@ -26,9 +25,8 @@ int main(int argc, char** argv) {
     TapeWorm::JIT::Compiler jitCompiler;
     TapeWorm::AST::Debug::ASTAnalyser ASTanalyser;
 
-    const std::string fileString = TapeWorm::Util::BrainFuckFileToString(fileName);
-    //const std::string fileString = TapeWorm::Util::BrainFuckFileToString(argv[1]);
-    auto c1 = std::chrono::high_resolution_clock::now();
+    const std::string fileString = TapeWorm::Util::BrainFuckFileToString(argv[1]);
+    //auto c1 = std::chrono::high_resolution_clock::now();
 
     const auto tokens = scanner.Scan(fileString);
     //const auto optTokens = scannerOpt.Optimise(tokens);
@@ -37,10 +35,10 @@ int main(int argc, char** argv) {
     //ASTanalyser.Analyse(ast);
 
     const auto ops = compilerVisitor.Visit(ast);
-    auto c2 = std::chrono::high_resolution_clock::now();
+    //auto c2 = std::chrono::high_resolution_clock::now();
 
     jitCompiler.Compile(ops);
-    std::cout << "Optimiser: " << std::chrono::duration_cast<std::chrono::milliseconds>(c2 - c1) << "\n";
+    //std::cout << "Optimiser: " << std::chrono::duration_cast<std::chrono::milliseconds>(c2 - c1) << "\n";
 
     return 0;
 }
