@@ -1,5 +1,26 @@
 # TapeWorm: A JIT Brainfuck Compiler
-TapeWorm is a [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) compiler for Linux and Windows, written in C++.
+TapeWorm is an optimising multipass [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) compiler for Linux and Windows, written in C++.
 
-It produces and executes x86 machine-code at runtime for the fast execution of brainfuck code.
+It produces and executes handwritten `x86` assembly using [asmjit](https://github.com/asmjit/asmjit) as a runtime assembler. 
 
+## Installation
+### Pre-compiled Binaries
+You can find pre-compiled binaries for both Windows and Linux under the Releases tab. 
+
+### Manual
+You can also build the project from source using `Make`/`CMake` in the [usual way](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html). 
+
+## Further Info
+### Compilation Pipeline
+TapeWorm has a 4-phase pipeline (and another 2 optional optimisation phases) from brainfuck source code to x86 assembly. 
+#### 1. Tokenisation: 
+Produces a sequence of value tokens that are a bit more expressive than the standard 8 brainfuck commands.
+#### 2. AST Generation
+Generates an abstract syntax tree from the token sequence.
+#### 3. Intermediate Language Generation
+Creates a sequence of instructions in TapeWorm's intermediate language _InterWorm_.
+#### 4. Assembly Generation
+Lastly _InterWorm_ is jitted into x86 assembly and executed.
+
+### InterWorm 
+Documentation for the _InterWorm_ ISA is still in the works and will be made available on the project wiki at a later date.
