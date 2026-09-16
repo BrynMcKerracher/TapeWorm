@@ -19,11 +19,12 @@ namespace TapeWorm::JIT {
         x86::Assembler assembler(&code);
         assembler.add_diagnostic_options(DiagnosticOptions::kValidateAssembler);
 
-        //Addresses R15-R12 are non-volatile on x86 so we're safe to use them for our purposes.
+        //Addresses R15-R12 are non-volatile on x86.
         constexpr x86::Gp cellPointer = x86::r15;
         constexpr x86::Gp loadRegister = x86::r14;
         constexpr x86::Gp arithRegister = x86::r13;
 
+        //Calling conventions decide which registers to use for syscalls
         #if defined _WIN32 || defined __CYGWIN__
         constexpr x86::Gp firstArgRegister = x86::rcx;
         #else

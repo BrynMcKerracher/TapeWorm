@@ -3,9 +3,12 @@ project(TapeWorm CXX)
 
 set(CMAKE_CXX_STANDARD 23 REQUIRED)
 
-set(ASMJIT_DIR "asmjit-master")
-set(ASMJIT_STATIC TRUE)
-add_subdirectory("${ASMJIT_DIR}")
+include(FetchContent)
+FetchContent_Declare(
+        asmjit
+        GIT_REPOSITORY https://github.com/asmjit/asmjit.git
+)
+FetchContent_MakeAvailable(asmjit)
 
 add_executable(TapeWorm
         main.cpp
