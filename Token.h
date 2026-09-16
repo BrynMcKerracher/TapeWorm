@@ -6,6 +6,7 @@
 #define TAPEWORM_TOKEN_H
 
 #include <string>
+#include <cstdint>
 
 namespace TapeWorm::InterWorm {
     struct Token {
