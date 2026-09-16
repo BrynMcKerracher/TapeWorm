@@ -1,5 +1,4 @@
 #include "AtomicNode.h"
-
 #include "NodeEditor.h"
 #include "NodeVisitor.h"
 

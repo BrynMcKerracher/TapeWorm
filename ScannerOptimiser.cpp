@@ -3,23 +3,6 @@
 namespace TapeWorm {
     ScannerOptimiser::ScannerOptimiser() {
         using InterWorm::Token;
-        //Add right
-        /*
-        optimisations.push_back({
-            Token::Type::Move,
-            {Token::DecCell, Token::IncPointer, Token::IncCell, Token::DecPointer, Token::JumpNotZero},
-            {{0, 2}, {1, 3}},
-            1
-        });
-        //Add left
-        /*
-        optimisations.push_back({
-            Token::Type::Move,
-            {Token::DecCell, Token::DecPointer, Token::IncCell, Token::IncPointer, Token::JumpNotZero},
-            {{0, 2}, {1, 3}},
-            1,
-            -1
-        }); */
         //Sub Right
         optimisations.push_back({
             Token::Type::Difference,

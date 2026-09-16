@@ -6,8 +6,6 @@
 #define TAPEWORM_BLOCKNODE_H
 
 #include "NodeBase.h"
-#include "NodeVisitor.h"
-
 #include <vector>
 #include <memory>
 

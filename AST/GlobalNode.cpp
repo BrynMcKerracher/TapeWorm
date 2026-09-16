@@ -3,8 +3,8 @@
  * @author brynm
  */
 #include "GlobalNode.h"
-
 #include "NodeEditor.h"
+#include "NodeVisitor.h"
 
 namespace TapeWorm::AST {
     GlobalNode::GlobalNode() {

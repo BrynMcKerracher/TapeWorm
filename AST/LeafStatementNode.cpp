@@ -3,7 +3,6 @@
  * @author brynm
  */
 #include "LeafStatementNode.h"
-
 #include "NodeEditor.h"
 #include "NodeVisitor.h"
 

@@ -3,7 +3,6 @@
  * @author brynm
  */
 #include "BlockNode.h"
-
 #include "NodeEditor.h"
 #include "NodeVisitor.h"
 

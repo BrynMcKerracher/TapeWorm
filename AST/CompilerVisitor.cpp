@@ -1,15 +1,13 @@
 #include "CompilerVisitor.h"
-
-#include <filesystem>
-#include <iostream>
-
 #include "AtomicNode.h"
 #include "BlockNode.h"
 #include "GlobalNode.h"
+#include "LeafStatementNode.h"
 
+#include <filesystem>
+#include <iostream>
 #include <map>
 
-#include "LeafStatementNode.h"
 
 namespace TapeWorm::AST {
     std::vector<InterWorm::Op::Type> CompilerVisitor::Visit(const Global& node) {

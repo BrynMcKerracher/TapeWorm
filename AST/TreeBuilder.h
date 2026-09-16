@@ -8,7 +8,6 @@
 #include "GlobalNode.h"
 #include "BlockNode.h"
 #include "LeafStatementNode.h"
-#include "NodeVisitor.h"
 #include "../Token.h"
 
 #include <stack>

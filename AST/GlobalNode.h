@@ -6,7 +6,6 @@
 #define TAPEWORM_GLOBALNODE_H
 
 #include "NodeBase.h"
-#include "NodeVisitor.h"
 
 #include <memory>
 #include <vector>
