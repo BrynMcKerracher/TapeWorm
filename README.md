@@ -1,5 +1,5 @@
 # TapeWorm: A JIT Brainfuck Compiler
-TapeWorm is an optimising multipass [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter for Linux and Windows, written in C++.
+TapeWorm is an optimising multipass [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter for `x86` platforms, written in C++.
 
 It produces and executes handwritten `x86` assembly using [asmjit](https://github.com/asmjit/asmjit) as a runtime assembler. 
 
@@ -19,13 +19,13 @@ Windows and Linux exist under the [releases](https://github.com/BrynMcKerracher/
 You can also build the project from source using `Make`/`CMake` in the [usual way](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html).
 
 ## Usage
-At the moment, TapeWorm only supports compiling a single file at a time. To do this you simply invoke the TapeWorm executable and pass it the path to your brainfuck source file.
+Invoke the TapeWorm executable in a CLI and pass it the path to your brainfuck source file.
 
-For example, assuming you open a terminal in the directory containing the TapeWorm executable, the following will execute a brainfuck file:
+For example:
 ```
 ./TapeWorm "path/to/file/source.b"
 ```
-More complex compilation modes are planned for the future.
+At the moment TapeWorm only supports single-file interpretation, but more complex compilation modes are planned for the future.
 
 ## Further Info
 ### Compilation Pipeline
