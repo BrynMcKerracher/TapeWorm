@@ -1,2 +1,5 @@
-# TapeWorm
-A JIT Brainfuck compiler written in C++
+# TapeWorm: A JIT Brainfuck Compiler
+TapeWorm is a [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) compiler for Linux and Windows, written in C++.
+
+It produces and executes x86 machine-code at runtime for the fastest possible execution of brainfuck code.
+
