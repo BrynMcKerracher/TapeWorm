@@ -10,6 +10,15 @@ You can find pre-compiled binaries for both Windows and Linux under the Releases
 ### Manual
 You can also build the project from source using `Make`/`CMake` in the [usual way](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html). 
 
+## Usage
+At the moment, TapeWorm only supports compiling a single file at a time. To do this you simply invoke the TapeWorm executable and pass it the path to your brainfuck source file.
+
+For example, assuming you open a terminal in the directory containing the TapeWorm executable, the following will execute a brainfuck file:
+```
+./TapeWorm "path/to/file/source.b"
+```
+More complex compilation modes are planned for the future.
+
 ## Further Info
 ### Compilation Pipeline
 TapeWorm has a 4-phase pipeline (and another 2 optional optimisation phases) from brainfuck source code to x86 assembly. 
