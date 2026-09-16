@@ -3,10 +3,9 @@
  * @author brynm
  */
 #include "TreeBuilder.h"
+#include "AtomicNode.h"
 
 #include <iostream>
-
-#include "AtomicNode.h"
 
 namespace TapeWorm::AST {
      Global TreeBuilder::BuildAST(const std::vector<InterWorm::Token> &tokens) {
@@ -48,8 +47,6 @@ namespace TapeWorm::AST {
     }
 
      Node TreeBuilder::BuildBlockNode() {
-        //if (!blockNodes.empty()) blockNodes.top()->isLeaf = false;
-
         Block block = std::make_unique<BlockNode>();
 
         const std::size_t blockDepth = blockNodes.size();
@@ -57,52 +54,9 @@ namespace TapeWorm::AST {
         while (Current().type != InterWorm::Token::JumpNotZero and blockNodes.size() > blockDepth) {
             block->subNodes.push_back(BuildNextNode());
         }
-        //Update block properties
-        //UpdateStatementStatus(block)
         blockNodes.pop();
 
-        if (block->isStatement and block->isLeaf and not block->isReadWrite) {
-          //  return BuildLeafStatement(block);
-        }
-
         return block;
-    }
-
-    LeafStatement TreeBuilder::BuildLeafStatement(const Block& block) {
-        LeafStatement statement = std::make_unique<LeafStatementNode>();
-        int64_t relativeAddress = 0;
-
-        for (const Node& node : block->subNodes) {
-            const auto& atomic = reinterpret_cast<const Atomic&>(node);
-            switch (atomic->token.type) {
-                case InterWorm::Token::IncPointer: {
-                    relativeAddress += atomic->token.length;
-                    break;
-                }
-                case InterWorm::Token::DecPointer: {
-                    relativeAddress -= atomic->token.length;
-                    break;
-                }
-                case InterWorm::Token::IncCell: {
-                    statement->addresses[relativeAddress] += atomic->token.length;
-                    break;
-                }
-                case InterWorm::Token::DecCell: {
-                    statement->addresses[relativeAddress] -= atomic->token.length;
-                    break;
-                }
-                case InterWorm::Token::ClearCell: {
-                    statement->addresses[relativeAddress] = 0;
-                    break;
-                }
-                default: {
-                    std::cout << node->nodeType << "\n";
-                    std::cout << "BuildLeafStatement(): Fell through LeafStatement switch!\n";
-                    break;
-                }
-            }
-        }
-        return statement;
     }
 
     bool TreeBuilder::Match(const InterWorm::Token::Type token) {

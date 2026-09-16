@@ -88,15 +88,7 @@ namespace TapeWorm::AST {
     }
 
     void CompilerVisitor::VisitLeafStatement(LeafStatementNode *node) {
-        for (auto& [addr, factor] : node->addresses) {
-            WriteOp(InterWorm::Op::Add);
-
-            std::cout << "CV Addr: " << addr << "\n";
-            std::cout << "CV Factor: " << static_cast<int>(factor) << "\n";
-
-            WriteInt64(addr);
-            WriteOp(static_cast<InterWorm::Op::Type>(factor));
-        }
+        //Void
     }
 
     void CompilerVisitor::WriteInt64(const int64_t n) {

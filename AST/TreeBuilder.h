@@ -29,7 +29,6 @@ namespace TapeWorm::AST {
         Atomic BuildAtomicNode();
         Node BuildNextNode();
         Node BuildBlockNode();
-        static LeafStatement BuildLeafStatement(const Block& block);
 
         bool Match(InterWorm::Token::Type token);
         [[nodiscard]] bool Check(InterWorm::Token::Type type) const;

@@ -10,7 +10,6 @@
 namespace TapeWorm {
     struct Util {
         static std::string BrainFuckFileToString(const std::string& fileName);
-        static std::string FileToString(const std::string& fileName);
     };
 } // TapeWorm
 

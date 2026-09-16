@@ -31,7 +31,6 @@ namespace TapeWorm::JIT {
             asmjit::Label close;
         };
 
-        int64_t ReadInt64();
         static void WriteCharacter(uint8_t character);
         static uint8_t ReadCharacter();
     };
