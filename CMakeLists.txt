@@ -3,11 +3,6 @@ project(TapeWorm CXX)
 
 set(CMAKE_CXX_STANDARD 23 REQUIRED)
 
-# Set Boost variables
-# set(Boost_DIR "C:\\Boost\\lib\\cmake\\Boost-1.89.0")
-# find_package(Boost 1.89.0 REQUIRED)
-
-# Set AsmJit variables
 set(ASMJIT_DIR "asmjit-master")
 set(ASMJIT_STATIC TRUE)
 add_subdirectory("${ASMJIT_DIR}")
@@ -45,5 +40,4 @@ add_executable(TapeWorm
         AST/TreeOptimiser.cpp
 )
 
-# target_link_libraries(TapeWorm Boost::headers)
 target_link_libraries(TapeWorm asmjit::asmjit)
