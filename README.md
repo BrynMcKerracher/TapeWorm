@@ -5,7 +5,7 @@ It produces and executes handwritten `x86` assembly using [asmjit](https://githu
 
 ## Installation
 ### Pre-compiled Binaries
-You can find pre-compiled binaries for both Windows and Linux under the Releases tab. 
+You can find pre-compiled binaries for both Windows and Linux under the [releases](https://github.com/BrynMcKerracher/TapeWorm/releases) tab. 
 
 ### Manual
 You can also build the project from source using `Make`/`CMake` in the [usual way](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html). 
