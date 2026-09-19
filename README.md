@@ -29,7 +29,7 @@ At the moment TapeWorm only supports single-file interpretation, but more comple
 
 ## Further Info
 ### Compilation Pipeline
-TapeWorm has a 4-phase pipeline (and another 2 optional optimisation phases) from brainfuck source code to x86 assembly. 
+TapeWorm has a 4-phase pipeline (and another 2 optional optimisation phases) from brainfuck source code to `x86` assembly. 
 #### 1. Tokenisation 
 Produces a sequence of value tokens that are a bit more expressive than the standard 8 brainfuck commands.
 #### 2. AST Generation
@@ -37,7 +37,7 @@ Generates an abstract syntax tree from the token sequence.
 #### 3. Intermediate Language Generation
 Creates a sequence of instructions in TapeWorm's intermediate language _InterWorm_.
 #### 4. Assembly Generation
-Lastly _InterWorm_ is jitted into x86 assembly and executed.
+Lastly _InterWorm_ is jitted into `x86` assembly and executed.
 
 ### InterWorm ISA
 Documentation for the _InterWorm_ ISA is still in the works and will be made available on the project wiki at a later date.
