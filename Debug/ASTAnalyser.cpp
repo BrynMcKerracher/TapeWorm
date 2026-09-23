@@ -21,7 +21,7 @@ namespace TapeWorm::AST::Debug {
         std::cout << InterWorm::Token::ToString(node->token);
     }
 
-    void ASTAnalyser::VisitBlock(SyntacticNode *node) {
+    void ASTAnalyser::VisitSyntactic(SyntacticNode *node) {
         nodesVisited++;
         std::string block = "[";
         for (const Node& subNode : node->subNodes) {

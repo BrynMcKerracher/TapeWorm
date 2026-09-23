@@ -1,6 +1,7 @@
-//
-// Created by brynm on 8/02/2026.
-//
+/**
+ * @file Token.cpp
+ * @author Bryn McKerracher
+ */
 #include "Token.h"
 
 namespace TapeWorm::InterWorm {

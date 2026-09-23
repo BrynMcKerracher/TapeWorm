@@ -11,6 +11,10 @@
 #include <memory>
 
 namespace TapeWorm::AST {
+    /**
+     * @struct TerminalNode
+     * @brief Represents a formal terminal InterWorm Token node in the AST.
+     **/
     struct TerminalNode final : NodeBase {
         InterWorm::Token token;
 

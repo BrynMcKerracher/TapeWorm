@@ -18,7 +18,7 @@ namespace TapeWorm::AST {
     struct NodeReadOnlyVisitor {
         virtual ~NodeReadOnlyVisitor() = default;
         virtual void VisitTerminal(TerminalNode* node) = 0;
-        virtual void VisitBlock(SyntacticNode* node) = 0;
+        virtual void VisitSyntactic(SyntacticNode* node) = 0;
         virtual void VisitGlobal(GlobalNode* node) = 0;
         virtual void VisitLeafStatement(LeafStatementNode* node) = 0;
     };

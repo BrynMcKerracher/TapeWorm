@@ -15,7 +15,7 @@ namespace TapeWorm::AST {
         std::vector<InterWorm::Op::Type> ops;
 
         void VisitTerminal(TerminalNode* node) override;
-        void VisitBlock(SyntacticNode* node) override;
+        void VisitSyntactic(SyntacticNode* node) override;
         void VisitGlobal(GlobalNode* node) override;
         void VisitLeafStatement(LeafStatementNode *node) override;
 

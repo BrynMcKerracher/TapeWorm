@@ -19,7 +19,7 @@ namespace TapeWorm::AST::Debug {
         std::size_t nodesVisited = 0;
 
         void VisitTerminal(TerminalNode* node) override;
-        void VisitBlock(SyntacticNode* node) override;
+        void VisitSyntactic(SyntacticNode* node) override;
         void VisitGlobal(GlobalNode* node) override;
         void VisitLeafStatement(LeafStatementNode *node) override;
     };

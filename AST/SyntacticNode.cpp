@@ -12,7 +12,7 @@ namespace TapeWorm::AST {
     }
 
     void SyntacticNode::AcceptReadOnlyVisitor(NodeReadOnlyVisitor* visitor) {
-        visitor->VisitBlock(this);
+        visitor->VisitSyntactic(this);
     }
 
     NodeBase *SyntacticNode::AcceptReadWriteVisitor(NodeReadWriteVisitor *visitor) {

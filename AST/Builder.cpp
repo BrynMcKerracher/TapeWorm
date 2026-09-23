@@ -28,8 +28,8 @@ namespace TapeWorm::AST {
      Syntactic Builder::BuildSyntacticNode() {
         Syntactic syntactic = std::make_unique<SyntacticNode>();
 
-        const std::size_t syntacticDepth = currentSyntacticDepth++;
-        while (Current().type != InterWorm::Token::JumpNotZero and currentSyntacticDepth > syntacticDepth) {
+        const std::size_t localSyntacticDepth = currentSyntacticDepth++;
+        while (Current().type != InterWorm::Token::JumpNotZero and currentSyntacticDepth > localSyntacticDepth) {
             syntactic->subNodes.push_back(BuildNextNode());
         }
         currentSyntacticDepth--;
@@ -56,16 +56,16 @@ namespace TapeWorm::AST {
     }
 
     bool Builder::Check(const InterWorm::Token::Type type) const {
-        if (AtEndOfStream()) return false;
+        if (AtEndOfTokens()) return false;
         return Current().type == type;
     }
 
-    bool Builder::AtEndOfStream() const {
+    bool Builder::AtEndOfTokens() const {
         return Current().type == InterWorm::Token::Type::EndOfFile;
     }
 
     InterWorm::Token Builder::Advance() {
-        if (!AtEndOfStream()) currentTokenIndex++;
+        if (!AtEndOfTokens()) currentTokenIndex++;
         return Previous();
     }
 

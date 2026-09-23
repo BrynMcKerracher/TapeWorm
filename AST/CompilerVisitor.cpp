@@ -1,13 +1,8 @@
 #include "CompilerVisitor.h"
-#include "TerminalNode.h"
-#include "SyntacticNode.h"
-#include "GlobalNode.h"
-#include "LeafStatementNode.h"
+#include "NodeTypes.h"
 
 #include <filesystem>
 #include <iostream>
-#include <map>
-
 
 namespace TapeWorm::AST {
     std::vector<InterWorm::Op::Type> CompilerVisitor::Visit(const Global& node) {
@@ -71,7 +66,7 @@ namespace TapeWorm::AST {
         }
     }
 
-    void CompilerVisitor::VisitBlock(SyntacticNode* node) {
+    void CompilerVisitor::VisitSyntactic(SyntacticNode* node) {
         WriteOp(InterWorm::Op::JumpIfZero);
         for (const Node& subNode : node->subNodes) {
             subNode->AcceptReadOnlyVisitor(this);
