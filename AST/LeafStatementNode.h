@@ -15,8 +15,8 @@ namespace TapeWorm::AST {
     struct LeafStatementNode final : NodeBase {
         std::map<int64_t, uint8_t> addresses;
 
-        void Accept(NodeVisitor *visitor) override;
-        NodeBase* AcceptEditor(NodeEditor *editor) override;
+        void AcceptReadOnlyVisitor(NodeReadOnlyVisitor *visitor) override;
+        NodeBase* AcceptReadWriteVisitor(NodeReadWriteVisitor *editor) override;
     };
     typedef std::unique_ptr<LeafStatementNode> LeafStatement;
 } // TapeWorm

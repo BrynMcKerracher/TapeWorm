@@ -4,8 +4,8 @@
  */
 #include "ASTAnalyser.h"
 
-#include "../AST/AtomicNode.h"
-#include "../AST/BlockNode.h"
+#include "../AST/TerminalNode.h"
+#include "../AST/SyntacticNode.h"
 
 #include <algorithm>
 #include <iostream>
@@ -13,19 +13,19 @@
 namespace TapeWorm::AST::Debug {
     void ASTAnalyser::Analyse(const Global &globalNode) {
         blockMap.clear();
-        globalNode->Accept(this);
+        globalNode->AcceptReadOnlyVisitor(this);
     }
 
-    void ASTAnalyser::VisitAtomic(AtomicNode *node) {
+    void ASTAnalyser::VisitTerminal(TerminalNode *node) {
         nodesVisited++;
         std::cout << InterWorm::Token::ToString(node->token);
     }
 
-    void ASTAnalyser::VisitBlock(BlockNode *node) {
+    void ASTAnalyser::VisitBlock(SyntacticNode *node) {
         nodesVisited++;
         std::string block = "[";
         for (const Node& subNode : node->subNodes) {
-            subNode->Accept(this);
+            subNode->AcceptReadOnlyVisitor(this);
         }
         block += "]";
         blockMap[block]++;
@@ -35,7 +35,7 @@ namespace TapeWorm::AST::Debug {
     void ASTAnalyser::VisitGlobal(GlobalNode *node) {
         nodesVisited++;
         for (const Node& subNodes : node->subNodes) {
-            subNodes->Accept(this);
+            subNodes->AcceptReadOnlyVisitor(this);
         }
         std::size_t totalBlocks = 0;
         std::vector<std::pair<std::string, std::size_t>> pairs;

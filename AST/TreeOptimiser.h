@@ -6,16 +6,16 @@
 #define TAPEWORMTESTS_TREEOPTIMISER_H
 
 #include "GlobalNode.h"
-#include "NodeEditor.h"
-#include "NodeVisitor.h"
+#include "NodeReadWriteVisitor.h"
+#include "NodeReadOnlyVisitor.h"
 
-namespace TapeWorm::AST{
-    class TreeOptimiser final : NodeEditor {
+namespace TapeWorm::AST {
+    class TreeOptimiser final : NodeReadWriteVisitor {
     public:
         Global Optimise(Global& node);
     private:
-        NodeBase* VisitAtomic(AtomicNode* node) override;
-        NodeBase* VisitBlock(BlockNode* node) override;
+        NodeBase* VisitTerminal(TerminalNode* node) override;
+        NodeBase* VisitSyntactic(SyntacticNode* node) override;
         NodeBase* VisitGlobal(GlobalNode* node) override;
         NodeBase* VisitLeafStatement(LeafStatementNode* node) override;
     };

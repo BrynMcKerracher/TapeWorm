@@ -27,25 +27,25 @@ add_executable(TapeWorm
         JIT/Compiler.cpp
         JIT/Compiler.h
         AST/NodeBase.h
-        AST/TreeBuilder.cpp
-        AST/TreeBuilder.h
-        AST/BlockNode.cpp
-        AST/BlockNode.h
+        AST/Builder.cpp
+        AST/Builder.h
+        AST/SyntacticNode.cpp
+        AST/SyntacticNode.h
         AST/GlobalNode.cpp
         AST/GlobalNode.h
-        AST/NodeVisitor.h
-        AST/AtomicNode.cpp
-        AST/AtomicNode.h
+        AST/NodeReadOnlyVisitor.h
+        AST/TerminalNode.cpp
+        AST/TerminalNode.h
         AST/CompilerVisitor.cpp
         AST/CompilerVisitor.h
+        AST/LeafStatementNode.cpp
+        AST/LeafStatementNode.h
+        AST/TreeOptimiser.cpp
+        AST/NodeTypes.h
         Debug/ASTAnalyser.cpp
         Debug/ASTAnalyser.h
         ScannerOptimiser.cpp
         ScannerOptimiser.h
-        AST/LeafStatementNode.cpp
-        AST/LeafStatementNode.h
-        AST/TreeOptimiser.cpp
-        AST/NodeEditor.cpp
 )
 
 target_link_libraries(TapeWorm asmjit::asmjit)

@@ -37,15 +37,15 @@ add_executable(TapeWormTests
         ../JIT/Compiler.cpp
         ../JIT/Compiler.h
         ../AST/NodeBase.h
-        ../AST/TreeBuilder.cpp
-        ../AST/TreeBuilder.h
-        ../AST/BlockNode.cpp
-        ../AST/BlockNode.h
+        ../AST/Builder.cpp
+        ../AST/Builder.h
+        ../AST/SyntacticNode.cpp
+        ../AST/SyntacticNode.h
         ../AST/GlobalNode.cpp
         ../AST/GlobalNode.h
-        ../AST/NodeVisitor.h
-        ../AST/AtomicNode.cpp
-        ../AST/AtomicNode.h
+        ../AST/NodeReadOnlyVisitor.h
+        ../AST/TerminalNode.cpp
+        ../AST/TerminalNode.h
         ../AST/CompilerVisitor.cpp
         ../AST/CompilerVisitor.h
         ../Debug/ASTAnalyser.cpp
@@ -60,8 +60,7 @@ add_executable(TapeWormTests
         ../Debug/Profiler.h
         ../AST/TreeOptimiser.cpp
         ../AST/TreeOptimiser.h
-        ../AST/NodeEditor.cpp
-        ../AST/NodeEditor.h
+        ../AST/NodeReadWriteVisitor.h
 )
 
 # target_link_libraries(TapeWormTests Boost::headers)

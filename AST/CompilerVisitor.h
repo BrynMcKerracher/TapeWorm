@@ -1,21 +1,21 @@
 #ifndef TAPEWORM_COMPILERVISITOR_H
 #define TAPEWORM_COMPILERVISITOR_H
 
-#include "NodeVisitor.h"
+#include "NodeReadOnlyVisitor.h"
 #include "GlobalNode.h"
 #include "../Op.h"
 
 #include <vector>
 
 namespace TapeWorm::AST {
-    class CompilerVisitor final : public NodeVisitor {
+    class CompilerVisitor final : public NodeReadOnlyVisitor {
     public:
         std::vector<InterWorm::Op::Type> Visit(const Global& node);
     private:
         std::vector<InterWorm::Op::Type> ops;
 
-        void VisitAtomic(AtomicNode* node) override;
-        void VisitBlock(BlockNode* node) override;
+        void VisitTerminal(TerminalNode* node) override;
+        void VisitBlock(SyntacticNode* node) override;
         void VisitGlobal(GlobalNode* node) override;
         void VisitLeafStatement(LeafStatementNode *node) override;
 

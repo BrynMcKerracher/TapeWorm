@@ -3,15 +3,15 @@
  * @author brynm
  */
 #include "LeafStatementNode.h"
-#include "NodeEditor.h"
-#include "NodeVisitor.h"
+#include "NodeReadWriteVisitor.h"
+#include "NodeReadOnlyVisitor.h"
 
 namespace TapeWorm::AST {
-    void LeafStatementNode::Accept(NodeVisitor *visitor) {
+    void LeafStatementNode::AcceptReadOnlyVisitor(NodeReadOnlyVisitor *visitor) {
         visitor->VisitLeafStatement(this);
     }
 
-    NodeBase *LeafStatementNode::AcceptEditor(NodeEditor *editor) {
+    NodeBase *LeafStatementNode::AcceptReadWriteVisitor(NodeReadWriteVisitor *editor) {
         return editor->VisitLeafStatement(this);
     }
 } // TapeWorm

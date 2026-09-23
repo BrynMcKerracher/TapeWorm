@@ -4,7 +4,7 @@
 #include "Scanner.h"
 #include "Util.h"
 #include "AST/CompilerVisitor.h"
-#include "AST/TreeBuilder.h"
+#include "AST/Builder.h"
 #include "JIT/Compiler.h"
 
 int main(int argc, char** argv) {
@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     }
 
     TapeWorm::InterWorm::Scanner scanner;
-    TapeWorm::AST::TreeBuilder treeBuilder;
+    TapeWorm::AST::Builder treeBuilder;
     TapeWorm::AST::CompilerVisitor compilerVisitor;
     TapeWorm::JIT::Compiler jitCompiler;
 

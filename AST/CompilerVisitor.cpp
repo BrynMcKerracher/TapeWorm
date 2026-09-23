@@ -1,6 +1,6 @@
 #include "CompilerVisitor.h"
-#include "AtomicNode.h"
-#include "BlockNode.h"
+#include "TerminalNode.h"
+#include "SyntacticNode.h"
 #include "GlobalNode.h"
 #include "LeafStatementNode.h"
 
@@ -12,11 +12,11 @@
 namespace TapeWorm::AST {
     std::vector<InterWorm::Op::Type> CompilerVisitor::Visit(const Global& node) {
         ops.clear();
-        node->Accept(this);
+        node->AcceptReadOnlyVisitor(this);
         return ops;
     }
 
-    void CompilerVisitor::VisitAtomic(AtomicNode* node) {
+    void CompilerVisitor::VisitTerminal(TerminalNode* node) {
         const InterWorm::Token::Type tokenType = node->token.type;
         const std::size_t data = node->token.length;
         switch (tokenType) {
@@ -71,17 +71,17 @@ namespace TapeWorm::AST {
         }
     }
 
-    void CompilerVisitor::VisitBlock(BlockNode* node) {
+    void CompilerVisitor::VisitBlock(SyntacticNode* node) {
         WriteOp(InterWorm::Op::JumpIfZero);
         for (const Node& subNode : node->subNodes) {
-            subNode->Accept(this);
+            subNode->AcceptReadOnlyVisitor(this);
         }
         WriteOp(InterWorm::Op::JumpNotZero);
     }
 
     void CompilerVisitor::VisitGlobal(GlobalNode* node) {
         for (const Node& subNode : node->subNodes) {
-            subNode->Accept(this);
+            subNode->AcceptReadOnlyVisitor(this);
         }
     }
 

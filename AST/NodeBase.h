@@ -1,28 +1,55 @@
 /**
- * @file Node.h
- * @author brynm
+ * @file NodeBase.h
+ * @author Bryn McKerracher
  */
-#ifndef TAPEWORM_EXPRESSION_H
-#define TAPEWORM_EXPRESSION_H
+#ifndef TAPEWORM_NODEBASE_H
+#define TAPEWORM_NODEBASE_H
 
 #include <memory>
-#include <any>
 
 namespace TapeWorm::AST {
+    /**
+     * @struct NodeBase
+     * @brief Base class for all nodes in the AST.
+     *
+     * To add a new Node type to the AST structure:
+     *   1. Add a new Type for the class to the NodeBase::Type enum.
+     *   2. Create a new subclass of NodeBase.
+     *   3. Make sure the new class sets its nodeType to the new Type.
+     **/
     struct NodeBase {
+        /**
+         * @brief Exhaustive list of all subclasses.
+         *
+         * These are tags for each subclass type.
+         */
         enum Type {
-            None,
-            Atomic,
+            None, /// No subclass should have this type.
+            Terminal,
             Block,
             Global,
             LeafStatement
         };
 
+        /**
+         * @brief Tag specifying subclass type.
+         **/
         Type nodeType = None;
 
         virtual ~NodeBase() = default;
-        virtual void Accept(struct NodeVisitor* visitor) = 0;
-        virtual NodeBase* AcceptEditor(struct NodeEditor* editor) = 0;
+
+        /**
+         * @brief Visitor pattern entry method for read-only traversing the AST.
+         * @param visitor The visitor object read-only traversing the AST.
+         */
+        virtual void AcceptReadOnlyVisitor(struct NodeReadOnlyVisitor* visitor) = 0;
+
+        /**
+         * @brief Visitor pattern entry method for read-write traversing the AST.
+         * @param editor The visitor object read-write traversing the AST.
+         * @return An updated node to replace this node.
+         */
+        virtual NodeBase* AcceptReadWriteVisitor(struct NodeReadWriteVisitor* editor) = 0;
     };
 
     typedef std::unique_ptr<NodeBase> Node;

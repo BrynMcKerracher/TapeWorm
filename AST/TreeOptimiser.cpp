@@ -3,21 +3,20 @@
  * @author Bryn McKerracher
  */
 #include "TreeOptimiser.h"
-#include "LeafStatementNode.h"
 
 namespace TapeWorm::AST {
     Global TreeOptimiser::Optimise(Global& node) {
-        node->AcceptEditor(this);
+        node->AcceptReadWriteVisitor(this);
         return std::move(node);
     }
 
-    NodeBase* TreeOptimiser::VisitAtomic(AtomicNode* node) {
+    NodeBase* TreeOptimiser::VisitTerminal(TerminalNode* node) {
         return node;
     }
 
-    NodeBase* TreeOptimiser::VisitBlock(BlockNode* node) {
+    NodeBase* TreeOptimiser::VisitSyntactic(SyntacticNode* node) {
         for (auto& subNode : node->subNodes) {
-            NodeBase* newNode = subNode->AcceptEditor(this);
+            NodeBase* newNode = subNode->AcceptReadWriteVisitor(this);
             if (newNode != subNode.get()) {
                 subNode.reset(newNode);
             }
@@ -27,7 +26,7 @@ namespace TapeWorm::AST {
 
     NodeBase* TreeOptimiser::VisitGlobal(GlobalNode* node) {
         for (auto& subNode : node->subNodes) {
-            NodeBase* newNode = subNode->AcceptEditor(this);
+            NodeBase* newNode = subNode->AcceptReadWriteVisitor(this);
             if (newNode != subNode.get()) {
                 subNode.reset(newNode);
             }
