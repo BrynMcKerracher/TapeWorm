@@ -10,7 +10,12 @@ namespace TapeWorm::AST {
         inputTokens = tokens;
         currentTokenIndex = 0;
 
-        return BuildGlobalNode();
+        Global ast = BuildGlobalNode();
+
+        inputTokens.clear();
+        currentTokenIndex = 0;
+
+        return ast;
     }
 
      Global Builder::BuildGlobalNode() {

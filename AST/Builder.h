@@ -7,7 +7,6 @@
 
 #include "NodeTypes.h"
 #include "../Token.h"
-#include <stack>
 
 namespace TapeWorm::AST {
     /**
@@ -42,6 +41,8 @@ namespace TapeWorm::AST {
         /**
          * @name inputTokens
          * @brief The array of tokens from which we are building the AST.
+         *
+         * This field is used to store a copy of the token list arg provided by the BuildAST() method.
          */
         std::vector<InterWorm::Token> inputTokens;
 

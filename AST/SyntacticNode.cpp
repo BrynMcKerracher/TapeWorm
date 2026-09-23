@@ -8,7 +8,7 @@
 
 namespace TapeWorm::AST {
     SyntacticNode::SyntacticNode() {
-        nodeType = Block;
+        type = Syntactic;
     }
 
     void SyntacticNode::AcceptReadOnlyVisitor(NodeReadOnlyVisitor* visitor) {

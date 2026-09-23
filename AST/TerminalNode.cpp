@@ -4,11 +4,11 @@
 
 namespace TapeWorm::AST {
     TerminalNode::TerminalNode() {
-        nodeType = Terminal;
+        type = Terminal;
     }
 
     TerminalNode::TerminalNode(const InterWorm::Token &token) {
-        nodeType = Terminal;
+        type = Terminal;
         this->token = token;
     }
 

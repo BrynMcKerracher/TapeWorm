@@ -13,9 +13,15 @@
 namespace TapeWorm::AST {
     /**
      * @struct TerminalNode
-     * @brief Represents a formal terminal InterWorm Token node in the AST.
+     * @brief Represents a formal terminal InterWorm node in the AST.
+     *
+     * A terminal node represents a single indivisible InterWorm token.
      **/
     struct TerminalNode final : NodeBase {
+        /**
+         * @name token
+         * @brief The I::T token this node represents in an AST.
+         */
         InterWorm::Token token;
 
         TerminalNode();

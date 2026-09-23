@@ -8,7 +8,7 @@
 
 namespace TapeWorm::AST {
     GlobalNode::GlobalNode() {
-        nodeType = Global;
+        type = Global;
     }
 
     void GlobalNode::AcceptReadOnlyVisitor(NodeReadOnlyVisitor* visitor) {
