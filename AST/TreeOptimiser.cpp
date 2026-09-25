@@ -1,7 +1,7 @@
 /**
  * @file TreeOptimiser.cpp
  * @author Bryn McKerracher
- */
+ **/
 #include "TreeOptimiser.h"
 
 namespace TapeWorm::AST {

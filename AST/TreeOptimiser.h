@@ -1,7 +1,7 @@
 /**
  * @file TreeOptimiser.h
  * @author Bryn McKerracher
- */
+ **/
 #ifndef TAPEWORMTESTS_TREEOPTIMISER_H
 #define TAPEWORMTESTS_TREEOPTIMISER_H
 

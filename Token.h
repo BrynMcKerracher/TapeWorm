@@ -1,7 +1,7 @@
 /**
  * @file Token.h
  * @author Bryn McKerracher
- */
+ **/
 #ifndef TAPEWORM_TOKEN_H
 #define TAPEWORM_TOKEN_H
 

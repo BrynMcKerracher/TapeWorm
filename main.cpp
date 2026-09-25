@@ -1,3 +1,7 @@
+/**
+ * @file main.cpp
+ * @author Bryn McKerracher
+ **/
 #include <chrono>
 #include <iostream>
 

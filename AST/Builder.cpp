@@ -1,7 +1,7 @@
 /**
  * @file Builder.cpp
  * @author Bryn McKerracher
- */
+ **/
 #include "Builder.h"
 #include "TerminalNode.h"
 

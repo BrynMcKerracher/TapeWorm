@@ -1,3 +1,7 @@
+/**
+ * @file CompilerVisitor.cpp
+ * @author Bryn McKerracher
+ **/
 #include "CompilerVisitor.h"
 #include "NodeTypes.h"
 
