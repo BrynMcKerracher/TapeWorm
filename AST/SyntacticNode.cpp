@@ -1,7 +1,7 @@
 /**
- * @file BlockNode.cpp
- * @author brynm
- */
+ * @file SyntacticNode.cpp
+ * @author Bryn McKerracher
+ **/
 #include "SyntacticNode.h"
 #include "NodeReadWriteVisitor.h"
 #include "NodeReadOnlyVisitor.h"

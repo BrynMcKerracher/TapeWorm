@@ -1,7 +1,7 @@
 /**
  * @file TerminalNode.h
  * @author Bryn McKerracher
- */
+ **/
 #ifndef TAPEWORM_TERMINALNODE_H
 #define TAPEWORM_TERMINALNODE_H
 

@@ -1,7 +1,7 @@
 /**
  * @file Util.h
- * @author brynm
- */
+ * @author Bryn McKerracher
+ **/
 #ifndef TAPEWORM_UTIL_H
 #define TAPEWORM_UTIL_H
 

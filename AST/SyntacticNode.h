@@ -1,7 +1,7 @@
 /**
  * @file SyntacticNode.h
- * @author brynm
- */
+ * @author Bryn McKerracher
+ **/
 #ifndef TAPEWORM_SYNTACTICNODE_H
 #define TAPEWORM_SYNTACTICNODE_H
 

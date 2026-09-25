@@ -1,7 +1,7 @@
 /**
  * @file Builder.h
  * @author Bryn McKerracher
- */
+ **/
 #ifndef TAPEWORM_BUILDER_H
 #define TAPEWORM_BUILDER_H
 

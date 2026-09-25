@@ -1,6 +1,6 @@
 /**
  * @file ScannerOptimiser.h
- * @author brynm
+ * @author Bryn McKerracher
  */
 #ifndef TAPEWORM_SCANNEROPTIMISER_H
 #define TAPEWORM_SCANNEROPTIMISER_H

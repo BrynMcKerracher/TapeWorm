@@ -1,7 +1,7 @@
 /**
  * @file MetaTerminalNode.h
  * @author Bryn McKerracher
- */
+ **/
 #include "MetaTerminalNode.h"
 #include "NodeReadWriteVisitor.h"
 #include "NodeReadOnlyVisitor.h"

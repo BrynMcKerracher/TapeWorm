@@ -1,6 +1,6 @@
 /**
  * @file Scanner.h
- * @author brynm
+ * @author Bryn McKerracher
  */
 #ifndef TAPEWORM_SCANNER_H
 #define TAPEWORM_SCANNER_H

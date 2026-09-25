@@ -1,6 +1,6 @@
 /**
  * @file Scanner.cpp
- * @author brynm
+ * @author Bryn McKerracher
  */
 #include "Scanner.h"
 

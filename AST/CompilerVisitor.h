@@ -1,3 +1,7 @@
+/**
+ * @file CompilerVisitor.cpp
+ * @author Bryn McKerracher
+ **/
 #ifndef TAPEWORM_COMPILERVISITOR_H
 #define TAPEWORM_COMPILERVISITOR_H
 

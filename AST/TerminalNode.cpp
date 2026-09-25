@@ -1,3 +1,7 @@
+/**
+ * @file TerminalNode.cpp
+ * @author Bryn McKerracher
+ **/
 #include "TerminalNode.h"
 #include "NodeReadWriteVisitor.h"
 #include "NodeReadOnlyVisitor.h"

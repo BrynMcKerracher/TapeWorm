@@ -1,6 +1,6 @@
 /**
  * @file Op.cpp
- * @author brynm
+ * @author Bryn McKerracher
  */
 #include "Op.h"
 

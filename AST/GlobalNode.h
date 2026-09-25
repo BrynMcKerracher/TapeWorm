@@ -1,7 +1,7 @@
 /**
  * @file GlobalNode.h
  * @author Bryn McKerracher
- */
+ **/
 #ifndef TAPEWORM_GLOBALNODE_H
 #define TAPEWORM_GLOBALNODE_H
 

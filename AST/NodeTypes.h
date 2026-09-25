@@ -1,7 +1,7 @@
 /**
  * @file NodeTypes.h
  * @author Bryn McKerracher
- */
+ **/
 #ifndef TAPEWORM_NODETYPES_H
 #define TAPEWORM_NODETYPES_H
 

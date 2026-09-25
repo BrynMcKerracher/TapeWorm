@@ -1,6 +1,6 @@
 /**
  * @file Op.h
- * @author brynm
+ * @author Bryn McKerracher
  */
 #ifndef TAPEWORM_OP_H
 #define TAPEWORM_OP_H

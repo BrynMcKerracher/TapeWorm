@@ -1,7 +1,7 @@
 /**
  * @file NodeReadOnlyVisitor.h
  * @author Bryn McKerracher
- */
+ **/
 #ifndef TAPEWORM_NODEREADONLYVISITOR_H
 #define TAPEWORM_NODEREADONLYVISITOR_H
 

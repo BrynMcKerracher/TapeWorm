@@ -1,7 +1,7 @@
 /**
  * @file Util.cpp
- * @author brynm
- */
+ * @author Bryn McKerracher
+ **/
 #include "Util.h"
 
 #include <sstream>

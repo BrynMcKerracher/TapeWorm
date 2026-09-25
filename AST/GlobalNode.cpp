@@ -1,7 +1,7 @@
 /**
  * @file GlobalNode.cpp
- * @author brynm
- */
+ * @author Bryn McKerracher
+ **/
 #include "GlobalNode.h"
 #include "NodeReadWriteVisitor.h"
 #include "NodeReadOnlyVisitor.h"

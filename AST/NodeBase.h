@@ -1,7 +1,7 @@
 /**
  * @file NodeBase.h
  * @author Bryn McKerracher
- */
+ **/
 #ifndef TAPEWORM_NODEBASE_H
 #define TAPEWORM_NODEBASE_H
 

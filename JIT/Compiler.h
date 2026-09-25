@@ -1,6 +1,6 @@
 /**
  * @file Compiler.h
- * @author brynm
+ * @author Bryn McKerracher
  */
 #ifndef TAPEWORM_JITCOMPILER_H
 #define TAPEWORM_JITCOMPILER_H

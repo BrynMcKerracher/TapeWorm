@@ -1,7 +1,7 @@
 /**
  * @file MetaTerminalNode.h
  * @author Bryn McKerracher
- */
+ **/
 #ifndef TAPEWORM_METATERMINALNODE_H
 #define TAPEWORM_METATERMINALNODE_H
 

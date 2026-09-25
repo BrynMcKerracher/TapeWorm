@@ -1,3 +1,7 @@
+/**
+ * @file ScannerOptimiser.cpp
+ * @author Bryn McKerracher
+ **/
 #include "ScannerOptimiser.h"
 
 namespace TapeWorm {
