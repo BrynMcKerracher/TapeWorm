@@ -53,8 +53,8 @@ add_executable(TapeWormTests
         ../ScannerOptimiser.cpp
         ../ScannerOptimiser.h
         ../Token.cpp
-        ../AST/LeafStatementNode.cpp
-        ../AST/LeafStatementNode.h
+        ../AST/MetaTerminalNode.cpp
+        ../AST/MetaTerminalNode.h
         FullPipelineTests.cpp
         ../Debug/Profiler.cpp
         ../Debug/Profiler.h

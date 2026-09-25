@@ -17,7 +17,7 @@ namespace TapeWorm::AST {
         void VisitTerminal(TerminalNode* node) override;
         void VisitSyntactic(SyntacticNode* node) override;
         void VisitGlobal(GlobalNode* node) override;
-        void VisitLeafStatement(LeafStatementNode *node) override;
+        void VisitLeafStatement(MetaTerminalNode *node) override;
 
         void WriteInt64(int64_t n);
         void WriteOps(std::initializer_list<InterWorm::Op::Type> bytes);

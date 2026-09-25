@@ -34,7 +34,12 @@ namespace TapeWorm::InterWorm {
             EndOfFile
         };
 
+        /**
+         * @name type
+         * @brief Tagged type.
+         **/
         Type type = Nop;
+
         int64_t length = 0;
 
         [[nodiscard]] std::string ToString() const;

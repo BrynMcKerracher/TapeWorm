@@ -80,7 +80,7 @@ namespace TapeWorm::AST {
         }
     }
 
-    void CompilerVisitor::VisitLeafStatement(LeafStatementNode *node) {
+    void CompilerVisitor::VisitLeafStatement(MetaTerminalNode *node) {
         //Void
     }
 

@@ -34,7 +34,7 @@ namespace TapeWorm::AST {
         return node;
     }
 
-    NodeBase* TreeOptimiser::VisitLeafStatement(LeafStatementNode* node) {
+    NodeBase* TreeOptimiser::VisitMetaTerminal(MetaTerminalNode* node) {
         return node;
     }
 } // TapeWorm

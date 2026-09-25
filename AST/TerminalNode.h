@@ -30,6 +30,7 @@ namespace TapeWorm::AST {
         void AcceptReadOnlyVisitor(NodeReadOnlyVisitor *visitor) override;
         NodeBase* AcceptReadWriteVisitor(NodeReadWriteVisitor *editor) override;
     };
+
     typedef std::unique_ptr<TerminalNode> Terminal;
 }
 

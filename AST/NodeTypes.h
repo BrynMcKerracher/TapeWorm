@@ -9,6 +9,6 @@
 #include "TerminalNode.h"
 #include "SyntacticNode.h"
 #include "GlobalNode.h"
-#include "LeafStatementNode.h"
+#include "MetaTerminalNode.h"
 
 #endif //TAPEWORM_NODETYPES_H

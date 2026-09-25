@@ -38,8 +38,8 @@ add_executable(TapeWorm
         AST/TerminalNode.h
         AST/CompilerVisitor.cpp
         AST/CompilerVisitor.h
-        AST/LeafStatementNode.cpp
-        AST/LeafStatementNode.h
+        AST/MetaTerminalNode.cpp
+        AST/MetaTerminalNode.h
         AST/TreeOptimiser.cpp
         AST/NodeTypes.h
         Debug/ASTAnalyser.cpp

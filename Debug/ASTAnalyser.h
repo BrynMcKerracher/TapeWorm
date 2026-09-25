@@ -21,7 +21,7 @@ namespace TapeWorm::AST::Debug {
         void VisitTerminal(TerminalNode* node) override;
         void VisitSyntactic(SyntacticNode* node) override;
         void VisitGlobal(GlobalNode* node) override;
-        void VisitLeafStatement(LeafStatementNode *node) override;
+        void VisitLeafStatement(MetaTerminalNode *node) override;
     };
 }
 

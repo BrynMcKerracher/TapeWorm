@@ -20,7 +20,7 @@ namespace TapeWorm::AST {
         virtual void VisitTerminal(TerminalNode* node) = 0;
         virtual void VisitSyntactic(SyntacticNode* node) = 0;
         virtual void VisitGlobal(GlobalNode* node) = 0;
-        virtual void VisitLeafStatement(LeafStatementNode* node) = 0;
+        virtual void VisitLeafStatement(MetaTerminalNode* node) = 0;
     };
 }
 

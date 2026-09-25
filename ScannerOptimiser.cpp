@@ -61,9 +61,9 @@ namespace TapeWorm {
         for (const OptimisationRequirements& optimisation : optimisations) {
             if (Match(tokens, index, optimisation.types)) {
                 return {
-                    true,
-                    {optimisation.replacement, tokens[index + optimisation.lengthIndex].length * optimisation.factor},
-                    optimisation.types.size()
+                    .isAvailable = true,
+                    .token = {.type = optimisation.replacement, .length = tokens[index + optimisation.lengthIndex].length * optimisation.factor},
+                    .offset = optimisation.types.size()
                 };
             }
         }
