@@ -55,7 +55,7 @@ namespace TapeWorm::AST::Debug {
         std::cout << "ASTAnalysis visited " << nodesVisited << " nodes\n";
     }
 
-    void Analyser::VisitLeafStatement(MetaTerminalNode *node) {
+    void Analyser::VisitMetaTerminal(MetaTerminalNode *node) {
 
     }
 }

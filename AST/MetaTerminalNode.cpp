@@ -8,7 +8,7 @@
 
 namespace TapeWorm::AST {
     void MetaTerminalNode::AcceptReadOnlyVisitor(NodeReadOnlyVisitor *visitor) {
-        visitor->VisitLeafStatement(this);
+        visitor->VisitMetaTerminal(this);
     }
 
     NodeBase *MetaTerminalNode::AcceptReadWriteVisitor(NodeReadWriteVisitor *editor) {

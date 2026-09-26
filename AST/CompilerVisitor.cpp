@@ -20,7 +20,12 @@ namespace TapeWorm::AST {
         const std::size_t data = node->token.length;
         switch (tokenType) {
             case InterWorm::Token::IncPointer: {
-                if (data > 1) {
+                if (data > 255) {
+                    ops.push_back(InterWorm::Op::Type::AddPointerExtended);
+                    ops.push_back(static_cast<InterWorm::Op::Type>(data));
+                    ops.push_back(static_cast<InterWorm::Op::Type>(data >> 8));
+                }
+                else if (data > 1) {
                     ops.push_back(InterWorm::Op::Type::AddPointer);
                     ops.push_back(static_cast<InterWorm::Op::Type>(data));
                 }
@@ -28,7 +33,12 @@ namespace TapeWorm::AST {
                 break;
             }
             case InterWorm::Token::DecPointer: {
-                if (data > 1) {
+                if (data > 255) {
+                    ops.push_back(InterWorm::Op::Type::SubPointerExtended);
+                    ops.push_back(static_cast<InterWorm::Op::Type>(data));
+                    ops.push_back(static_cast<InterWorm::Op::Type>(data >> 8));
+                }
+                else if (data > 1) {
                     ops.push_back(InterWorm::Op::Type::SubPointer);
                     ops.push_back(static_cast<InterWorm::Op::Type>(data));
                 }
@@ -36,7 +46,12 @@ namespace TapeWorm::AST {
                 break;
             }
             case InterWorm::Token::IncCell: {
-                if (data > 1) {
+                if (data > 255) {
+                    ops.push_back(InterWorm::Op::Type::AddImmediateExtended);
+                    ops.push_back(static_cast<InterWorm::Op::Type>(data));
+                    ops.push_back(static_cast<InterWorm::Op::Type>(data >> 8));
+                }
+                else if (data > 1) {
                     ops.push_back(InterWorm::Op::Type::AddImmediate);
                     ops.push_back(static_cast<InterWorm::Op::Type>(data));
                 }
@@ -44,7 +59,12 @@ namespace TapeWorm::AST {
                 break;
             }
             case InterWorm::Token::DecCell: {
-                if (data > 1) {
+                if (data > 255) {
+                    ops.push_back(InterWorm::Op::Type::SubImmediateExtended);
+                    ops.push_back(static_cast<InterWorm::Op::Type>(data));
+                    ops.push_back(static_cast<InterWorm::Op::Type>(data >> 8));
+                }
+                else if (data > 1) {
                     ops.push_back(InterWorm::Op::Type::SubImmediate);
                     ops.push_back(static_cast<InterWorm::Op::Type>(data));
                 }
@@ -84,14 +104,8 @@ namespace TapeWorm::AST {
         }
     }
 
-    void CompilerVisitor::VisitLeafStatement(MetaTerminalNode *node) {
+    void CompilerVisitor::VisitMetaTerminal(MetaTerminalNode *node) {
         //Void
-    }
-
-    void CompilerVisitor::WriteInt64(const int64_t n) {
-        for (uint64_t i = 0; i < sizeof(n); ++i) {
-            WriteOp(static_cast<InterWorm::Op::Type>(n >> (8 * i)));
-        }
     }
 
     void CompilerVisitor::WriteOps(const std::initializer_list<InterWorm::Op::Type> bytes) {
