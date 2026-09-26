@@ -5,8 +5,8 @@ enable_testing()
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(BUILD_SHARED_LIBS OFF)
-set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
+#set(BUILD_SHARED_LIBS OFF)
+#set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
 
 set(ASMJIT_STATIC TRUE)
 include(FetchContent)
@@ -16,8 +16,16 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(asmjit)
 
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
 add_executable(TapeWormTests
-        main.cpp
+        FullPipelineTest.cpp
         ../Util.cpp
         ../Util.h
         ../Token.cpp
@@ -50,13 +58,7 @@ add_executable(TapeWormTests
         ../ScannerOptimiser.h
 )
 
-target_link_libraries(TapeWormTests asmjit::asmjit)
+target_link_libraries(TapeWormTests PRIVATE asmjit::asmjit GTest::gtest_main)
 
-add_test(NAME HelloWorld COMMAND TapeWormTests "../Tests/hw.b")
-set_property(TEST HelloWorld PROPERTY PASS_REGULAR_EXPRESSION "11208743478092974376")
-
-add_test(NAME Mandelbrot COMMAND TapeWormTests "../Tests/mandelbrot.b")
-set_property(TEST Mandelbrot PROPERTY PASS_REGULAR_EXPRESSION "4686367950102506177")
-
-add_test(NAME TortureTest COMMAND TapeWormTests "../Tests/bitwidth.b")
-set_property(TEST TortureTest PROPERTY PASS_REGULAR_EXPRESSION "5756710207797096192")
+include(GoogleTest)
+gtest_discover_tests(TapeWormTests)
