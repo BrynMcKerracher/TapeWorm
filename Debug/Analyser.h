@@ -1,5 +1,5 @@
 /**
- * @file ASTAnalyser.h
+ * @file Analyser.h
  * @author Bryn McKerracher
  */
 #ifndef TAPEWORM_ASTANALYSER_H
@@ -12,7 +12,7 @@
 #include <string>
 
 namespace TapeWorm::AST::Debug {
-    class ASTAnalyser final : public NodeReadOnlyVisitor {
+    class Analyser final : public NodeReadOnlyVisitor {
     public:
         void Analyse(const Global& globalNode);
     private:

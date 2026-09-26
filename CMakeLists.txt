@@ -42,8 +42,8 @@ add_executable(TapeWorm
         AST/MetaTerminalNode.h
         AST/TreeOptimiser.cpp
         AST/NodeTypes.h
-        Debug/ASTAnalyser.cpp
-        Debug/ASTAnalyser.h
+        Debug/Analyser.cpp
+        Debug/Analyser.h
         ScannerOptimiser.cpp
         ScannerOptimiser.h
 )

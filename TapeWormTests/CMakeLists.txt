@@ -48,8 +48,8 @@ add_executable(TapeWormTests
         ../AST/TerminalNode.h
         ../AST/CompilerVisitor.cpp
         ../AST/CompilerVisitor.h
-        ../Debug/ASTAnalyser.cpp
-        ../Debug/ASTAnalyser.h
+        ../Debug/Analyser.cpp
+        ../Debug/Analyser.h
         ../ScannerOptimiser.cpp
         ../ScannerOptimiser.h
         ../Token.cpp
