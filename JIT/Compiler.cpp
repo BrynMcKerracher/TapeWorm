@@ -183,7 +183,7 @@ namespace TapeWorm::JIT {
     }
 
     void Compiler::WriteCharacter(const uint8_t character) {
-        std::cout.put(character);
+        std::cout << character;
     }
 
     uint8_t Compiler::ReadCharacter() {
