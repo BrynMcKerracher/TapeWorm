@@ -18,12 +18,12 @@ namespace {
     class FullPipelineTest : public ::testing::Test {
     protected:
         void SetUp() override {
-            coutbuf = std::cout.rdbuf();
-            std::cout.rdbuf(stream.rdbuf());
+           // coutbuf = std::cout.rdbuf();
+           // std::cout.rdbuf(stream.rdbuf());
         }
 
         void TearDown() override {
-            std::cout.rdbuf(coutbuf);
+           // std::cout.rdbuf(coutbuf);
         }
 
         std::streambuf* coutbuf = nullptr;
