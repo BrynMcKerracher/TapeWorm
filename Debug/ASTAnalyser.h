@@ -1,14 +1,15 @@
 /**
  * @file ASTAnalyser.h
- * @author brynm
+ * @author Bryn McKerracher
  */
 #ifndef TAPEWORM_ASTANALYSER_H
 #define TAPEWORM_ASTANALYSER_H
 
-#include <map>
-#include <string>
 #include "../AST/NodeReadOnlyVisitor.h"
 #include "../AST/GlobalNode.h"
+
+#include <map>
+#include <string>
 
 namespace TapeWorm::AST::Debug {
     class ASTAnalyser final : public NodeReadOnlyVisitor {

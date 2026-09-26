@@ -6,6 +6,7 @@
 #define TAPEWORM_METATERMINALNODE_H
 
 #include "NodeBase.h"
+
 #include <cstdint>
 #include <memory>
 #include <map>

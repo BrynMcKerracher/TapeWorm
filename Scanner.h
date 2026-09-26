@@ -5,9 +5,10 @@
 #ifndef TAPEWORM_SCANNER_H
 #define TAPEWORM_SCANNER_H
 
+#include "Token.h"
+
 #include <vector>
 #include <string>
-#include "Token.h"
 
 namespace TapeWorm::InterWorm {
     class Scanner {

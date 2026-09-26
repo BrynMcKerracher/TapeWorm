@@ -2,16 +2,16 @@
  * @file main.cpp
  * @author Bryn McKerracher
  **/
-#include <chrono>
-#include <iostream>
-
 #include "Scanner.h"
 #include "Util.h"
 #include "AST/CompilerVisitor.h"
 #include "AST/Builder.h"
 #include "JIT/Compiler.h"
 
-int main(int argc, char** argv) {
+#include <chrono>
+#include <iostream>
+
+int main(const int argc, char** argv) {
     //Check correct number of arguments
     if (argc < 2) {
         std::cerr << "Error: No file given to interpret.\n";

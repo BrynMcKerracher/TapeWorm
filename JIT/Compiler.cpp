@@ -3,6 +3,7 @@
  * @author Bryn McKerracher
  **/
 #include "Compiler.h"
+
 #include <iostream>
 #include <fstream>
 #include <stack>

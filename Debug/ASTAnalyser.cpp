@@ -1,9 +1,8 @@
 /**
  * @file ASTAnalyser.cpp
- * @author brynm
+ * @author Bryn McKerracher
  */
 #include "ASTAnalyser.h"
-
 #include "../AST/TerminalNode.h"
 #include "../AST/SyntacticNode.h"
 

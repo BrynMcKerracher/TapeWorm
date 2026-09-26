@@ -56,8 +56,6 @@ add_executable(TapeWormTests
         ../AST/MetaTerminalNode.cpp
         ../AST/MetaTerminalNode.h
         FullPipelineTests.cpp
-        ../Debug/Profiler.cpp
-        ../Debug/Profiler.h
         ../AST/TreeOptimiser.cpp
         ../AST/TreeOptimiser.h
         ../AST/NodeReadWriteVisitor.h

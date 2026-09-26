@@ -5,11 +5,11 @@
 #ifndef TAPEWORM_JITCOMPILER_H
 #define TAPEWORM_JITCOMPILER_H
 
-#include <vector>
-
 #include "../Op.h"
 #include "asmjit/core/jit_runtime.h"
 #include "asmjit/x86/x86_assembler.h"
+
+#include <vector>
 
 namespace TapeWorm::JIT {
     using MainEntry = void(*)(uintptr_t);

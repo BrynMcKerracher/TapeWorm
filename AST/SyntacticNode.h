@@ -6,6 +6,7 @@
 #define TAPEWORM_SYNTACTICNODE_H
 
 #include "NodeBase.h"
+
 #include <vector>
 #include <memory>
 
