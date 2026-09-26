@@ -55,7 +55,7 @@ TEST_F(FullPipelineTest, HelloWorld) {
     try {
         jitCompiler.Compile(ops);
     } catch (std::exception &e) {
-        std::cerr << e.what() << std::endl;
+        std::cerr << "EXCEPTION" << e.what() << std::endl;
     }
 
     EXPECT_EQ(fnv1a64(stream.str()), 11208743478092974376u);
