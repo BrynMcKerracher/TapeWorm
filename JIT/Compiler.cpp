@@ -47,6 +47,8 @@ namespace TapeWorm::JIT {
                 }
                 case InterWorm::Op::OutputCell: {
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
+                    assembler.push(x86::byte_ptr(cellPointer));
+                    assembler.push(firstArgRegister);
                     assembler.push(x86::rbp);
                     assembler.mov(x86::rbp, x86::rsp);
                     assembler.and_(x86::rsp, -16);
@@ -55,6 +57,8 @@ namespace TapeWorm::JIT {
                     assembler.call(WriteCharacter);
                     assembler.mov(x86::rsp, x86::rbp);
                     assembler.pop(x86::rbp);
+                    assembler.pop(firstArgRegister);
+                    assembler.pop(x86::byte_ptr(cellPointer));
                     break;
                 }
                 case InterWorm::Op::InputCell: {
