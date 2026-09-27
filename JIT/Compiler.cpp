@@ -27,7 +27,7 @@ namespace TapeWorm::JIT {
         constexpr x86::Gp cellPointer = x86::r15;
 
         //Calling conventions decide which registers to use for syscalls
-        #if defined (_WIN32) || defined (__CYGWIN__)
+        #if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
         constexpr x86::Gp firstArgRegister = x86::rcx;
         #else
         constexpr x86::Gp firstArgRegister = x86::rdi;
@@ -60,7 +60,7 @@ namespace TapeWorm::JIT {
                     assembler.push(x86::rbp);
                     assembler.mov(x86::rbp, x86::rsp);
                     assembler.and_(x86::rsp, -16);
-                    assembler.sub(x86::rsp, 32);
+                    assembler.sub(x86::rsp, 40);
                     assembler.call(ReadCharacter);
                     assembler.mov(x86::rsp, x86::rbp);
                     assembler.pop(x86::rbp);
