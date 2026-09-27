@@ -52,10 +52,7 @@ namespace TapeWorm::JIT {
                     assembler.and_(x86::rsp, -16);
                     assembler.sub(x86::rsp, 8);
 
-                    assembler.mov(x86::rax, reinterpret_cast<uintptr_t>(WriteCharacter));
-
-                    //assembler.call(WriteCharacter);
-                    assembler.call(x86::rax);
+                    assembler.call(WriteCharacter);
                     assembler.mov(x86::rsp, x86::rbp);
                     assembler.pop(x86::rbp);
                     break;

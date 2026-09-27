@@ -20,7 +20,7 @@ namespace TapeWorm::JIT {
     private:
         asmjit::JitRuntime runtime;
         std::vector<uint8_t> runtimeMemory;
-        constexpr static std::size_t RuntimeMemorySize = 30000;
+        constexpr static std::size_t RuntimeMemorySize = 80000;
 
         struct ControlFlowPair {
             ControlFlowPair(const asmjit::Label& open, const asmjit::Label& close) :
