@@ -25,8 +25,6 @@ namespace TapeWorm::JIT {
 
         //Registers R15-R12 are non-volatile on x86.
         constexpr x86::Gp cellPointer = x86::r15;
-        constexpr x86::Gp loadRegister = x86::r14;
-        constexpr x86::Gp arithRegister = x86::r13;
 
         //Calling conventions decide which registers to use for syscalls
         #if defined (_WIN32) || defined (__CYGWIN__)
@@ -48,11 +46,6 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::OutputCell: {
-                    /*assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
-                    assembler.sub(x86::rsp, 7);
-                    assembler.call(WriteCharacter);
-                    assembler.add(x86::rsp, 7); */
-
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
                     assembler.push(x86::rbp);
                     assembler.mov(x86::rbp, x86::rsp);
@@ -64,9 +57,13 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::InputCell: {
-                    assembler.sub(x86::rsp, 7);
+                    assembler.push(x86::rbp);
+                    assembler.mov(x86::rbp, x86::rsp);
+                    assembler.and_(x86::rsp, -16);
+                    assembler.sub(x86::rsp, 32);
                     assembler.call(ReadCharacter);
-                    assembler.add(x86::rsp, 7);
+                    assembler.mov(x86::rsp, x86::rbp);
+                    assembler.pop(x86::rbp);
                     assembler.mov(x86::byte_ptr(cellPointer), x86::al);
                     break;
                 }
