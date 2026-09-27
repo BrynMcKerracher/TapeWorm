@@ -56,6 +56,7 @@ namespace TapeWorm::JIT {
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
                     assembler.push(x86::rbp);
                     assembler.mov(x86::rbp, x86::rsp);
+                    assembler.and_(x86::rsp, -16);
                     assembler.sub(x86::rsp, 32);
                     assembler.call(WriteCharacter);
                     assembler.mov(x86::rsp, x86::rbp);
