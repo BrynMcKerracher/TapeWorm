@@ -12,8 +12,6 @@
 #include <iostream>
 
 int main(const int argc, char** argv) {
-    setvbuf(stdout, NULL, _IONBF, 0);
-
     //Check correct number of arguments
     if (argc < 2) {
         std::cerr << "Error: No source file given.\n";
