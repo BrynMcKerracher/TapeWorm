@@ -1,6 +1,6 @@
 # TapeWorm: A JIT Brainfuck Compiler
 
-[![Deployment Full Pipeline Tests](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Multi-Platform-Full-Pipeline-Tests.yml/badge.svg)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Multi-Platform-Full-Pipeline-Tests.yml)
+[![Ubuntu 22.04 Full Pipeline Tests](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Ubuntu-22.04%20Tests.yml/badge.svg)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Ubuntu-22.04%20Tests.yml)
 
 TapeWorm is an optimising multipass [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter for `x86` platforms, written in C++.
 
