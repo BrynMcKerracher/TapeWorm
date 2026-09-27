@@ -10,7 +10,6 @@
 
 #include <iostream>
 #include <sstream>
-#include <exception>
 
 #include <gtest/gtest.h>
 
@@ -18,12 +17,12 @@ namespace {
     class FullPipelineTest : public ::testing::Test {
     protected:
         void SetUp() override {
-           // coutbuf = std::cout.rdbuf();
-           // std::cout.rdbuf(stream.rdbuf());
+            coutbuf = std::cout.rdbuf();
+            std::cout.rdbuf(stream.rdbuf());
         }
 
         void TearDown() override {
-           // std::cout.rdbuf(coutbuf);
+            std::cout.rdbuf(coutbuf);
         }
 
         std::streambuf* coutbuf = nullptr;
@@ -52,11 +51,7 @@ TEST_F(FullPipelineTest, HelloWorld) {
     const auto ast = treeBuilder.BuildAST(tokens);
     const auto ops = compilerVisitor.Visit(ast);
 
-    try {
-        jitCompiler.Compile(ops);
-    } catch (std::exception &e) {
-        std::cerr << "EXCEPTION" << e.what() << std::endl;
-    }
+    jitCompiler.Compile(ops);
 
     EXPECT_EQ(fnv1a64(stream.str()), 11208743478092974376u);
 }
