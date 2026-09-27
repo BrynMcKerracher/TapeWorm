@@ -60,7 +60,7 @@ namespace TapeWorm::JIT {
                     assembler.push(x86::rbp);
                     assembler.mov(x86::rbp, x86::rsp);
                     assembler.and_(x86::rsp, -16);
-                    assembler.sub(x86::rsp, 40);
+                    //assembler.sub(x86::rsp, 40);
                     assembler.call(ReadCharacter);
                     assembler.mov(x86::rsp, x86::rbp);
                     assembler.pop(x86::rbp);
