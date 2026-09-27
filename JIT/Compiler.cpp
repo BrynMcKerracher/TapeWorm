@@ -151,30 +151,6 @@ namespace TapeWorm::JIT {
                     i++;
                     break;
                 }
-                case InterWorm::Op::Multiply: {
-                    int64_t addr = 0;
-                    for (int n = 0; n < 8; ++n) {
-                        addr |= interwormStream[i + n + 1] << (8 * n);
-                    }
-                    //const auto addr = static_cast<int8_t>(interwormStream[i + 1]);
-                    const auto factor = static_cast<uint8_t>(interwormStream[i + 9]);
-
-                    std::cout << "addr: " << addr << "\n";
-                    std::cout << "factor: " << (int)factor << "\n";
-
-                    assembler.add(cellPointer, addr);
-                    assembler.mov(arithRegister, x86::byte_ptr(cellPointer));
-                    assembler.imul(arithRegister, factor);
-                    assembler.sub(cellPointer, addr);
-                    assembler.movzx(cellPointer, x86::rax);
-
-                    i += 9;
-                    break;
-                }
-                case InterWorm::Op::LoadPointer: {
-                    assembler.movzx(loadRegister, x86::byte_ptr(cellPointer));
-                    break;
-                }
                 default: break;
             }
         }

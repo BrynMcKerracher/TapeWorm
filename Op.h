@@ -6,6 +6,7 @@
 #define TAPEWORM_OP_H
 
 #include <cstdint>
+#include <string>
 
 namespace TapeWorm::InterWorm {
     struct Op {
@@ -30,9 +31,11 @@ namespace TapeWorm::InterWorm {
             SubPointerExtended,
             Add,
             Subtract,
-            Multiply,
-            LoadPointer,
+            NumOps
         };
+
+        static std::string ToString(Type type);
+        static std::size_t NumArgs(Type type);
     };
 } // TapeWorm
 
