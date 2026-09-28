@@ -176,6 +176,7 @@ namespace TapeWorm::JIT {
         mainEntry(reinterpret_cast<uintptr_t>(runtimeMemory.data()));
 
         runtime.release(mainEntry);
+        code.reset();
     }
 
     void Compiler::WriteCharacter(const uint8_t character) {
