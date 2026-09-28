@@ -15,6 +15,6 @@ namespace TapeWorm::AST::Debug {
         for (auto& i : covered) {
             std::cout << InterWorm::Op::ToString(i) << "\n";
         }
-        std::cout << "Coverage: " << 100.f * (static_cast<float>(covered.size()) / static_cast<float>(InterWorm::Op::NumOps)) << "%\n";
+        std::cout << "Coverage: " << 100.f * (static_cast<float>(covered.size()) / static_cast<float>(InterWorm::Op::Count)) << "%\n";
     }
 } // TapeWorm

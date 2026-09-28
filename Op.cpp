@@ -25,9 +25,7 @@ namespace TapeWorm::InterWorm {
             case AddPointerExtended:   return "AddPointerExtended";
             case SubPointer:   return "SubPointer";
             case SubPointerExtended:   return "SubPointerExtended";
-            case Add:          return "Add";
-            case Subtract:     return "Subtract";
-            case NumOps:
+            case Count:        return "Count";
                 break;
         }
         return "Error";
@@ -39,8 +37,6 @@ namespace TapeWorm::InterWorm {
             case SubPointer:
             case AddImmediate:
             case SubImmediate:
-            case Add:
-            case Subtract:
                 return 1;
             case AddPointerExtended:
             case SubPointerExtended:

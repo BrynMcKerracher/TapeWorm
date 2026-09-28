@@ -51,18 +51,6 @@ TEST_CASE("Full Pipline Tests", "[FullPipeline]") {
 
         REQUIRE(fnv1a64(stream.str()) == 4686367950102506177u);
     }
-    /*
-    SECTION("Bitwidth") {
-        const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Tests/bitwidth.b");
-        const auto tokens = scanner.Scan(fileString);
-        const auto ast = treeBuilder.BuildAST(tokens);
-        const auto ops = compilerVisitor.Visit(ast);
-
-        jitCompiler.Compile(ops);
-
-        REQUIRE(fnv1a64(stream.str()) == 5756710207797096192u);
-    }
-    */
     SECTION("Squares") {
         const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Tests/squares.b");
         const auto tokens = scanner.Scan(fileString);

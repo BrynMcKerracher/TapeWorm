@@ -76,16 +76,6 @@ namespace TapeWorm::AST {
             case InterWorm::Token::OutputCell: ops.push_back(InterWorm::Op::Type::OutputCell); break;
             case InterWorm::Token::JumpIfZero: ops.push_back(InterWorm::Op::Type::JumpIfZero); break;
             case InterWorm::Token::JumpNotZero: ops.push_back(InterWorm::Op::Type::JumpNotZero); break;
-            case InterWorm::Token::Move: {
-                ops.push_back(InterWorm::Op::Type::Add);
-                ops.push_back(static_cast<InterWorm::Op::Type>(data));
-                break;
-            }
-            case InterWorm::Token::Difference: {
-                ops.push_back(InterWorm::Op::Type::Subtract);
-                ops.push_back(static_cast<InterWorm::Op::Type>(data));
-                break;
-            }
             default: break;
         }
     }
@@ -105,7 +95,7 @@ namespace TapeWorm::AST {
     }
 
     void CompilerVisitor::VisitMetaTerminal(MetaTerminalNode *node) {
-        //Void
+        //Further optimisation to occur here later
     }
 
     void CompilerVisitor::WriteOps(const std::initializer_list<InterWorm::Op::Type> bytes) {

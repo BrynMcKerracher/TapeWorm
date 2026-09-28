@@ -29,9 +29,7 @@ namespace TapeWorm::InterWorm {
             AddPointerExtended,
             SubPointer,
             SubPointerExtended,
-            Add,
-            Subtract,
-            NumOps
+            Count
         };
 
         static std::string ToString(Type type);

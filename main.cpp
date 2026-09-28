@@ -7,7 +7,6 @@
 #include "AST/CompilerVisitor.h"
 #include "AST/Builder.h"
 #include "JIT/Compiler.h"
-#include "Debug/InstructionCoverage.h"
 
 #include <iostream>
 
@@ -29,8 +28,6 @@ int main(const int argc, char** argv) {
     const auto tokens = scanner.Scan(fileString);
     const auto ast = treeBuilder.BuildAST(tokens);
     const auto ops = compilerVisitor.Visit(ast);
-
-    //TapeWorm::AST::Debug::InstructionCoverage::ListCoverage(ops);
 
     jitCompiler.Compile(ops);
 

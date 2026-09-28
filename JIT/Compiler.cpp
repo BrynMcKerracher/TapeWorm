@@ -142,26 +142,6 @@ namespace TapeWorm::JIT {
                     i += 2;
                     break;
                 }
-                case InterWorm::Op::Add: {
-                    const auto arg = static_cast<int8_t>(interwormStream[i + 1]);
-                    assembler.movzx(x86::rax, x86::byte_ptr(cellPointer));
-                    assembler.add(cellPointer, arg);
-                    assembler.add(x86::byte_ptr(cellPointer), x86::al);
-                    assembler.sub(cellPointer, arg);
-                    assembler.mov(x86::byte_ptr(cellPointer), 0);
-                    i++;
-                    break;
-                }
-                case InterWorm::Op::Subtract: {
-                    const auto arg = static_cast<int8_t>(interwormStream[i + 1]);
-                    assembler.movzx(x86::rax, x86::byte_ptr(cellPointer));
-                    assembler.add(cellPointer, arg);
-                    assembler.sub(x86::byte_ptr(cellPointer), x86::al);
-                    assembler.sub(cellPointer, arg);
-                    assembler.mov(x86::byte_ptr(cellPointer), 0);
-                    i++;
-                    break;
-                }
                 default: break;
             }
         }
