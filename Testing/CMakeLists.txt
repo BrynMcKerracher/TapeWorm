@@ -15,13 +15,14 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(asmjit)
 
 FetchContent_Declare(
-        googletest
-        URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-        DOWNLOAD_EXTRACT_TIMESTAMP true
+        Catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG        v3.8.1 # or a later release
 )
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
+FetchContent_MakeAvailable(Catch2)
+list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
+include(CTest)
+include(Catch)
 
 add_executable(TapeWormTests
         FullPipelineTest.cpp
@@ -59,7 +60,5 @@ add_executable(TapeWormTests
         ../Debug/InstructionCoverage.h
 )
 
-target_link_libraries(TapeWormTests PRIVATE asmjit::asmjit GTest::gtest_main)
-
-include(GoogleTest)
-gtest_discover_tests(TapeWormTests)
+target_link_libraries(TapeWormTests PRIVATE asmjit::asmjit Catch2::Catch2WithMain)
+catch_discover_tests(TapeWormTests)
