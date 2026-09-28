@@ -45,21 +45,35 @@ namespace TapeWorm::JIT {
                     assembler.mov(x86::byte_ptr(cellPointer), 0);
                     break;
                 }
+            #if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
                 case InterWorm::Op::OutputCell: {
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
                     assembler.push(x86::rbp);
                     assembler.mov(x86::rbp, x86::rsp);
                     assembler.and_(x86::rsp, -16);
-                #if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
                     assembler.sub(x86::rsp, 40);
-                #else
-                    assembler.sub(x86::rsp, 8);
-                #endif
                     assembler.call(WriteCharacter);
                     assembler.mov(x86::rsp, x86::rbp);
                     assembler.pop(x86::rbp);
                     break;
                 }
+            #else
+                case InterWorm::Op::OutputCell: {
+                    assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
+
+                    //assembler.push(x86::rbp);
+                   // assembler.mov(x86::rbp, x86::rsp);
+                   // assembler.and_(x86::rsp, -16);
+                  //  assembler.sub(x86::rsp, 40);
+
+                    assembler.sub(x86::rsp, 8);
+                    assembler.call(WriteCharacter);
+                    assembler.add(x86::rsp, 8);
+                    //assembler.mov(x86::rsp, x86::rbp);
+                   // assembler.pop(x86::rbp);
+                    break;
+                }
+            #endif
                 case InterWorm::Op::InputCell: {
                     assembler.push(x86::rbp);
                     assembler.mov(x86::rbp, x86::rsp);
