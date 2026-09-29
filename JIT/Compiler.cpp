@@ -20,6 +20,21 @@ namespace TapeWorm::JIT {
         CodeHolder code;
         code.init(runtime.environment(), runtime.cpu_features());
 
+        /*
+        x86::Compiler compiler(&code);
+
+        FuncNode* write_func_node = compiler.add_func(FuncSignature::build<void, uint8_t>());
+        x86::Gp characterReg = compiler.new_gp_ptr("c");
+
+        write_func_node->set_arg(0, characterReg);
+        InvokeNode* invoke;
+        compiler.call(&invoke, imm(reinterpret_cast<void*>(std::putchar)), FuncSignature::build<int, int>());
+
+        compiler.ret();
+        compiler.end_func();
+        compiler.finalize(); */
+
+
         x86::Assembler assembler(&code);
         assembler.align(AlignMode::kCode, 2);
 
