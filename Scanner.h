@@ -41,7 +41,7 @@ namespace TapeWorm::InterWorm {
         /**
          * @brief Consumes the next character if it matches the given parameter.
          * @param expected The character to look for.
-         * @return True if the next character matched the expected charater, otherwise false.
+         * @return True if the next character matched the expected character, otherwise false.
          **/
         [[nodiscard]] bool Match(char expected);
     };
