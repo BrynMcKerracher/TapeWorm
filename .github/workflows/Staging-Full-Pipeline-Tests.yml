@@ -4,9 +4,9 @@ name: Staging Full Pipeline Tests
 
 on:
   push:
-    branches: [ "release/v1.1.0" ]
+    branches: [ "origin/release/v1.1.0" ]
   pull_request:
-    branches: [ "release/v1.1.0" ]
+    branches: [ "origin/release/v1.1.0" ]
 
 jobs:
   build:
