@@ -4,13 +4,6 @@
 
 TapeWorm is an optimising multipass [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter for `x86_64` platforms, written in C++. It provides a CLI interface for running vanilla brainfuck source files.
 
-No AI was used at any point during development.
-
-## Goals
-**1.** Optimise runtime execution of brainfuck. To this end it produces and executes optimised `x86_64` assembly using [asmjit](https://github.com/asmjit/asmjit) as a runtime assembler. 
-
-**2.** Create a feature-rich interpreter to make working in vanilla brainfuck as painless as possible.
-
 ## Installation
 #### Pre-compiled Binaries
 Pre-compiled binaries for both 
@@ -24,3 +17,10 @@ Invoke the TapeWorm executable in a CLI and pass it the path to your brainfuck s
 ```
 ./TapeWorm "path/to/file/source.b"
 ```
+The brainfuck program will print and receive input through the same CLI.
+## Goals
+**1.** Optimise runtime execution of brainfuck. To this end it produces and executes optimised `x86_64` assembly using [asmjit](https://github.com/asmjit/asmjit) as a runtime assembler. 
+
+**2.** Create a feature-rich interpreter to make working in vanilla brainfuck as painless as possible.
+
+**Note:** No generative AI was used during development.
