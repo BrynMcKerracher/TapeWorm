@@ -22,7 +22,7 @@ uint64_t fnv1a64(const std::string &str) {
     return hash;
 }
 
-TEST_CASE("Full Pipline Tests", "[FullPipeline]") {
+TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
     TapeWorm::InterWorm::Scanner scanner;
     TapeWorm::AST::Builder treeBuilder;
     TapeWorm::AST::CompilerVisitor compilerVisitor;
@@ -31,6 +31,15 @@ TEST_CASE("Full Pipline Tests", "[FullPipeline]") {
     std::streambuf* coutbuf = std::cout.rdbuf();
     std::cout.rdbuf(stream.rdbuf());
 
+    SECTION("Empty") {
+        const auto tokens = scanner.Scan("");
+        const auto ast = treeBuilder.BuildAST(tokens);
+        const auto ops = compilerVisitor.Visit(ast);
+
+        jitCompiler.Compile(ops);
+
+        REQUIRE(fnv1a64(stream.str()) == 14695981039346656037u);
+    }
     SECTION("Hello World") {
         const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Tests/hw.b");
         const auto tokens = scanner.Scan(fileString);
