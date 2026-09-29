@@ -19,6 +19,7 @@ namespace TapeWorm::JIT {
 
         CodeHolder code;
         code.init(runtime.environment(), runtime.cpu_features());
+        return;
 
         /*
         x86::Compiler compiler(&code);
