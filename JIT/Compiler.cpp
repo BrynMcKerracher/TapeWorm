@@ -14,6 +14,8 @@
 namespace TapeWorm::JIT {
     using namespace asmjit;
 
+    std::ostream* Compiler::output;
+
     void Compiler::Compile(const std::vector<InterWorm::Op::Type> &interwormStream) {
         std::stack<ControlFlowPair> controlFlowPairs;
 
@@ -59,8 +61,8 @@ namespace TapeWorm::JIT {
                 }
             #else
                 case InterWorm::Op::OutputCell: {
-                    //assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
-                    //assembler.call(reinterpret_cast<void*>(WriteCharacter));
+                    assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
+                    assembler.call(WriteCharacter);
                     break;
                 }
             #endif
@@ -166,7 +168,7 @@ namespace TapeWorm::JIT {
     }
 
     void Compiler::WriteCharacter(const uint8_t character) {
-        std::cout << character;
+        *output << character;
     }
 
     uint8_t Compiler::ReadCharacter() {

@@ -10,6 +10,8 @@
 #include "asmjit/x86/x86_assembler.h"
 
 #include <vector>
+#include <iostream>
+#include <ostream>
 
 namespace TapeWorm::JIT {
     using MainEntry = void(*)(uintptr_t);
@@ -17,6 +19,8 @@ namespace TapeWorm::JIT {
     class Compiler {
     public:
         void Compile(const std::vector<InterWorm::Op::Type>& interwormStream);
+
+        static std::ostream* output;// = &std::cout;
     private:
         asmjit::JitRuntime runtime;
         std::vector<uint8_t> runtimeMemory;
