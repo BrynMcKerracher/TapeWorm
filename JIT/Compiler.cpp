@@ -21,7 +21,7 @@ namespace TapeWorm::JIT {
         code.init(runtime.environment(), runtime.cpu_features());
 
         x86::Assembler assembler(&code);
-        assembler.add_diagnostic_options(DiagnosticOptions::kValidateAssembler);
+        assembler.align(AlignMode::kCode, 2);
 
         //Registers R15-R12 are non-volatile on x86.
         constexpr x86::Gp cellPointer = x86::r15;
@@ -148,17 +148,21 @@ namespace TapeWorm::JIT {
             }
         }
         assembler.ret();
+        assembler.finalize();
         code.flatten();
 
         runtimeMemory = std::vector<uint8_t>(RuntimeMemorySize, 0);
 
         MainEntry mainEntry;
-        runtime.add(&mainEntry, &code);
+        Error error = runtime.add(&mainEntry, &code);
+        if (error != Error::kOk) {
+            std::cout << "Error: " << stringify_error(error) << "\n";
+            return;
+        }
 
         mainEntry(reinterpret_cast<uintptr_t>(runtimeMemory.data()));
 
         runtime.release(mainEntry);
-        code.reset();
     }
 
     void Compiler::WriteCharacter(const uint8_t character) {
