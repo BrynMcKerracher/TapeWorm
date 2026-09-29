@@ -60,9 +60,7 @@ namespace TapeWorm::JIT {
             #else
                 case InterWorm::Op::OutputCell: {
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
-                    //assembler.sub(x86::rsp, 8);
                     assembler.call(WriteCharacter);
-                    //assembler.add(x86::rsp, 8);
                     break;
                 }
             #endif
@@ -80,9 +78,7 @@ namespace TapeWorm::JIT {
                 }
             #else
                 case InterWorm::Op::InputCell: {
-                    //assembler.sub(x86::rsp, 8);
                     assembler.call(ReadCharacter);
-                    //assembler.add(x86::rsp, 8);
                     assembler.mov(x86::byte_ptr(cellPointer), x86::al);
                     break;
                 }
