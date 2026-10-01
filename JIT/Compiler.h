@@ -12,6 +12,7 @@
 #include <vector>
 #include <iostream>
 #include <ostream>
+#include <sstream>
 
 namespace TapeWorm::JIT {
     using MainEntry = void(*)(uintptr_t);

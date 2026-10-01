@@ -17,6 +17,8 @@ namespace TapeWorm::JIT {
     std::ostream* Compiler::output;
 
     void Compiler::Compile(const std::vector<InterWorm::Op::Type> &interwormStream) {
+        if (interwormStream.empty()) return;
+
         std::stack<ControlFlowPair> controlFlowPairs;
 
         CodeHolder code;
