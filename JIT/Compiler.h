@@ -20,7 +20,7 @@ namespace TapeWorm::JIT {
     public:
         void Compile(const std::vector<InterWorm::Op::Type>& interwormStream);
     private:
-        constexpr static std::size_t RuntimeMemorySize = 80000;
+        constexpr static std::size_t RuntimeMemorySize = 30000;
         asmjit::JitRuntime runtime;
         std::unique_ptr<uint8_t[]> runtimeMemory;
 

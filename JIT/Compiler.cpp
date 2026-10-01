@@ -60,14 +60,14 @@ namespace TapeWorm::JIT {
                 }
 #else
                 case InterWorm::Op::OutputCell: {
-                    /*assembler.mov(x86::eax, 1);
+                    assembler.mov(x86::eax, 1);
                     assembler.mov(x86::edi, 1);
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
                     assembler.mov(x86::edx, 1);
-                    assembler.syscall(); */
+                    assembler.syscall();
 
-                    assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
-                    assembler.call(WriteCharacter);
+                    //assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
+                    //assembler.call(WriteCharacter);
 
                     break;
                 }
