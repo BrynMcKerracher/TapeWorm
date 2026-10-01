@@ -12,8 +12,6 @@
 #include <vector>
 #include <iostream>
 #include <memory>
-#include <ostream>
-#include <sstream>
 
 namespace TapeWorm::JIT {
     using MainEntry = void(*)(uintptr_t);
@@ -21,12 +19,10 @@ namespace TapeWorm::JIT {
     class Compiler {
     public:
         void Compile(const std::vector<InterWorm::Op::Type>& interwormStream);
-
-        static std::ostream* output;// = &std::cout;
     private:
         constexpr static std::size_t RuntimeMemorySize = 80000;
         asmjit::JitRuntime runtime;
-        std::unique_ptr<uint8_t[]> runtimeMemory = std::make_unique<uint8_t[]>(RuntimeMemorySize);
+        std::unique_ptr<uint8_t[]> runtimeMemory;
 
         struct ControlFlowPair {
             ControlFlowPair(const asmjit::Label& open, const asmjit::Label& close) :

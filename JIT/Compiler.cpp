@@ -13,9 +13,6 @@
 
 namespace TapeWorm::JIT {
     using namespace asmjit;
-
-    std::ostream* Compiler::output;
-
     void Compiler::Compile(const std::vector<InterWorm::Op::Type> &interwormStream) {
         if (interwormStream.empty()) return;
 
@@ -63,8 +60,15 @@ namespace TapeWorm::JIT {
                 }
 #else
                 case InterWorm::Op::OutputCell: {
+                    /*assembler.mov(x86::eax, 1);
+                    assembler.mov(x86::edi, 1);
+                    assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
+                    assembler.mov(x86::edx, 1);
+                    assembler.syscall(); */
+
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
                     assembler.call(WriteCharacter);
+
                     break;
                 }
 #endif
@@ -160,13 +164,14 @@ namespace TapeWorm::JIT {
             return;
         }
 
+        runtimeMemory = std::make_unique<uint8_t[]>(RuntimeMemorySize);
         mainEntry(reinterpret_cast<uintptr_t>(runtimeMemory.get()));
 
         runtime.release(mainEntry);
     }
 
     void Compiler::WriteCharacter(const uint8_t character) {
-        *output << character;
+        std::cout << character;
     }
 
     uint8_t Compiler::ReadCharacter() {
