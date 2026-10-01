@@ -111,7 +111,7 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::AddImmediateExtended: {
-                    uint16_t offset = interwormStream[i + 1] | (static_cast<uint16_t>(interwormStream[i + 2]) << 8);
+                    uint32_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
                     assembler.add(x86::word_ptr(cellPointer), offset);
                     i += 2;
                     break;
@@ -122,7 +122,7 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::SubImmediateExtended: {
-                    uint16_t offset = interwormStream[i + 1] | (static_cast<uint16_t>(interwormStream[i + 2]) << 8);
+                    uint32_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
                     assembler.sub(x86::word_ptr(cellPointer), offset);
                     i += 2;
                     break;
@@ -133,7 +133,7 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::AddPointerExtended: {
-                    uint64_t offset = interwormStream[i + 1] | (static_cast<uint16_t>(interwormStream[i + 2]) << 8);
+                    uint64_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
                     assembler.add(cellPointer, offset);
                     i += 2;
                     break;
@@ -144,7 +144,7 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::SubPointerExtended: {
-                    uint64_t offset = interwormStream[i + 1] | (static_cast<uint16_t>(interwormStream[i + 2]) << 8);
+                    uint64_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
                     assembler.sub(cellPointer, offset);
                     i += 2;
                     break;
