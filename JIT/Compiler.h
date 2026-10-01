@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <iostream>
+#include <memory>
 #include <ostream>
 #include <sstream>
 
@@ -23,9 +24,9 @@ namespace TapeWorm::JIT {
 
         static std::ostream* output;// = &std::cout;
     private:
-        asmjit::JitRuntime runtime;
-        std::vector<uint8_t> runtimeMemory;
         constexpr static std::size_t RuntimeMemorySize = 80000;
+        asmjit::JitRuntime runtime;
+        std::unique_ptr<uint8_t[]> runtimeMemory = std::make_unique<uint8_t[]>(RuntimeMemorySize);
 
         struct ControlFlowPair {
             ControlFlowPair(const asmjit::Label& open, const asmjit::Label& close) :

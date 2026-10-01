@@ -155,15 +155,13 @@ namespace TapeWorm::JIT {
         assembler.ret();
         assembler.finalize();
 
-        runtimeMemory = std::vector<uint8_t>(RuntimeMemorySize, 0);
-
         MainEntry mainEntry;
         if (Error error = runtime.add(&mainEntry, &code); error != Error::kOk) {
             std::cout << "Error: " << stringify_error(error) << "\n";
             return;
         }
 
-        mainEntry(reinterpret_cast<uintptr_t>(runtimeMemory.data()));
+        mainEntry(reinterpret_cast<uintptr_t>(runtimeMemory.get()));
 
         runtime.release(mainEntry);
     }
