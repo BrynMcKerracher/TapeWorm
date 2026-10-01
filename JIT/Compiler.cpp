@@ -25,7 +25,6 @@ namespace TapeWorm::JIT {
         code.init(runtime.environment(), runtime.cpu_features());
 
         x86::Assembler assembler(&code);
-        assembler.align(AlignMode::kCode, 2);
 
         //Registers R15-R12 are non-volatile on x86.
         constexpr x86::Gp cellPointer = x86::r15;
