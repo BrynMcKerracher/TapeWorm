@@ -167,7 +167,12 @@ namespace TapeWorm::JIT {
         runtimeMemory = std::make_unique<uint8_t[]>(RuntimeMemorySize);
         mainEntry(reinterpret_cast<uintptr_t>(runtimeMemory.get()));
 
-        runtime.release(mainEntry);
+        /*
+        if (Error error = runtime.release(mainEntry); error != Error::kOk) {
+            std::cerr << "Error: " << stringify_error(error) << "\n";
+            return;
+        }
+        */
     }
 
     void Compiler::WriteCharacter(const uint8_t character) {
