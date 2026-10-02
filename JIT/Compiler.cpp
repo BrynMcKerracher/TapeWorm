@@ -10,7 +10,6 @@
 #include <asmjit/x86.h>
 #include <asmjit/x86/x86_assembler.h>
 #include <asmjit/arm/a64_operand.h>
-#include <thread>
 
 namespace TapeWorm::JIT {
     using namespace asmjit;
