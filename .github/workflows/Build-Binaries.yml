@@ -41,6 +41,6 @@ jobs:
         with:
           name: TapeWorm-${{ matrix.os }}
           path: |
-            build/TapeWorm
+            build/Release/TapeWorm
             build/Release/TapeWorm.exe
 
