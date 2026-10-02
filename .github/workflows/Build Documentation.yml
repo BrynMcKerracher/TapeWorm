@@ -29,7 +29,7 @@ jobs:
 
       - name: Build
         run: |
-          doxygen Docs/Doxyfil
+          doxygen Docs/doxyfile
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
