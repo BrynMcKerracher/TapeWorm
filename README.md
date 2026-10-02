@@ -4,7 +4,14 @@
 [![Linux Build Tests (Full Pipeline)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Linux%20Build%20Tests%20(Full%20Pipeline).yml/badge.svg)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Linux%20Build%20Tests%20(Full%20Pipeline).yml)
 [![Windows Build Tests (Full Pipeline)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Windows%20Build%20Tests%20(Full%20Pipeline).yml/badge.svg)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Windows%20Build%20Tests%20(Full%20Pipeline).yml)
 
-TapeWorm is an optimising multipass [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter for `x86_64` platforms, written in C++. It provides a CLI interface for running vanilla brainfuck source files.
+TapeWorm is a [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter for Windows and Linux `x86-64` platforms, written in C++. 
+
+## Features
+- Fast assembly-based JIT framework.
+- Multiple optimisation passes for better runtime performance.
+- CLI interface for directly running brainfuck files.
+- Continually tested to ensure stability on target platforms.
+- Works out of the box without additional configuration.
 
 ## Installation
 #### Pre-compiled Binaries
