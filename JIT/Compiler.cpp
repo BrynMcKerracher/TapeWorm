@@ -18,12 +18,10 @@ namespace TapeWorm::JIT {
         if (interwormStream.empty()) return;
 
         std::stack<ControlFlowPair> controlFlowPairs;
-
         code.init(runtime.environment(), runtime.cpu_features());
-
         x86::Assembler assembler(&code);
 
-        //Registers R15-R12 are non-volatile on x86.
+        //Registers R15-R12 are non-volatile on x86, any will do for the cell pointer
         constexpr x86::Gp cellPointer = x86::r15;
 
         //Calling conventions decide which registers to use for syscalls
