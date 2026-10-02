@@ -31,7 +31,7 @@ jobs:
       - name: Get Latest Version
         id: tag_version
         run: |
-          echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+          echo "tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_OUTPUT"
 
       - name: Configure CMake
         run: >
@@ -57,7 +57,7 @@ jobs:
       - name: Build Windows Installer MSI
         uses: AliceOh/CreateWindowsInstaller@1.0.0
         with:
-          exefile: build/Release/TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
+          exefile: TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
           version: ${{ steps.tag_version.outputs.tag }}
 
       - name: Upload MSI Artifact
