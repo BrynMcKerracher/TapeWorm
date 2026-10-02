@@ -1,10 +1,17 @@
 # TapeWorm: A JIT Brainfuck Compiler
 
 ![GitHub Release](https://img.shields.io/github/v/release/BrynMcKerracher/TapeWorm?link=https%3A%2F%2Fgithub.com%2FBrynMcKerracher%2FTapeWorm%2Freleases%2F)
-[![Linux Tests](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Linux%20Tests.yml/badge.svg?branch=main)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Linux%20Tests.yml)
-[![Windows Tests](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Windows%20Tests.yml/badge.svg?branch=main)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Windows%20Tests.yml)
+[![Linux Build Tests (Full Pipeline)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Linux%20Build%20Tests%20(Full%20Pipeline).yml/badge.svg)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Linux%20Build%20Tests%20(Full%20Pipeline).yml)
+[![Windows Build Tests (Full Pipeline)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Windows%20Build%20Tests%20(Full%20Pipeline).yml/badge.svg)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Windows%20Build%20Tests%20(Full%20Pipeline).yml)
 
-TapeWorm is an optimising multipass [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter for `x86_64` platforms, written in C++. It provides a CLI interface for running vanilla brainfuck source files.
+TapeWorm is a [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter for Windows and Linux `x86-64` platforms, written in C++. 
+
+## Features
+- Fast assembly-based JIT framework.
+- Multiple optimisation passes for better runtime performance.
+- CLI interface for directly running brainfuck files.
+- Continually tested to ensure stability on target platforms.
+- Works out of the box without additional configuration.
 
 ## Installation
 #### Pre-compiled Binaries
@@ -24,5 +31,8 @@ The brainfuck program will print and receive input through the same CLI.
 **1.** Optimise runtime execution of brainfuck. To this end it produces and executes optimised `x86_64` assembly using [asmjit](https://github.com/asmjit/asmjit) as a runtime assembler. 
 
 **2.** Create a feature-rich interpreter to make working in vanilla brainfuck as painless as possible.
+
+## Documentation
+- [Source Code Documentation](https://brynmckerracher.github.io/TapeWorm/)
 
 **Note:** No generative AI was used during development.

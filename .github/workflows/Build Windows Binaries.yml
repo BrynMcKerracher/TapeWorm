@@ -1,0 +1,73 @@
+name: Build Windows Binaries
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest]
+        
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with: 
+          fetch-depth: 500
+          fetch-tags: true
+
+      - name: Set Strings
+        id: strings
+        shell: bash
+        run: |
+          echo "build-output-dir=${{ github.workspace }}/binary-build" >> "$GITHUB_OUTPUT"
+
+      - name: Get Latest Version
+        id: tag_version
+        run: |
+          env LATEST_VERSION=$(git describe --tags --abbrev=0)
+          echo "tag=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{ steps.strings.outputs.build-output-dir }}
+          -DCMAKE_CXX_COMPILER=g++
+          -DCMAKE_C_COMPILER=gcc
+          -DCMAKE_BUILD_TYPE=Release
+          -S ${{ github.workspace }}
+
+      - name: Build CMake
+        run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config Release
+
+      - name: Rename Binary With Versioning
+        run: mv binary-build/Release/TapeWorm.exe binary-build/Release/TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
+
+      - name: Upload Raw Executable Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TapeWorm-${{ matrix.os }}
+          path: |
+            binary-build/Release/TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
+
+      - name: Make App Directory
+        run: |
+          mkdir ${{ github.workspace }}/application
+ 
+      - name: Build Windows Installer MSI
+        uses: AliceOh/CreateWindowsInstaller@1.0.0
+        with:
+          exefile: TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
+          version: ${{ steps.tag_version.outputs.tag }}
+
+      - name: Upload MSI Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-msi-installer
+          path: |
+            *.msi
