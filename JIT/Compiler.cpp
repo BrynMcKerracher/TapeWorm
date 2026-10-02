@@ -10,6 +10,7 @@
 #include <asmjit/x86.h>
 #include <asmjit/x86/x86_assembler.h>
 #include <asmjit/arm/a64_operand.h>
+#include <thread>
 
 namespace TapeWorm::JIT {
     using namespace asmjit;
@@ -18,7 +19,6 @@ namespace TapeWorm::JIT {
 
         std::stack<ControlFlowPair> controlFlowPairs;
 
-        CodeHolder code;
         code.init(runtime.environment(), runtime.cpu_features());
 
         x86::Assembler assembler(&code);
@@ -60,13 +60,6 @@ namespace TapeWorm::JIT {
                 }
 #else
                 case InterWorm::Op::OutputCell: {
-                    /*
-                    assembler.mov(x86::eax, 1);
-                    assembler.mov(x86::edi, 1);
-                    assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
-                    assembler.mov(x86::edx, 1);
-                    assembler.syscall();
-                    */
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
                     assembler.call(WriteCharacter);
                     break;
@@ -158,21 +151,17 @@ namespace TapeWorm::JIT {
         assembler.ret();
         assembler.finalize();
 
-        MainEntry mainEntry;
-        if (Error error = runtime.add(&mainEntry, &code); error != Error::kOk) {
-            std::cout << "Error: " << stringify_error(error) << "\n";
+        if (const Error error = runtime.add(&mainEntry, &code); error != Error::kOk) {
+            std::cerr << "Error: " << stringify_error(error) << "\n";
             return;
         }
 
         runtimeMemory = std::make_unique<uint8_t[]>(RuntimeMemorySize);
         mainEntry(reinterpret_cast<uintptr_t>(runtimeMemory.get()));
+    }
 
-        /*
-        if (Error error = runtime.release(mainEntry); error != Error::kOk) {
-            std::cerr << "Error: " << stringify_error(error) << "\n";
-            return;
-        }
-        */
+    Compiler::~Compiler() {
+        runtime.release(mainEntry);
     }
 
     void Compiler::WriteCharacter(const uint8_t character) {

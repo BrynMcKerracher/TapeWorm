@@ -19,10 +19,13 @@ namespace TapeWorm::JIT {
     class Compiler {
     public:
         void Compile(const std::vector<InterWorm::Op::Type>& interwormStream);
+        ~Compiler();
     private:
         constexpr static std::size_t RuntimeMemorySize = 30000;
         asmjit::JitRuntime runtime;
+        asmjit::CodeHolder code;
         std::unique_ptr<uint8_t[]> runtimeMemory;
+        MainEntry mainEntry;
 
         struct ControlFlowPair {
             ControlFlowPair(const asmjit::Label& open, const asmjit::Label& close) :
