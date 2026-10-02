@@ -1,6 +1,9 @@
 # TapeWorm: A JIT Brainfuck Compiler
 
-[![Ubuntu 22.04 Full Pipeline Tests](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Ubuntu-22.04%20Tests.yml/badge.svg)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Ubuntu-22.04%20Tests.yml) [![Windows 2025 Server Full Pipeline Tests](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Windows-2025-Server-Full-Pipeline-Tests.yml/badge.svg)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Windows-2025-Server-Full-Pipeline-Tests.yml) [![Ubuntu 24.04 Full Pipeline Tests](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Ubuntu-24.04-Full-Pipeline-Tests.yml/badge.svg)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Ubuntu-24.04-Full-Pipeline-Tests.yml)
+![GitHub Release](https://img.shields.io/github/v/release/BrynMcKerracher/TapeWorm?link=https%3A%2F%2Fgithub.com%2FBrynMcKerracher%2FTapeWorm%2Freleases%2F)
+[![Linux Tests](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Linux%20Tests.yml/badge.svg?branch=main)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Linux%20Tests.yml)
+[![Windows Tests](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Windows%20Tests.yml/badge.svg?branch=main)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Windows%20Tests.yml)
+[![MacOS Tests](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/MacOS%20Tests.yml/badge.svg?branch=main)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/MacOS%20Tests.yml)
 
 TapeWorm is an optimising multipass [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter for `x86_64` platforms, written in C++. It provides a CLI interface for running vanilla brainfuck source files.
 
