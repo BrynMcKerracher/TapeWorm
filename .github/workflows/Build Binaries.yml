@@ -1,0 +1,66 @@
+name: Build Binaries
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set Strings
+        id: strings
+        shell: bash
+        run: |
+          echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+      - name: Get Latest Version
+        id: version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LATEST_RELEASE=$(gh release view $GITHUB_REPOSITORY --json tagName --jq '.tagName')
+          echo "LATEST_RELEASE=$LATEST_RELEASE" >> "$GITHUB_OUTPUT"
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{ steps.strings.outputs.build-output-dir }}
+          -DCMAKE_CXX_COMPILER=g++
+          -DCMAKE_C_COMPILER=gcc
+          -DCMAKE_BUILD_TYPE=Release
+          -S ${{ github.workspace }}
+
+      - name: Build CMake
+        run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config Release
+
+      - name: Upload Raw Executable Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TapeWorm-${{ matrix.os }}
+          path: |
+            build/Release/TapeWorm-${{ steps.version.outputs.LATEST_RELEASE }}-Linux
+            build/Release/TapeWorm-${{ steps.version.outputs.LATEST_RELEASE }}-Windows.exe
+ 
+      - name: Build Windows Installer MSI
+        uses: AliceOh/CreateWindowsInstaller@1.0.0
+        with:
+          exefile: build/Release/TapeWorm-${{ steps.version.outputs.LATEST_RELEASE }}-Windows.exe
+          version: ${{ steps.version.outputs.LATEST_RELEASE }}
+
+      - name: Upload MSI Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-msi-installer
+          path: |
+            *.msi
