@@ -25,4 +25,7 @@ The brainfuck program will print and receive input through the same CLI.
 
 **2.** Create a feature-rich interpreter to make working in vanilla brainfuck as painless as possible.
 
+## Documentation
+- [Source Code Documentation](https://brynmckerracher.github.io/TapeWorm/)
+
 **Note:** No generative AI was used during development.
