@@ -44,6 +44,9 @@ jobs:
       - name: Build CMake
         run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config Release
 
+      - name: Rename Binary With Versioning
+        run: mv build/Release/TapeWorm build/Release/TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
+
       - name: Upload Raw Executable Artifact
         uses: actions/upload-artifact@v4
         with:
