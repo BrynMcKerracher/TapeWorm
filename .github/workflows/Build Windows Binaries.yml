@@ -54,6 +54,10 @@ jobs:
           name: TapeWorm-${{ matrix.os }}
           path: |
             binary-build/Release/TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
+
+      - name: Make App Directory
+        run: |
+          mkdir ${{ github.workspace }}/application
  
       - name: Build Windows Installer MSI
         uses: AliceOh/CreateWindowsInstaller@1.0.0
