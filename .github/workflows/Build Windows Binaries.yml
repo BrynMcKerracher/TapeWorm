@@ -26,12 +26,13 @@ jobs:
         id: strings
         shell: bash
         run: |
-          echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+          echo "build-output-dir=${{ github.workspace }}/binary-build" >> "$GITHUB_OUTPUT"
 
       - name: Get Latest Version
         id: tag_version
         run: |
-          echo "tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_OUTPUT"
+          "LATEST_VERSION"=$(git describe --tags --abbrev=0)
+          echo "tag=$LATEST_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Configure CMake
         run: >
@@ -45,14 +46,14 @@ jobs:
         run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config Release
 
       - name: Rename Binary With Versioning
-        run: mv build/Release/TapeWorm.exe build/Release/TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
+        run: mv binary-build/Release/TapeWorm.exe binary-build/Release/TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
 
       - name: Upload Raw Executable Artifact
         uses: actions/upload-artifact@v4
         with:
           name: TapeWorm-${{ matrix.os }}
           path: |
-            build/Release/TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
+            binary-build/Release/TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
  
       - name: Build Windows Installer MSI
         uses: AliceOh/CreateWindowsInstaller@1.0.0
