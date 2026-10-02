@@ -44,16 +44,36 @@ namespace TapeWorm::JIT {
                     assembler.mov(x86::byte_ptr(cellPointer), 0);
                     break;
                 }
+#if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
+                case InterWorm::Op::OutputCell: {
+                    assembler.sub(x86::rsp, 32);
+                    assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
+                    assembler.call(WriteCharacter);
+                    assembler.add(x86::rsp, 32);
+                    break;
+                }
+#else
                 case InterWorm::Op::OutputCell: {
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
                     assembler.call(WriteCharacter);
                     break;
                 }
+#endif
+#if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
+                case InterWorm::Op::InputCell: {
+                    assembler.sub(x86::rsp, 32);
+                    assembler.call(ReadCharacter);
+                    assembler.mov(x86::byte_ptr(cellPointer), x86::al);
+                    assembler.add(x86::rsp, 32);
+                    break;
+                }
+#else
                 case InterWorm::Op::InputCell: {
                     assembler.call(ReadCharacter);
                     assembler.mov(x86::byte_ptr(cellPointer), x86::al);
                     break;
                 }
+#endif
                 case InterWorm::Op::JumpIfZero: {
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
                     Label open = assembler.new_label();
