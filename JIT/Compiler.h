@@ -25,7 +25,7 @@ namespace TapeWorm::JIT {
         asmjit::JitRuntime runtime;
         asmjit::CodeHolder code;
         std::unique_ptr<uint8_t[]> runtimeMemory;
-        MainEntry mainEntry;
+        MainEntry mainEntry = nullptr;
 
         struct ControlFlowPair {
             ControlFlowPair(const asmjit::Label& open, const asmjit::Label& close) :

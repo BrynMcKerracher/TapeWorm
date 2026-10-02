@@ -46,44 +46,16 @@ namespace TapeWorm::JIT {
                     assembler.mov(x86::byte_ptr(cellPointer), 0);
                     break;
                 }
-#if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
-                case InterWorm::Op::OutputCell: {
-                    assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
-                    assembler.push(x86::rbp);
-                    assembler.mov(x86::rbp, x86::rsp);
-                    assembler.and_(x86::rsp, -16);
-                    assembler.sub(x86::rsp, 40);
-                    assembler.call(WriteCharacter);
-                    assembler.mov(x86::rsp, x86::rbp);
-                    assembler.pop(x86::rbp);
-                    break;
-                }
-#else
                 case InterWorm::Op::OutputCell: {
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
                     assembler.call(WriteCharacter);
                     break;
                 }
-#endif
-#if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
-                case InterWorm::Op::InputCell: {
-                    assembler.push(x86::rbp);
-                    assembler.mov(x86::rbp, x86::rsp);
-                    assembler.and_(x86::rsp, -16);
-                    assembler.sub(x86::rsp, 40);
-                    assembler.call(ReadCharacter);
-                    assembler.mov(x86::rsp, x86::rbp);
-                    assembler.pop(x86::rbp);
-                    assembler.mov(x86::byte_ptr(cellPointer), x86::al);
-                    break;
-                }
-#else
                 case InterWorm::Op::InputCell: {
                     assembler.call(ReadCharacter);
                     assembler.mov(x86::byte_ptr(cellPointer), x86::al);
                     break;
                 }
-#endif
                 case InterWorm::Op::JumpIfZero: {
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
                     Label open = assembler.new_label();
@@ -151,11 +123,7 @@ namespace TapeWorm::JIT {
         assembler.ret();
         assembler.finalize();
 
-        if (const Error error = runtime.add(&mainEntry, &code); error != Error::kOk) {
-            std::cerr << "Error: " << stringify_error(error) << "\n";
-            return;
-        }
-
+        runtime.add(&mainEntry, &code);
         runtimeMemory = std::make_unique<uint8_t[]>(RuntimeMemorySize);
         mainEntry(reinterpret_cast<uintptr_t>(runtimeMemory.get()));
     }
