@@ -1,7 +1,8 @@
 # TapeWorm: A JIT Brainfuck Compiler
 
 ![GitHub Release](https://img.shields.io/github/v/release/BrynMcKerracher/TapeWorm?link=https%3A%2F%2Fgithub.com%2FBrynMcKerracher%2FTapeWorm%2Freleases%2F)
-
+[![Linux Tests](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Linux%20Tests.yml/badge.svg?branch=main)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Linux%20Tests.yml)
+[![Windows Tests](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Windows%20Tests.yml/badge.svg?branch=main)](https://github.com/BrynMcKerracher/TapeWorm/actions/workflows/Windows%20Tests.yml)
 
 TapeWorm is an optimising multipass [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter for `x86_64` platforms, written in C++. It provides a CLI interface for running vanilla brainfuck source files.
 
