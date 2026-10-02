@@ -28,8 +28,7 @@ jobs:
       - name: Get Latest Version
         id: tag_version
         run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0)
-          echo "tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+          echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
 
       - name: Configure CMake
         run: >
