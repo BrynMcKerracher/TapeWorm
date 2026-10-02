@@ -1,4 +1,4 @@
-name: Build Binaries
+name: Build Windows Binaries
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [windows-latest]
         
     runs-on: ${{ matrix.os }}
 
@@ -26,12 +26,10 @@ jobs:
           echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
       - name: Get Latest Version
-        id: version
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: tag_version
         run: |
-          LATEST_RELEASE=$(gh release view $GITHUB_REPOSITORY --json tagName --jq '.tagName')
-          echo "LATEST_RELEASE=$LATEST_RELEASE" >> "$GITHUB_OUTPUT"
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          echo "tag=$LATEST_TAG" >> $GITHUB_OUTPUT
 
       - name: Configure CMake
         run: >
@@ -49,14 +47,13 @@ jobs:
         with:
           name: TapeWorm-${{ matrix.os }}
           path: |
-            build/Release/TapeWorm-${{ steps.version.outputs.LATEST_RELEASE }}-Linux
-            build/Release/TapeWorm-${{ steps.version.outputs.LATEST_RELEASE }}-Windows.exe
+            build/Release/TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
  
       - name: Build Windows Installer MSI
         uses: AliceOh/CreateWindowsInstaller@1.0.0
         with:
-          exefile: build/Release/TapeWorm-${{ steps.version.outputs.LATEST_RELEASE }}-Windows.exe
-          version: ${{ steps.version.outputs.LATEST_RELEASE }}
+          exefile: build/Release/TapeWorm-${{ steps.tag_version.outputs.tag }}-Windows.exe
+          version: ${{ steps.tag_version.outputs.tag }}
 
       - name: Upload MSI Artifact
         uses: actions/upload-artifact@v4
