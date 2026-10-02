@@ -6,6 +6,11 @@ enable_testing()
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if (NOT ${APPLE})
+    set(BUILD_SHARED_LIBS OFF)
+    set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
+endif()
+
 set(ASMJIT_STATIC TRUE)
 include(FetchContent)
 FetchContent_Declare(
@@ -58,6 +63,8 @@ add_executable(TapeWormTests
         ../ScannerOptimiser.h
         ../Debug/InstructionCoverage.cpp
         ../Debug/InstructionCoverage.h
+        TestEnvironmentSetup.cpp
+        TestEnvironmentSetup.h
 )
 
 target_link_libraries(TapeWormTests PRIVATE asmjit::asmjit Catch2::Catch2WithMain)

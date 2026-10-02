@@ -10,6 +10,8 @@
 #include "asmjit/x86/x86_assembler.h"
 
 #include <vector>
+#include <iostream>
+#include <memory>
 
 namespace TapeWorm::JIT {
     using MainEntry = void(*)(uintptr_t);
@@ -17,10 +19,13 @@ namespace TapeWorm::JIT {
     class Compiler {
     public:
         void Compile(const std::vector<InterWorm::Op::Type>& interwormStream);
+        ~Compiler();
     private:
+        constexpr static std::size_t RuntimeMemorySize = 30000;
         asmjit::JitRuntime runtime;
-        std::vector<uint8_t> runtimeMemory;
-        constexpr static std::size_t RuntimeMemorySize = 80000;
+        asmjit::CodeHolder code;
+        std::unique_ptr<uint8_t[]> runtimeMemory;
+        MainEntry mainEntry = nullptr;
 
         struct ControlFlowPair {
             ControlFlowPair(const asmjit::Label& open, const asmjit::Label& close) :

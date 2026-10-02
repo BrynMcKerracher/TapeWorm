@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include "AST/TreeOptimiser.h"
+
 int main(const int argc, char** argv) {
     //Check correct number of arguments
     if (argc < 2) {
@@ -21,13 +23,15 @@ int main(const int argc, char** argv) {
 
     TapeWorm::InterWorm::Scanner scanner;
     TapeWorm::AST::Builder treeBuilder;
+    TapeWorm::AST::TreeOptimiser treeOptimiser;
     TapeWorm::AST::CompilerVisitor compilerVisitor;
     TapeWorm::JIT::Compiler jitCompiler;
 
     const std::string fileString = TapeWorm::Util::BrainFuckFileToString(argv[1]);
     const auto tokens = scanner.Scan(fileString);
-    const auto ast = treeBuilder.BuildAST(tokens);
-    const auto ops = compilerVisitor.Visit(ast);
+    auto ast = treeBuilder.BuildAST(tokens);
+    const auto optimisedAST = treeOptimiser.Optimise(ast);
+    const auto ops = compilerVisitor.Visit(optimisedAST);
 
     jitCompiler.Compile(ops);
 
