@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with: 
+          fetch-depth: 500
 
       - name: Set Strings
         id: strings
