@@ -42,10 +42,8 @@ Invoke the TapeWorm executable in a CLI (such as `bash` or `command prompt`) and
 The brainfuck program will print and receive input through the same CLI.
 If you installed TapeWorm using the Windows Installer, `.b` are associated with TapeWorm, so you can double-click them to run.
 
-## Goals
-**1.** Optimise runtime execution of brainfuck. To this end it produces and executes optimised `x86_64` assembly using [asmjit](https://github.com/asmjit/asmjit) as a runtime assembler. 
-
-**2.** Create a feature-rich interpreter to make working in vanilla brainfuck as painless as possible.
-
 ## Documentation
 - [Source Code Documentation](https://brynmckerracher.github.io/TapeWorm/)
+
+## Roadmap
+- [Backlog, Development Status, & Planned Features](https://github.com/users/BrynMcKerracher/projects/11).
