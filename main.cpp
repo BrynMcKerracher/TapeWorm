@@ -40,7 +40,7 @@ int main(const int argc, char** argv) {
     const TapeWorm::Environment environment = options.ParseCommands(argc, argv);
     if (environment.InvalidEnvironment) {
         PrintHelp(environment);
-        return -0;
+        return 0;
     }
 
     TapeWorm::InterWorm::Scanner scanner;
