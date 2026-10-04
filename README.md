@@ -44,5 +44,5 @@ If you installed TapeWorm using the Windows Installer, `.b` are associated with 
 
 ## Documentation
 - [Source Code Documentation](https://brynmckerracher.github.io/TapeWorm/)
-- [Roadmap, Development Status, & Planned Features](https://github.com/users/BrynMcKerracher/projects/11).
+- [Roadmap](https://github.com/users/BrynMcKerracher/projects/11).
 - [Project Health](https://github.com/users/BrynMcKerracher/projects/11/views/1?pane=info&statusUpdateId=272113)
