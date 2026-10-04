@@ -51,8 +51,11 @@ The brainfuck program will print and receive input through the same CLI.
 You can change the behaviour of TapeWorm by passing in any of the following arguments.
 |     Argument     |                 Effect                |
 |:----------------:|---------------------------------------|
-| `--no-ast-opt`   | Disables all AST optimisation passes. |
+| `--no-opt`       | Disable all optimisation passes.      |
+| `--no-ast-opt`   | Disable AST optimisation pass.        |
+| `--no-ir-opt`    | Disable IR optimisation pass.         |
 | `--help`         | Displays version and usage info.      |
+
 ## Documentation
 - [Source Code Documentation](https://brynmckerracher.github.io/TapeWorm/)
 - [Roadmap](https://github.com/users/BrynMcKerracher/projects/11)
