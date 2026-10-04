@@ -61,3 +61,7 @@ You can change the behaviour of TapeWorm by passing in any of the following argu
 - [Source Code Documentation](https://brynmckerracher.github.io/TapeWorm/)
 - [Roadmap](https://github.com/users/BrynMcKerracher/projects/11)
 - [Project Health](https://github.com/users/BrynMcKerracher/projects/11/views/1?pane=info&statusUpdateId=272113)
+
+## Further Resources
+- [Learn Brainfuck](https://brainfuck.net/learn)
+- [List of Brainfuck Programs](https://www.brainfuck.org/) by Daniel B. Cristofani 
