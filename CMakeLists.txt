@@ -51,6 +51,10 @@ add_executable(TapeWorm
         ScannerOptimiser.h
         Debug/InstructionCoverage.cpp
         Debug/InstructionCoverage.h
+        CLI/OptionsManagement.cpp
+        CLI/OptionsManagement.h
+        CLI/Environment.cpp
+        CLI/Environment.h
 )
 
 target_link_libraries(TapeWorm asmjit::asmjit)
