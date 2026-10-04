@@ -8,7 +8,7 @@ TapeWorm is a [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter f
 
 ## Features
 - Fast assembly-based JIT framework.
-- Custom built lightweight IR layer for faster compilation. 
+- Custom-built lightweight IR layer for faster compilation. 
 - Multiple optimisation passes for better runtime performance.
 - CLI interface for directly running brainfuck files.
 - Continually tested to ensure stability on target platforms.
