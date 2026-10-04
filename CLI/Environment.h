@@ -13,6 +13,8 @@ namespace TapeWorm {
         std::string SourceFileLocation;
         bool PerformASTOptimsationPass = true;
         bool InvalidEnvironment = false;
+
+        ~Environment();
     };
 } // TapeWorm
 
