@@ -55,6 +55,8 @@ add_executable(TapeWorm
         CLI/OptionsManagement.h
         CLI/Environment.cpp
         CLI/Environment.h
+        IROptimiser.cpp
+        IROptimiser.h
 )
 
 target_link_libraries(TapeWorm asmjit::asmjit)
