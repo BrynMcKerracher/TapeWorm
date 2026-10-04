@@ -18,7 +18,9 @@ namespace TapeWorm::CLI {
         }
 
         environment.SourceFileLocation = data[0];
-        environment.PerformASTOptimsationPass = std::ranges::find(flags, "--no-ast-opt") != flags.end();
+        const bool performOptimisation = std::ranges::find(flags, "--no-opt") == flags.end();
+        environment.PerformASTOptimisationPass = std::ranges::find(flags, "--no-ast-opt") == flags.end() and performOptimisation;
+        environment.PerformIROptimisationPass = std::ranges::find(flags, "--no-ir-opt") == flags.end() and performOptimisation;
 
         return environment;
     }

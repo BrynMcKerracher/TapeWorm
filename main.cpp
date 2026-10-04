@@ -13,6 +13,8 @@
 
 #include <iostream>
 
+#include "IROptimiser.h"
+
 static void PrintHelp(const TapeWorm::Environment &env) {
     std::cout << "-------------------------------------------\n";
     std::cout << " TapeWorm " << env.Version << "\n";
@@ -51,12 +53,15 @@ int main(const int argc, char** argv) {
     const std::string fileString = TapeWorm::Util::BrainFuckFileToString(environment.SourceFileLocation);
     const auto tokens = scanner.Scan(fileString);
     auto ast = treeBuilder.BuildAST(tokens);
-    if (environment.PerformASTOptimsationPass) {
+    if (environment.PerformASTOptimisationPass) {
         TapeWorm::AST::TreeOptimiser treeOptimiser;
         ast = treeOptimiser.Optimise(ast);
     }
-    const auto ops = compilerVisitor.Visit(ast);
-
+    auto ops = compilerVisitor.Visit(ast);
+    if (environment.PerformIROptimisationPass) {
+        TapeWorm::InterWorm::IROptimiser irOptimiser;
+        ops = irOptimiser.Optimise(ops);
+    }
     jitCompiler.Compile(ops);
 
     return 0;
