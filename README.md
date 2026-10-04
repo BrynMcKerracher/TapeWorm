@@ -42,7 +42,7 @@ Invoke the TapeWorm executable in a CLI (such as `bash` or `command prompt`) and
 ```
 TapeWorm.exe "path/to/file/source.b"
 ```
-If you installed TapeWorm using the Windows Installer, `.b` are associated with TapeWorm, so you can double-click them to run.
+If you installed TapeWorm using the Windows Installer, `.b` files are associated with TapeWorm, so you can double-click them to run.
 ### On Linux
 ```
 ./TapeWorm "path/to/file/source.b"
