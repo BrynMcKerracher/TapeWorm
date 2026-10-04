@@ -36,13 +36,24 @@ TapeWorm is a [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter f
 
 ## Usage
 Invoke the TapeWorm executable in a CLI (such as `bash` or `command prompt`) and pass it the path to your brainfuck source file:
+### On Windows
+```
+TapeWorm.exe "path/to/file/source.b"
+```
+If you installed TapeWorm using the Windows Installer, `.b` are associated with TapeWorm, so you can double-click them to run.
+### On Linux
 ```
 ./TapeWorm "path/to/file/source.b"
 ```
 The brainfuck program will print and receive input through the same CLI.
-If you installed TapeWorm using the Windows Installer, `.b` are associated with TapeWorm, so you can double-click them to run.
 
+### Command Line Arguments
+You can change the behaviour of TapeWorm by passing in any of the following arguments.
+|     Argument     |                 Effect                |
+|:----------------:|---------------------------------------|
+| `--no-ast-opt`   | Disables all AST optimisation passes. |
+| `--help`         | Displays version and usage info.      |
 ## Documentation
 - [Source Code Documentation](https://brynmckerracher.github.io/TapeWorm/)
-- [Roadmap](https://github.com/users/BrynMcKerracher/projects/11).
+- [Roadmap](https://github.com/users/BrynMcKerracher/projects/11)
 - [Project Health](https://github.com/users/BrynMcKerracher/projects/11/views/1?pane=info&statusUpdateId=272113)
