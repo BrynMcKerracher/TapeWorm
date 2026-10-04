@@ -4,8 +4,8 @@
  **/
 #include "Environment.h"
 
-#include <iostream>
 #if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
+#include <iostream>
 #include <Windows.h>
 #endif
 
