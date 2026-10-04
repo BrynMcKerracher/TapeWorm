@@ -25,6 +25,7 @@ TapeWorm is a [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter f
 
   **Build From Source:**
   - Go to the [latest release](https://github.com/BrynMcKerracher/TapeWorm/releases/latest) and download source `.zip` file.
+  - [Build](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html) the source using [CMake](https://cmake.org/).
 
 ### On Linux
   **Download The Binaries:**
@@ -32,7 +33,7 @@ TapeWorm is a [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter f
 
   **Build From Source:**
   - Go to the [latest release](https://github.com/BrynMcKerracher/TapeWorm/releases/latest) and download source `.zip` file.
-  - [Build](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html) the source using [CMake].
+  - [Build](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html) the source using [CMake](https://cmake.org/).
 
 ## Usage
 Invoke the TapeWorm executable in a CLI (such as `bash` or `command prompt`) and pass it the path to your brainfuck source file:
