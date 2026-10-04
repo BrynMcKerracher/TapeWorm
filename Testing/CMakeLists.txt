@@ -65,6 +65,12 @@ add_executable(TapeWormTests
         ../Debug/InstructionCoverage.h
         TestEnvironmentSetup.cpp
         TestEnvironmentSetup.h
+        ../CLI/OptionsManagement.cpp
+        ../CLI/OptionsManagement.h
+        ../CLI/Environment.cpp
+        ../CLI/Environment.h
+        ../IROptimiser.cpp
+        ../IROptimiser.h
 )
 
 target_link_libraries(TapeWormTests PRIVATE asmjit::asmjit Catch2::Catch2WithMain)
