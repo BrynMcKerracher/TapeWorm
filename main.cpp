@@ -2,18 +2,10 @@
  * @file main.cpp
  * @author Bryn McKerracher
  **/
-#include "Scanner.h"
-#include "Util.h"
-#include "AST/CompilerVisitor.h"
-#include "AST/Builder.h"
-#include "JIT/Compiler.h"
-#include "AST/TreeOptimiser.h"
+#include "TapeWorm.h"
 #include "CLI/OptionsManagement.h"
-#include "CLI/Environment.h"
 
 #include <iostream>
-
-#include "IROptimiser.h"
 
 static void PrintHelp(const TapeWorm::Environment &env) {
     std::cout << "-------------------------------------------\n";
