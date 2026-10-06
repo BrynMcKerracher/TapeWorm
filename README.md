@@ -16,7 +16,7 @@ TapeWorm is a [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter f
 
 ## Installation
 ### On Windows
-  **Using The `.deb` Installer (Easiest)**
+  **Using The Installer (Easiest)**
   - Go to the [latest release](https://github.com/BrynMcKerracher/TapeWorm/releases/latest) then download and run the Windows installer file.
   - This is the preferred method on Windows because it associates `.b` files with TapeWorm, allowing you to run brainfuck files by double-clicking them from anywhere.
   
@@ -29,7 +29,7 @@ TapeWorm is a [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter f
   - [Build](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html) the source using [CMake](https://cmake.org/).
 
 ### On Linux
-  **Using the Installer (Easiest)**
+  **Using The `.deb` Installer (Easiest)**
   - Go to the [latest release](https://github.com/BrynMcKerracher/TapeWorm/releases/latest) then download and run the Linux `.deb` package.
   - This is the preferred method on Linux because it allows you to easily call `$ tapeworm` from any terminal context and allows you to easily uninstall via `apt`.
 
