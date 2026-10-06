@@ -16,23 +16,27 @@ TapeWorm is a [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter f
 
 ## Installation
 ### On Windows
-  **Using The Installer (Easiest)**
+  **Using The `.deb` Installer (Easiest)**
   - Go to the [latest release](https://github.com/BrynMcKerracher/TapeWorm/releases/latest) then download and run the Windows installer file.
-  - This is the preferred method because it associates `.b` files with TapeWorm, allowing you to run brainfuck files by double-clicking them.
+  - This is the preferred method on Windows because it associates `.b` files with TapeWorm, allowing you to run brainfuck files by double-clicking them from anywhere.
   
-  **Download The Binaries:**
+  **Downloading The Binaries**
   - Go to the [latest release](https://github.com/BrynMcKerracher/TapeWorm/releases/latest) and download the Windows executable.
   - <mark>Note</mark>: This will not associate `.b` files, and in some cases anti-virus software may incorrectly suppress execution.
 
-  **Build From Source:**
+  **Building From Source**
   - Go to the [latest release](https://github.com/BrynMcKerracher/TapeWorm/releases/latest) and download source `.zip` file.
   - [Build](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html) the source using [CMake](https://cmake.org/).
 
 ### On Linux
-  **Download The Binaries:**
+  **Using the Installer (Easiest)**
+  - Go to the [latest release](https://github.com/BrynMcKerracher/TapeWorm/releases/latest) then download and run the Linux `.deb` package.
+  - This is the preferred method on Linux because it allows you to easily call `$ tapeworm` from any terminal context and allows you to easily uninstall via `apt`.
+
+  **Downloading The Binaries**
   - Go to the [latest release](https://github.com/BrynMcKerracher/TapeWorm/releases/latest) and download the Linux binary.
 
-  **Build From Source:**
+  **Building From Source**
   - Go to the [latest release](https://github.com/BrynMcKerracher/TapeWorm/releases/latest) and download source `.zip` file.
   - [Build](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html) the source using [CMake](https://cmake.org/).
 
@@ -44,10 +48,14 @@ TapeWorm.exe "path/to/file/source.b"
 ```
 If you installed TapeWorm using the Windows Installer, `.b` files are associated with TapeWorm, so you can double-click them to run.
 ### On Linux
+If you installed using the latest `.deb` package, you can simply call `tapeworm` from any terminal context, e.g.,
 ```
-./TapeWorm "path/to/file/source.b"
+user@machine:~$ tapeworm "path/to/file/source.b"
 ```
-The brainfuck program will print and receive input through the same CLI.
+Otherwise you will need to specify the location of the TapeWorm binary when invoking it:
+```
+user@machine:~$ /path/to/binary/tapeworm "path/to/file/source.b"
+```
 
 ### Command Line Arguments
 You can change the behaviour of TapeWorm by passing in any of the following arguments.
