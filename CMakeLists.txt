@@ -60,3 +60,5 @@ add_executable(TapeWorm
 )
 
 target_link_libraries(TapeWorm asmjit::asmjit)
+
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")

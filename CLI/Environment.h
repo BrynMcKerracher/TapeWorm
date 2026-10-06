@@ -9,7 +9,7 @@
 
 namespace TapeWorm {
     struct Environment {
-        const std::string Version = "v1.2.0";
+        const std::string Version = "v1.3.0";
         std::string SourceFileLocation;
         bool PerformASTOptimisationPass = true;
         bool PerformIROptimisationPass = true;
