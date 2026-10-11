@@ -7,21 +7,6 @@
 namespace TapeWorm {
     ScannerOptimiser::ScannerOptimiser() {
         using InterWorm::Token;
-        //Sub Right
-        optimisations.push_back({
-            Token::Type::Difference,
-            {Token::DecCell, Token::IncPointer, Token::DecCell, Token::DecPointer, Token::JumpNotZero},
-            {{0, 2}, {1, 3}},
-            1,
-        });
-        //Sub Left
-        optimisations.push_back({
-            Token::Type::Difference,
-            {Token::DecCell, Token::DecPointer, Token::DecCell, Token::IncPointer, Token::JumpNotZero},
-            {{0, 2}, {1, 3}},
-            1,
-            -1
-        });
         //Clear (Downwards)
         optimisations.push_back({
             Token::Type::ClearCell,

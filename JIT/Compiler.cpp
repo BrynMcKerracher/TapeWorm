@@ -22,6 +22,7 @@ namespace TapeWorm::JIT {
 
         //Registers R15-R12 are non-volatile on x86, any will do for the cell pointer
         constexpr x86::Gp cellPointer = x86::r15;
+        constexpr x86::Gp scratchRegister = x86::r14;
 
         //Calling conventions decide which registers to use for syscalls
         #if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
@@ -96,7 +97,7 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::AddImmediateExtended: {
-                    uint32_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
+                    const uint32_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
                     assembler.add(x86::word_ptr(cellPointer), offset);
                     i += 2;
                     break;
@@ -107,7 +108,7 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::SubImmediateExtended: {
-                    uint32_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
+                    const uint32_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
                     assembler.sub(x86::word_ptr(cellPointer), offset);
                     i += 2;
                     break;
@@ -118,7 +119,7 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::AddPointerExtended: {
-                    uint64_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
+                    const uint64_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
                     assembler.add(cellPointer, offset);
                     i += 2;
                     break;
@@ -129,9 +130,19 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::SubPointerExtended: {
-                    uint64_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
+                    const uint64_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
                     assembler.sub(cellPointer, offset);
                     i += 2;
+                    break;
+                }
+                case InterWorm::Op::Move: {
+                    const int8_t offset = static_cast<int8_t>(interwormStream[i + 1]);
+                    assembler.movzx(scratchRegister, x86::byte_ptr(cellPointer));
+                    assembler.mov(x86::byte_ptr(cellPointer), 0);
+                    assembler.add(cellPointer, offset);
+                    assembler.add(x86::byte_ptr(cellPointer), scratchRegister);
+                    assembler.sub(cellPointer, offset);
+                    i++;
                     break;
                 }
                 default: break;

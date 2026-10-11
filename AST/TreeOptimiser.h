@@ -26,10 +26,24 @@ namespace TapeWorm::AST {
          */
         Global Optimise(Global& node);
     private:
+        struct SyntacticMetadata {
+            bool isMetaTerminal = false;
+            bool isReadWriteNode = false;
+            int64_t volatility = 0;
+
+            explicit SyntacticMetadata(const SyntacticNode* node);
+
+            static bool IsMetaTerminal(const SyntacticNode* node);
+            static bool IsReadWriteNode(const SyntacticNode* node);
+            static int64_t CalculateVolatility(const SyntacticNode* node);
+        };
+
         NodeBase* VisitTerminal(TerminalNode* node) override;
         NodeBase* VisitSyntactic(SyntacticNode* node) override;
         NodeBase* VisitGlobal(GlobalNode* node) override;
         NodeBase* VisitMetaTerminal(MetaTerminalNode* node) override;
+
+        static NodeBase* CreateMetaTerminal(const SyntacticNode* node);
     };
 } // TapeWorm
 

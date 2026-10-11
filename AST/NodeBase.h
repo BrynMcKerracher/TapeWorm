@@ -24,11 +24,12 @@ namespace TapeWorm::AST {
          * These are tags for each subclass type.
          */
         enum Type {
-            None,        /// No subclass should have this type.
-            Terminal,    /// In the formal grammatical sense.
-            Syntactic,   /// In the formal grammatical sense.
-            Global,      /// AST root node type.
-            MetaTerminal /// Syntactic node containing ONLY terminal statements.
+            None,         /// No subclass should have this type.
+            Terminal,     /// In the formal grammatical sense.
+            Syntactic,    /// In the formal grammatical sense.
+            Global,       /// AST root node type.
+            MetaTerminal, /// Syntactic node containing ONLY terminal statements.
+            MoveTerminal, /// Move from one cell to another.
         };
 
         /**

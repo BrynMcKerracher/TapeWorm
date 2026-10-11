@@ -71,10 +71,10 @@ namespace TapeWorm::AST {
                 else ops.push_back(InterWorm::Op::Type::DecCell);
                 break;
             }
-            case InterWorm::Token::ClearCell: ops.push_back(InterWorm::Op::Type::ClearCell); break;
-            case InterWorm::Token::InputCell: ops.push_back(InterWorm::Op::Type::InputCell); break;
-            case InterWorm::Token::OutputCell: ops.push_back(InterWorm::Op::Type::OutputCell); break;
-            case InterWorm::Token::JumpIfZero: ops.push_back(InterWorm::Op::Type::JumpIfZero); break;
+            case InterWorm::Token::ClearCell:   ops.push_back(InterWorm::Op::Type::ClearCell); break;
+            case InterWorm::Token::InputCell:   ops.push_back(InterWorm::Op::Type::InputCell); break;
+            case InterWorm::Token::OutputCell:  ops.push_back(InterWorm::Op::Type::OutputCell); break;
+            case InterWorm::Token::JumpIfZero:  ops.push_back(InterWorm::Op::Type::JumpIfZero); break;
             case InterWorm::Token::JumpNotZero: ops.push_back(InterWorm::Op::Type::JumpNotZero); break;
             default: break;
         }
@@ -95,7 +95,7 @@ namespace TapeWorm::AST {
     }
 
     void CompilerVisitor::VisitMetaTerminal(MetaTerminalNode *node) {
-        //Further optimisation to occur here later
+
     }
 
     void CompilerVisitor::WriteOps(const std::initializer_list<InterWorm::Op::Type> bytes) {
