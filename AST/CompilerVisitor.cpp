@@ -94,8 +94,19 @@ namespace TapeWorm::AST {
         }
     }
 
-    void CompilerVisitor::VisitMetaTerminal(MetaTerminalNode *node) {
-
+    void CompilerVisitor::VisitMetaTerminal(MetaTerminalNode* node) {
+        switch (node->metaType) {
+            case MetaTerminalNode::Move: {
+                ops.push_back(InterWorm::Op::Move);
+                ops.push_back(static_cast<InterWorm::Op::Type>((++node->addresses.begin())->first));
+                break;
+            }
+            case MetaTerminalNode::Multiply: {
+                std::cout << "MULTIPLY\n";
+                break;
+            }
+            default: break;
+        }
     }
 
     void CompilerVisitor::WriteOps(const std::initializer_list<InterWorm::Op::Type> bytes) {

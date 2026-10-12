@@ -13,12 +13,13 @@
 
 namespace TapeWorm::JIT {
     using namespace asmjit;
+
     void Compiler::Compile(const std::vector<InterWorm::Op::Type> &interwormStream) {
         if (interwormStream.empty()) return;
 
-        std::stack<ControlFlowPair> controlFlowPairs;
+        std::stack<LabelPair> controlFlowPairs;
         code.init(runtime.environment(), runtime.cpu_features());
-        x86::Assembler assembler(&code);
+        code.attach(assembler._emitter());
 
         //Registers R15-R12 are non-volatile on x86, any will do for the cell pointer
         constexpr x86::Gp cellPointer = x86::r15;
@@ -84,11 +85,11 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::JumpNotZero: {
-                    ControlFlowPair labels = controlFlowPairs.top();
+                    LabelPair labels = controlFlowPairs.top();
                     controlFlowPairs.pop();
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
-                    assembler.jnz(labels.open);
-                    assembler.bind(labels.close);
+                    assembler.jnz(labels.first);
+                    assembler.bind(labels.second);
                     break;
                 }
                 case InterWorm::Op::AddImmediate: {
@@ -158,6 +159,7 @@ namespace TapeWorm::JIT {
 
     Compiler::~Compiler() {
         runtime.release(mainEntry);
+        code.detach(assembler._emitter());
     }
 
     void Compiler::WriteCharacter(const uint8_t character) {

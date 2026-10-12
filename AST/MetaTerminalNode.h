@@ -8,6 +8,7 @@
 #include "NodeBase.h"
 
 #include <memory>
+#include <cstdint>
 #include <map>
 
 namespace TapeWorm::AST {
@@ -15,6 +16,7 @@ namespace TapeWorm::AST {
         enum MetaTerminalType : uint8_t {
             Generic = 0,
             Move,
+            Multiply,
             Count
         };
 
