@@ -71,11 +71,9 @@ namespace TapeWorm::AST {
                 else ops.push_back(InterWorm::Op::Type::DecCell);
                 break;
             }
-            case InterWorm::Token::ClearCell: ops.push_back(InterWorm::Op::Type::ClearCell); break;
-            case InterWorm::Token::InputCell: ops.push_back(InterWorm::Op::Type::InputCell); break;
-            case InterWorm::Token::OutputCell: ops.push_back(InterWorm::Op::Type::OutputCell); break;
-            case InterWorm::Token::JumpIfZero: ops.push_back(InterWorm::Op::Type::JumpIfZero); break;
-            case InterWorm::Token::JumpNotZero: ops.push_back(InterWorm::Op::Type::JumpNotZero); break;
+            case InterWorm::Token::ClearCell:   ops.push_back(InterWorm::Op::Type::ClearCell); break;
+            case InterWorm::Token::InputCell:   ops.push_back(InterWorm::Op::Type::InputCell); break;
+            case InterWorm::Token::OutputCell:  ops.push_back(InterWorm::Op::Type::OutputCell); break;
             default: break;
         }
     }
@@ -94,8 +92,27 @@ namespace TapeWorm::AST {
         }
     }
 
-    void CompilerVisitor::VisitMetaTerminal(MetaTerminalNode *node) {
-        //Further optimisation to occur here later
+    void CompilerVisitor::VisitMetaTerminal(MetaTerminalNode* node) {
+        if (node->addresses.empty()) return;
+
+        switch (node->metaType) {
+            case MetaTerminalNode::Move: {
+                ops.push_back(InterWorm::Op::Move);
+                ops.push_back(static_cast<InterWorm::Op::Type>((++node->addresses.begin())->first));
+                break;
+            }
+            case MetaTerminalNode::Multiply: {
+                node->addresses.erase(0);
+                ops.push_back(InterWorm::Op::Multiply);
+                ops.push_back(static_cast<InterWorm::Op::Type>(node->addresses.size()));
+                for (const auto& [address, factor] : node->addresses) {
+                    ops.push_back(static_cast<InterWorm::Op::Type>(address));
+                    ops.push_back(static_cast<InterWorm::Op::Type>(factor));
+                }
+                break;
+            }
+            default: break;
+        }
     }
 
     void CompilerVisitor::WriteOps(const std::initializer_list<InterWorm::Op::Type> bytes) {

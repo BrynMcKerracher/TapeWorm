@@ -7,6 +7,10 @@
 #include "NodeReadOnlyVisitor.h"
 
 namespace TapeWorm::AST {
+    MetaTerminalNode::MetaTerminalNode() {
+        type = MetaTerminal;
+    }
+
     void MetaTerminalNode::AcceptReadOnlyVisitor(NodeReadOnlyVisitor *visitor) {
         visitor->VisitMetaTerminal(this);
     }

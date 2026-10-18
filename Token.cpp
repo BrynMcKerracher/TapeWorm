@@ -20,8 +20,6 @@ namespace TapeWorm::InterWorm {
             case OutputCell:  return {"."};
             case JumpIfZero:  return {"["};
             case JumpNotZero: return {"]"};
-            case Move:        return {"A"};
-            case Difference:  return {"S"};
             default: return {"E"};
         }
     }

@@ -8,6 +8,7 @@
 #include "GlobalNode.h"
 #include "NodeReadWriteVisitor.h"
 #include "NodeReadOnlyVisitor.h"
+#include "SyntacticMetadata.h"
 
 namespace TapeWorm::AST {
     /**
@@ -30,6 +31,8 @@ namespace TapeWorm::AST {
         NodeBase* VisitSyntactic(SyntacticNode* node) override;
         NodeBase* VisitGlobal(GlobalNode* node) override;
         NodeBase* VisitMetaTerminal(MetaTerminalNode* node) override;
+
+        static NodeBase* CreateMetaTerminal(const SyntacticNode* node, const SyntacticMetadata& data);
     };
 } // TapeWorm
 

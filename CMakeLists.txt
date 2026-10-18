@@ -57,6 +57,8 @@ add_executable(TapeWorm
         CLI/Environment.h
         IROptimiser.cpp
         IROptimiser.h
+        AST/SyntacticMetadata.cpp
+        AST/SyntacticMetadata.h
 )
 
 target_link_libraries(TapeWorm asmjit::asmjit)

@@ -70,6 +70,8 @@ add_executable(TapeWormBenches
         ../Testing/TestEnvironmentSetup.cpp
         ../Testing/TestEnvironmentSetup.h
         ../TapeWorm.h
+        ../AST/SyntacticMetadata.cpp
+        ../AST/SyntacticMetadata.h
 )
 
 target_link_libraries(TapeWormBenches PRIVATE asmjit::asmjit nanobench)

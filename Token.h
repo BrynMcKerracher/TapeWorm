@@ -29,8 +29,6 @@ namespace TapeWorm::InterWorm {
             OutputCell,  //Equivalent to brainfuck '.'
             JumpIfZero,  //Equivalent to brainfuck '['
             JumpNotZero, //Equivalent to brainfuck ']'
-            Move,
-            Difference,
             EndOfFile
         };
 

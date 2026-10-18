@@ -71,6 +71,8 @@ add_executable(TapeWormTests
         ../CLI/Environment.h
         ../IROptimiser.cpp
         ../IROptimiser.h
+        ../AST/SyntacticMetadata.cpp
+        ../AST/SyntacticMetadata.h
 )
 
 target_link_libraries(TapeWormTests PRIVATE asmjit::asmjit Catch2::Catch2WithMain)
