@@ -11,7 +11,6 @@
 
 #include <vector>
 #include <iostream>
-#include <memory>
 
 namespace TapeWorm::JIT {
     using MainEntry = void(*)(uintptr_t);
@@ -26,7 +25,7 @@ namespace TapeWorm::JIT {
         asmjit::JitRuntime runtime;
         asmjit::CodeHolder code;
         asmjit::x86::Assembler assembler;
-        std::unique_ptr<uint8_t[]> runtimeMemory;
+        std::vector<uint8_t> runtimeMemory;
         MainEntry mainEntry = nullptr;
 
         static void WriteCharacter(uint8_t character);

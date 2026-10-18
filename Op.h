@@ -31,6 +31,7 @@ namespace TapeWorm::InterWorm {
             SubPointerExtended,
             VectorAdd,
             Move,
+            Multiply,
             Count
         };
 

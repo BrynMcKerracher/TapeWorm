@@ -2,7 +2,6 @@
 #include "MetaTerminalNode.h"
 #include "TerminalNode.h"
 #include <algorithm>
-#include <iostream>
 
 namespace TapeWorm::AST {
     SyntacticMetadata::SyntacticMetadata(const SyntacticNode *node) {
@@ -75,7 +74,9 @@ namespace TapeWorm::AST {
             if (addresses.size() == 2 and (++addresses.begin())->second == 1) {
                 return MetaTerminalNode::Move;
             }
-            //return MetaTerminalNode::Multiply;
+            if (addresses.size() > 1) {
+                return MetaTerminalNode::Multiply;
+            }
         }
         return MetaTerminalNode::Generic;
     }
