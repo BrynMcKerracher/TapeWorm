@@ -26,7 +26,11 @@ namespace TapeWorm::JIT {
         constexpr x86::Gp cellPointer = x86::r15;
         constexpr x86::Gp scratchRegister = x86::r14;
         constexpr x86::Gp tr1Register = x86::r13;
-        constexpr x86::Gp tr2Register = x86::r12;
+
+        assembler.push(tr1Register);
+        assembler.push(scratchRegister);
+        assembler.push(cellPointer);
+        assembler.sub(x86::rsp, 8);
 
         //Calling conventions decide which registers to use for syscalls
         #if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
@@ -160,6 +164,7 @@ namespace TapeWorm::JIT {
                     const uint8_t numAddresses = static_cast<uint8_t>(interwormStream[i + 1]);
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
                     assembler.jz(skip);
+
                     for (uint8_t k = 0; k < numAddresses; k++) {
                         const int8_t offset = static_cast<int8_t>(interwormStream[i + 2 * k + 2]);
                         const uint8_t factor = static_cast<uint8_t>(interwormStream[i + 2 * k + 3]);
@@ -186,6 +191,11 @@ namespace TapeWorm::JIT {
                 default: break;
             }
         }
+        assembler.add(x86::rsp, 8);
+        assembler.pop(cellPointer);
+        assembler.pop(scratchRegister);
+        assembler.pop(tr1Register);
+
         assembler.ret();
         assembler.finalize();
 

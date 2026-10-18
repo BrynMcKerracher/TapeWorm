@@ -29,9 +29,9 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
     TapeWorm::AST::Builder treeBuilder;
     TapeWorm::AST::TreeOptimiser treeOptimiser;
     TapeWorm::AST::CompilerVisitor compilerVisitor;
+    TapeWorm::JIT::Compiler jitCompiler;
 
     SECTION("Empty") {
-        TapeWorm::JIT::Compiler jitCompiler;
         const auto tokens = scanner.Scan("");
         auto ast = treeBuilder.BuildAST(tokens);
         const auto optimisedAST = treeOptimiser.Optimise(ast);
@@ -41,7 +41,6 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 14695981039346656037u);
     }
     SECTION("Hello World") {
-        TapeWorm::JIT::Compiler jitCompiler;
         const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Programs/hw.b");
         const auto tokens = scanner.Scan(fileString);
         auto ast = treeBuilder.BuildAST(tokens);
@@ -52,7 +51,6 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 11208743478092974376u);
     }
     SECTION("Mandelbrot") {
-        TapeWorm::JIT::Compiler jitCompiler;
         const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Programs/mandelbrot.b");
         const auto tokens = scanner.Scan(fileString);
         auto ast = treeBuilder.BuildAST(tokens);
@@ -63,7 +61,6 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 4686367950102506177u);
     }
     SECTION("Squares") {
-        TapeWorm::JIT::Compiler jitCompiler;
         const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Programs/squares.b");
         const auto tokens = scanner.Scan(fileString);
         auto ast = treeBuilder.BuildAST(tokens);
@@ -74,7 +71,6 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 10922714458512192041u);
     }
     SECTION("Sierpinski") {
-        TapeWorm::JIT::Compiler jitCompiler;
         const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Programs/sierpinski.b");
         const auto tokens = scanner.Scan(fileString);
         auto ast = treeBuilder.BuildAST(tokens);
@@ -85,7 +81,6 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 5884179497606717719u);
     }
     SECTION("Quine 1") {
-        TapeWorm::JIT::Compiler jitCompiler;
         const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Programs/dquine.b");
         const auto tokens = scanner.Scan(fileString);
         auto ast = treeBuilder.BuildAST(tokens);
@@ -96,7 +91,6 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 12914509490304531892u);
     }
     SECTION("Quine 2") {
-        TapeWorm::JIT::Compiler jitCompiler;
         const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Programs/392quine.b");
         const auto tokens = scanner.Scan(fileString);
         auto ast = treeBuilder.BuildAST(tokens);
