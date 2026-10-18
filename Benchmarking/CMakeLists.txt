@@ -49,8 +49,8 @@ add_executable(TapeWormBenches
         ../AST/NodeReadOnlyVisitor.h
         ../AST/TerminalNode.cpp
         ../AST/TerminalNode.h
-        ../AST/CompilerVisitor.cpp
-        ../AST/CompilerVisitor.h
+        ../AST/Serialiser.cpp
+        ../AST/Serialiser.h
         ../AST/MetaTerminalNode.cpp
         ../AST/MetaTerminalNode.h
         ../AST/TreeOptimiser.cpp

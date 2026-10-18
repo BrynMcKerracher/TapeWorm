@@ -4,7 +4,7 @@
  **/
 #include "../Scanner.h"
 #include "../Util.h"
-#include "../AST/CompilerVisitor.h"
+#include "../AST/Serialiser.h"
 #include "../AST/Builder.h"
 #include "../AST/TreeOptimiser.h"
 #include "../JIT/Compiler.h"
@@ -28,7 +28,7 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
     TapeWorm::InterWorm::Scanner scanner;
     TapeWorm::AST::Builder treeBuilder;
     TapeWorm::AST::TreeOptimiser treeOptimiser;
-    TapeWorm::AST::CompilerVisitor compilerVisitor;
+    TapeWorm::AST::Serialiser compilerVisitor;
     TapeWorm::JIT::Compiler jitCompiler;
 
     SECTION("Empty") {

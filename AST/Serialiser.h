@@ -1,5 +1,5 @@
 /**
- * @file CompilerVisitor.cpp
+ * @file Serialiser.cpp
  * @author Bryn McKerracher
  **/
 #ifndef TAPEWORM_COMPILERVISITOR_H
@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace TapeWorm::AST {
-    class CompilerVisitor final : public NodeReadOnlyVisitor {
+    class Serialiser final : public NodeReadOnlyVisitor {
     public:
         std::vector<InterWorm::Op::Type> Visit(const Global& node);
     private:
@@ -25,6 +25,7 @@ namespace TapeWorm::AST {
 
         void WriteOps(std::initializer_list<InterWorm::Op::Type> bytes);
         void WriteOp(InterWorm::Op::Type op);
+        void WriteData(std::size_t data, uint8_t numBytesToWrite = 1);
     };
 } // TapeWorm
 

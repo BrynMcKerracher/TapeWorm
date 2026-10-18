@@ -169,7 +169,7 @@ namespace TapeWorm::JIT {
                         const int8_t offset = static_cast<int8_t>(interwormStream[i + 2 * k + 2]);
                         const uint8_t factor = static_cast<uint8_t>(interwormStream[i + 2 * k + 3]);
 
-                        if (offset == 0) continue;
+                        //if (offset == 0) continue;
 
                         //Set relative address
                         assembler.mov(scratchRegister, cellPointer);
@@ -180,7 +180,6 @@ namespace TapeWorm::JIT {
                         assembler.imul(tr1Register.r32(), tr1Register.r32(), factor);
                         assembler.add(x86::byte_ptr(scratchRegister), tr1Register.r8());
                     }
-
                     //Set control cell to zero
                     assembler.mov(x86::byte_ptr(cellPointer), 0);
 
