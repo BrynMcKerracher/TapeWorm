@@ -62,8 +62,8 @@ namespace TapeWorm::JIT {
                 }
 #else
                 case InterWorm::Op::OutputCell: {
-                    assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
-                    assembler.call(WriteCharacter);
+                    //assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
+                    //assembler.call(WriteCharacter);
                     break;
                 }
 #endif
@@ -211,7 +211,6 @@ namespace TapeWorm::JIT {
 
     void Compiler::WriteCharacter(const uint8_t character) {
         std::cout << character;
-        //std::cout << static_cast<int>(character) << " ";
     }
 
     uint8_t Compiler::ReadCharacter() {
