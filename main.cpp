@@ -39,7 +39,7 @@ int main(const int argc, char** argv) {
 
     TapeWorm::InterWorm::Scanner scanner;
     TapeWorm::AST::Builder treeBuilder;
-    TapeWorm::AST::CompilerVisitor compilerVisitor;
+    TapeWorm::AST::Serialiser compilerVisitor;
     TapeWorm::JIT::Compiler jitCompiler;
 
     const std::string fileString = TapeWorm::Util::BrainFuckFileToString(environment.SourceFileLocation);

@@ -3,7 +3,7 @@
 
 #include "Scanner.h"
 #include "Util.h"
-#include "AST/CompilerVisitor.h"
+#include "AST/Serialiser.h"
 #include "AST/Builder.h"
 #include "AST/TreeOptimiser.h"
 #include "JIT/Compiler.h"

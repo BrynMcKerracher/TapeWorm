@@ -11,7 +11,7 @@
 static void RunBenchmark(const std::string& testFile, const std::string& testName) {
     TapeWorm::InterWorm::Scanner scanner;
     TapeWorm::AST::Builder treeBuilder;
-    TapeWorm::AST::CompilerVisitor compilerVisitor;
+    TapeWorm::AST::Serialiser compilerVisitor;
 
     const std::string fileString = TapeWorm::Util::BrainFuckFileToString(testFile);
     const auto tokens = scanner.Scan(fileString);
