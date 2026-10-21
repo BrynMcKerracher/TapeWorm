@@ -4,6 +4,7 @@
  **/
 #include "TapeWorm.h"
 #include "CLI/OptionsManagement.h"
+#include "Debug/Analyser.h"
 
 #include <iostream>
 
@@ -41,20 +42,24 @@ int main(const int argc, char** argv) {
     TapeWorm::AST::Builder treeBuilder;
     TapeWorm::AST::Serialiser compilerVisitor;
     TapeWorm::JIT::Compiler jitCompiler;
+    TapeWorm::AST::Debug::Analyser astAnalyser;
 
     const std::string fileString = TapeWorm::Util::BrainFuckFileToString(environment.SourceFileLocation);
     const auto tokens = scanner.Scan(fileString);
     auto ast = treeBuilder.BuildAST(tokens);
+
     if (environment.PerformASTOptimisationPass) {
         TapeWorm::AST::TreeOptimiser treeOptimiser;
         ast = treeOptimiser.Optimise(ast);
+        astAnalyser.Analyse(ast);
     }
+    /*
     auto ops = compilerVisitor.Visit(ast);
     if (environment.PerformIROptimisationPass) {
         TapeWorm::InterWorm::IROptimiser irOptimiser;
         ops = irOptimiser.Optimise(ops);
     }
     jitCompiler.Compile(ops);
-
+    */
     return 0;
 }

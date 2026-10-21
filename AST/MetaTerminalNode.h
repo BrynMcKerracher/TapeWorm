@@ -27,6 +27,7 @@ namespace TapeWorm::AST {
 
         void AcceptReadOnlyVisitor(NodeReadOnlyVisitor *visitor) override;
         NodeBase* AcceptReadWriteVisitor(NodeReadWriteVisitor *editor) override;
+        std::any AcceptAnyVisitor(NodeAnyVisitor* visitor) override;
     };
     typedef std::unique_ptr<MetaTerminalNode> MetaTerminal;
 } // TapeWorm

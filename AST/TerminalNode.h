@@ -20,7 +20,7 @@ namespace TapeWorm::AST {
     struct TerminalNode : NodeBase {
         /**
          * @name token
-         * @brief The I::T token this node represents in an AST.
+         * @brief The InterWorm token this node represents in an AST.
          */
         InterWorm::Token token;
 
@@ -29,6 +29,7 @@ namespace TapeWorm::AST {
 
         void AcceptReadOnlyVisitor(NodeReadOnlyVisitor *visitor) override;
         NodeBase* AcceptReadWriteVisitor(NodeReadWriteVisitor *editor) override;
+        std::any AcceptAnyVisitor(NodeAnyVisitor* visitor) override;
     };
 
     typedef std::unique_ptr<TerminalNode> Terminal;

@@ -18,6 +18,7 @@ namespace TapeWorm::AST {
 
         void AcceptReadOnlyVisitor(NodeReadOnlyVisitor* visitor) override;
         NodeBase* AcceptReadWriteVisitor(NodeReadWriteVisitor *visitor) override;
+        std::any AcceptAnyVisitor(NodeAnyVisitor* visitor) override;
     };
 
     typedef std::unique_ptr<SyntacticNode> Syntactic;
