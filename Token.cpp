@@ -11,16 +11,19 @@ namespace TapeWorm::InterWorm {
 
     std::string Token::ToString(const Token& token) {
         switch (token.type) {
-            case IncPointer:  return {">"};
-            case DecPointer:  return {"<"};
-            case IncCell:     return {"+"};
-            case DecCell:     return {"-"};
-            case ClearCell:   return {"X"};
-            case InputCell:   return {","};
-            case OutputCell:  return {"."};
-            case JumpIfZero:  return {"["};
-            case JumpNotZero: return {"]"};
-            default: return {"E"};
+            case Unknown:     return "?";
+            case Nop:         return "NOP";
+            case IncPointer:  return ">";
+            case DecPointer:  return "<";
+            case IncCell:     return "+";
+            case DecCell:     return "-";
+            case ClearCell:   return "X";
+            case InputCell:   return ",";
+            case OutputCell:  return ".";
+            case JumpIfZero:  return "[";
+            case JumpNotZero: return "]";
+            case EndOfFile:   return "EOF";
+            default:          return "ERR";
         }
     }
 }

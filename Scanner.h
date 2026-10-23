@@ -25,9 +25,9 @@ namespace TapeWorm::InterWorm {
          **/
         [[nodiscard]] std::vector<Token> Scan(const std::string& source);
     private:
-        int64_t current = 0; ///Index of current character being analysed in a file.
-        int64_t start = 0;   ///Index of the beginning of the current token sequence in a file.
-        std::string sourceCode; ///Copy of the file's contents.
+        const char* current = nullptr; ///Index of current character being analysed in a file.
+        const char* start = nullptr;   ///Index of the beginning of the current token sequence in a file.
+        std::string sourceCode;  ///Copy of the file's contents.
         std::vector<Token> tokens; ///List of tokens constructed from the given file.
 
         /**
@@ -44,6 +44,15 @@ namespace TapeWorm::InterWorm {
          * @return True if the next character matched the expected character, otherwise false.
          **/
         [[nodiscard]] bool Match(char expected);
+
+        [[nodiscard]] bool Match(const std::string& expected);
+
+        [[nodiscard]] bool AtEndOfSequence() const;
+
+        [[nodiscard]] Token MakeToken(Token::Type type) const;
+        [[nodiscard]] Token NextToken();
+
+        char Advance();
     };
 }
 

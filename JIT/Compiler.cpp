@@ -26,11 +26,13 @@ namespace TapeWorm::JIT {
         constexpr x86::Gp cellPointer = x86::r15;
         constexpr x86::Gp scratchRegister = x86::r14;
         constexpr x86::Gp tr1Register = x86::r13;
+        constexpr x86::Gp tr2Register = x86::r12;
 
+        //We preserve the register values and restore them after jitting
+        assembler.push(tr2Register);
         assembler.push(tr1Register);
         assembler.push(scratchRegister);
         assembler.push(cellPointer);
-        assembler.sub(x86::rsp, 8);
 
         //Calling conventions decide which registers to use for syscalls
         #if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
@@ -143,42 +145,27 @@ namespace TapeWorm::JIT {
                     i += 2;
                     break;
                 }
-                case InterWorm::Op::Move: {
-                    Label skip = assembler.new_label();
-                    const int8_t offset = static_cast<int8_t>(interwormStream[i + 1]);
-                    assembler.cmp(x86::byte_ptr(cellPointer), 0);
-                    assembler.jz(skip);
-
-                    assembler.mov(scratchRegister, cellPointer);
-                    assembler.add(scratchRegister, offset);
-                    assembler.mov(x86::rax, x86::byte_ptr(cellPointer));
-                    assembler.add(x86::byte_ptr(scratchRegister), x86::al);
-                    assembler.mov(x86::byte_ptr(cellPointer), 0);
-
-                    assembler.bind(skip);
-                    i++;
-                    break;
-                }
                 case InterWorm::Op::Multiply: {
                     Label skip = assembler.new_label();
                     const uint8_t numAddresses = static_cast<uint8_t>(interwormStream[i + 1]);
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
                     assembler.jz(skip);
 
+                    assembler.movzx(tr1Register, x86::byte_ptr(cellPointer));
+
                     for (uint8_t k = 0; k < numAddresses; k++) {
                         const int8_t offset = static_cast<int8_t>(interwormStream[i + 2 * k + 2]);
                         const uint8_t factor = static_cast<uint8_t>(interwormStream[i + 2 * k + 3]);
 
-                        //if (offset == 0) continue;
-
-                        //Set relative address
-                        assembler.mov(scratchRegister, cellPointer);
-                        assembler.add(scratchRegister, offset);
-
-                        //Multiply
-                        assembler.movzx(tr1Register.r32(), x86::byte_ptr(cellPointer));
-                        assembler.imul(tr1Register.r32(), tr1Register.r32(), factor);
-                        assembler.add(x86::byte_ptr(scratchRegister), tr1Register.r8());
+                        if (factor == 0) {
+                            //Factor == 0 is a special case that we interpret as 'clear this cell'
+                            assembler.mov(x86::byte_ptr(cellPointer, offset), 0);
+                        }
+                        else {
+                            //Multiply & Add
+                            assembler.imul(tr2Register, tr1Register, factor);
+                            assembler.add(x86::byte_ptr(cellPointer, offset), tr2Register.r8());
+                        }
                     }
                     //Set control cell to zero
                     assembler.mov(x86::byte_ptr(cellPointer), 0);
@@ -190,10 +177,10 @@ namespace TapeWorm::JIT {
                 default: break;
             }
         }
-        assembler.add(x86::rsp, 8);
         assembler.pop(cellPointer);
         assembler.pop(scratchRegister);
         assembler.pop(tr1Register);
+        assembler.pop(tr2Register);
 
         assembler.ret();
         assembler.finalize();

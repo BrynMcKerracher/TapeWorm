@@ -22,8 +22,8 @@ static void RunBenchmark(const std::string& testFile, const std::string& testNam
     TapeWorm::InterWorm::IROptimiser irOptimiser;
     ops = irOptimiser.Optimise(ops);
 
-    //TapeWorm::Test::TestEnvironmentSetup setup;
     ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).run(testName, [&] {
+        TapeWorm::Test::TestEnvironmentSetup setup;
         TapeWorm::JIT::Compiler jitCompiler;
         jitCompiler.Compile(ops);
     });

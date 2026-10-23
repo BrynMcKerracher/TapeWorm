@@ -23,8 +23,6 @@ namespace TapeWorm::AST {
                 subNode.reset(newNode);
             }
         }
-        //
-
         //Post-order analysis
         if (const SyntacticMetadata metadata(node); metadata.type != MetaTerminalNode::Generic) {
             return CreateMetaTerminal(node, metadata);

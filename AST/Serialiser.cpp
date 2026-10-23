@@ -93,11 +93,6 @@ namespace TapeWorm::AST {
         if (node->addresses.empty()) return;
 
         switch (node->metaType) {
-            case MetaTerminalNode::Move: {
-                WriteOp(InterWorm::Op::Move);
-                WriteOp(static_cast<InterWorm::Op::Type>((++node->addresses.begin())->first));
-                break;
-            }
             case MetaTerminalNode::Multiply: {
                 node->addresses.erase(0);
                 WriteOp(InterWorm::Op::Multiply);

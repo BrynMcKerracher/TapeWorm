@@ -53,13 +53,13 @@ int main(const int argc, char** argv) {
         ast = treeOptimiser.Optimise(ast);
         astAnalyser.Analyse(ast);
     }
-    /*
+
     auto ops = compilerVisitor.Visit(ast);
     if (environment.PerformIROptimisationPass) {
         TapeWorm::InterWorm::IROptimiser irOptimiser;
         ops = irOptimiser.Optimise(ops);
     }
     jitCompiler.Compile(ops);
-    */
+
     return 0;
 }

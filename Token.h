@@ -19,6 +19,7 @@ namespace TapeWorm::InterWorm {
      **/
     struct Token {
         enum Type {
+            Unknown,
             Nop,
             IncPointer,  //Equivalent to brainfuck '>'
             DecPointer,  //Equivalent to brainfuck '<'
@@ -29,7 +30,8 @@ namespace TapeWorm::InterWorm {
             OutputCell,  //Equivalent to brainfuck '.'
             JumpIfZero,  //Equivalent to brainfuck '['
             JumpNotZero, //Equivalent to brainfuck ']'
-            EndOfFile
+            EndOfFile,
+            Error
         };
 
         /**
