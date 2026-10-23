@@ -44,8 +44,8 @@ namespace TapeWorm::JIT {
         //Move the memory location of our runtime starting block into r15.
         assembler.mov(cellPointer, firstArgRegister);
 
-        for (streamIndex = 0; streamIndex < interwormStream.size(); ++streamIndex) {
-            switch (interwormStream[streamIndex]) {
+        for (streamIndex = 0; streamIndex < opStream.size(); ++streamIndex) {
+            switch (opStream[streamIndex]) {
                 case InterWorm::Op::IncPointer: assembler.inc(cellPointer); break;
                 case InterWorm::Op::DecPointer: assembler.dec(cellPointer); break;
                 case InterWorm::Op::IncCell: assembler.inc(x86::byte_ptr(cellPointer)); break;
@@ -135,15 +135,15 @@ namespace TapeWorm::JIT {
                 }
                 case InterWorm::Op::Multiply: {
                     Label skip = assembler.new_label();
-                    const uint8_t numAddresses = static_cast<uint8_t>(interwormStream[streamIndex + 1]);
+                    const uint8_t numAddresses = static_cast<uint8_t>(opStream[streamIndex + 1]);
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
                     assembler.jz(skip);
 
                     assembler.movzx(tr1Register, x86::byte_ptr(cellPointer));
 
                     for (uint8_t k = 0; k < numAddresses; k++) {
-                        const int8_t offset = static_cast<int8_t>(interwormStream[streamIndex + 2 * k + 2]);
-                        const uint8_t factor = static_cast<uint8_t>(interwormStream[streamIndex + 2 * k + 3]);
+                        const int8_t offset = static_cast<int8_t>(opStream[streamIndex + 2 * k + 2]);
+                        const uint8_t factor = static_cast<uint8_t>(opStream[streamIndex + 2 * k + 3]);
 
                         if (factor == 0) {
                             //Factor == 0 is a special case that we interpret as 'clear this cell'
