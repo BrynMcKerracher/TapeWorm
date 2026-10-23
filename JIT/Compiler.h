@@ -27,9 +27,14 @@ namespace TapeWorm::JIT {
         asmjit::x86::Assembler assembler;
         std::vector<uint8_t> runtimeMemory;
         MainEntry mainEntry = nullptr;
+        std::size_t streamIndex = 0;
+        std::vector<InterWorm::Op::Type> opStream;
 
         static void WriteCharacter(uint8_t character);
         static uint8_t ReadCharacter();
+
+        uint16_t ReadWord();
+        uint8_t ReadByte();
     };
 }
 

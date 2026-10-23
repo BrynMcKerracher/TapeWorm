@@ -16,7 +16,7 @@ namespace TapeWorm::JIT {
 
     void Compiler::Compile(const std::vector<InterWorm::Op::Type> &interwormStream) {
         if (interwormStream.empty()) return;
-
+        opStream = interwormStream;
         std::stack<LabelPair> controlFlowPairs;
 
         code.init(runtime.environment(), runtime.cpu_features());
@@ -44,8 +44,8 @@ namespace TapeWorm::JIT {
         //Move the memory location of our runtime starting block into r15.
         assembler.mov(cellPointer, firstArgRegister);
 
-        for (std::size_t i = 0; i < interwormStream.size(); ++i) {
-            switch (interwormStream[i]) {
+        for (streamIndex = 0; streamIndex < interwormStream.size(); ++streamIndex) {
+            switch (interwormStream[streamIndex]) {
                 case InterWorm::Op::IncPointer: assembler.inc(cellPointer); break;
                 case InterWorm::Op::DecPointer: assembler.dec(cellPointer); break;
                 case InterWorm::Op::IncCell: assembler.inc(x86::byte_ptr(cellPointer)); break;
@@ -102,60 +102,48 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::AddImmediate: {
-                    assembler.add(x86::byte_ptr(cellPointer),interwormStream[i + 1]);
-                    i++;
+                    assembler.add(x86::byte_ptr(cellPointer), ReadByte());
                     break;
                 }
                 case InterWorm::Op::AddImmediateExtended: {
-                    const uint32_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
-                    assembler.add(x86::word_ptr(cellPointer), offset);
-                    i += 2;
+                    assembler.add(x86::word_ptr(cellPointer), ReadWord());
                     break;
                 }
                 case InterWorm::Op::SubImmediate: {
-                    assembler.sub(x86::byte_ptr(cellPointer), interwormStream[i + 1]);
-                    i++;
+                    assembler.sub(x86::byte_ptr(cellPointer), ReadByte());
                     break;
                 }
                 case InterWorm::Op::SubImmediateExtended: {
-                    const uint32_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
-                    assembler.sub(x86::word_ptr(cellPointer), offset);
-                    i += 2;
+                    assembler.sub(x86::word_ptr(cellPointer), ReadWord());
                     break;
                 }
                 case InterWorm::Op::AddPointer: {
-                    assembler.add(cellPointer, interwormStream[i + 1]);
-                    i++;
+                    assembler.add(cellPointer, ReadByte());
                     break;
                 }
                 case InterWorm::Op::AddPointerExtended: {
-                    const uint64_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
-                    assembler.add(cellPointer, offset);
-                    i += 2;
+                    assembler.add(cellPointer, ReadWord());
                     break;
                 }
                 case InterWorm::Op::SubPointer: {
-                    assembler.sub(cellPointer, interwormStream[i + 1]);
-                    i++;
+                    assembler.sub(cellPointer, ReadByte());
                     break;
                 }
                 case InterWorm::Op::SubPointerExtended: {
-                    const uint64_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
-                    assembler.sub(cellPointer, offset);
-                    i += 2;
+                    assembler.sub(cellPointer, ReadWord());
                     break;
                 }
                 case InterWorm::Op::Multiply: {
                     Label skip = assembler.new_label();
-                    const uint8_t numAddresses = static_cast<uint8_t>(interwormStream[i + 1]);
+                    const uint8_t numAddresses = static_cast<uint8_t>(interwormStream[streamIndex + 1]);
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
                     assembler.jz(skip);
 
                     assembler.movzx(tr1Register, x86::byte_ptr(cellPointer));
 
                     for (uint8_t k = 0; k < numAddresses; k++) {
-                        const int8_t offset = static_cast<int8_t>(interwormStream[i + 2 * k + 2]);
-                        const uint8_t factor = static_cast<uint8_t>(interwormStream[i + 2 * k + 3]);
+                        const int8_t offset = static_cast<int8_t>(interwormStream[streamIndex + 2 * k + 2]);
+                        const uint8_t factor = static_cast<uint8_t>(interwormStream[streamIndex + 2 * k + 3]);
 
                         if (factor == 0) {
                             //Factor == 0 is a special case that we interpret as 'clear this cell'
@@ -171,7 +159,7 @@ namespace TapeWorm::JIT {
                     assembler.mov(x86::byte_ptr(cellPointer), 0);
 
                     assembler.bind(skip);
-                    i += numAddresses * 2 + 1;
+                    streamIndex += numAddresses * 2 + 1;
                     break;
                 }
                 default: break;
@@ -201,5 +189,15 @@ namespace TapeWorm::JIT {
 
     uint8_t Compiler::ReadCharacter() {
         return std::getchar();
+    }
+
+    uint16_t Compiler::ReadWord() {
+        const uint16_t word = opStream[streamIndex + 1] | (static_cast<uint16_t>(opStream[streamIndex + 2]) << 8);
+        streamIndex += 2;
+        return word;
+    }
+
+    uint8_t Compiler::ReadByte() {
+        return opStream[++streamIndex];
     }
 }
