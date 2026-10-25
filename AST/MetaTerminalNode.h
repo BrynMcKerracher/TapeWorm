@@ -15,7 +15,6 @@ namespace TapeWorm::AST {
     struct MetaTerminalNode final : NodeBase {
         enum MetaTerminalType : uint8_t {
             Generic = 0,
-            Move,
             Multiply,
             Count
         };

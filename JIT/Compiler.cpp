@@ -28,6 +28,10 @@ namespace TapeWorm::JIT {
         constexpr x86::Gp tr1Register = x86::r13;
         constexpr x86::Gp tr2Register = x86::r12;
 
+        //We reserve xmm1 as a zero-register for vector operations.
+        constexpr x86::Vec gen1VectorRegister = x86::xmm1;
+        constexpr x86::Vec gen0VectorRegister = x86::xmm0;
+
         //We preserve the register values and restore them after jitting
         assembler.push(tr2Register);
         assembler.push(tr1Register);
@@ -43,6 +47,7 @@ namespace TapeWorm::JIT {
 
         //Move the memory location of our runtime starting block into r15.
         assembler.mov(cellPointer, firstArgRegister);
+        assembler.add(cellPointer, PaddingSize);
 
         for (streamIndex = 0; streamIndex < opStream.size(); ++streamIndex) {
             switch (opStream[streamIndex]) {
@@ -162,6 +167,52 @@ namespace TapeWorm::JIT {
                     streamIndex += numAddresses * 2 + 1;
                     break;
                 }
+                case InterWorm::Op::ScanForward: {
+                    const uint8_t stride = ReadByte();
+
+                    Label skipEnd  = assembler.new_label();
+                    assembler.cmp(x86::byte_ptr(cellPointer), 0);
+                    assembler.jz(skipEnd);
+
+                    if (stride == 1) {
+                        VectorScanNoStride(cellPointer, tr1Register, gen0VectorRegister, gen1VectorRegister);
+                        break;
+                    }
+                    if (stride >= 2 and stride < 16) {
+                        VectorScan(stride, cellPointer, tr1Register, gen0VectorRegister, gen1VectorRegister);
+                        break;
+                    }
+
+                    Label loop = assembler.new_label();
+                    assembler.bind(loop);
+                    assembler.add(cellPointer, stride);
+                    assembler.cmp(x86::byte_ptr(cellPointer), 0);
+                    assembler.jnz(loop);
+
+                    assembler.bind(skipEnd);
+                    break;
+                }
+                case InterWorm::Op::ScanBackward: {
+                    const uint8_t stride = ReadByte();
+
+                    Label skipEnd  = assembler.new_label();
+                    assembler.cmp(x86::byte_ptr(cellPointer), 0);
+                    assembler.jz(skipEnd);
+
+                    if (stride >= 2 and stride < 16) {
+                        VectorScan(stride, cellPointer, tr1Register, gen0VectorRegister, gen1VectorRegister, false);
+                        break;
+                    }
+
+                    Label loop = assembler.new_label();
+                    assembler.bind(loop);
+                    assembler.sub(cellPointer, stride);
+                    assembler.cmp(x86::byte_ptr(cellPointer), 0);
+                    assembler.jnz(loop);
+
+                    assembler.bind(skipEnd);
+                    break;
+                }
                 default: break;
             }
         }
@@ -174,7 +225,7 @@ namespace TapeWorm::JIT {
         assembler.finalize();
 
         runtime.add(&mainEntry, &code);
-        runtimeMemory = std::vector<uint8_t>(RuntimeMemorySize, 0);
+        runtimeMemory = std::vector<uint8_t>(RuntimeMemorySize + 2 * PaddingSize, 0);
         mainEntry(reinterpret_cast<uintptr_t>(&runtimeMemory[0]));
     }
 
@@ -199,5 +250,64 @@ namespace TapeWorm::JIT {
 
     uint8_t Compiler::ReadByte() {
         return opStream[++streamIndex];
+    }
+
+    void Compiler::VectorScanNoStride(const x86::Gp& cellPointer, const x86::Gp& tempReg, const x86::Vec& genVec0, const x86::Vec& genVec1) {
+        const Label skip = assembler.new_label();
+        constexpr uint32_t MaxLookAhead = 3;
+        for (uint32_t k = 0; k < MaxLookAhead; k++) {
+            assembler.inc(cellPointer);
+            assembler.cmp(x86::byte_ptr(cellPointer), 0);
+            assembler.jz(skip);
+        }
+        assembler.pxor(genVec0, genVec0);
+        const Label loop = assembler.new_label();
+        assembler.bind(loop);
+        assembler.movdqu(genVec1, x86::xmmword_ptr(cellPointer));
+        assembler.pcmpeqb(genVec1, genVec0);
+        assembler.pmovmskb(tempReg.r32(), genVec1);
+        assembler.add(cellPointer, 16);
+        assembler.test(tempReg.r32(), tempReg.r32());
+        assembler.jz(loop);
+
+        assembler.bsf(tempReg.r32(), tempReg.r32());
+        assembler.lea(cellPointer, x86::ptr(cellPointer, tempReg.r32(), 0, -16));
+
+        assembler.bind(skip);
+    }
+
+    void Compiler::VectorScan(const uint8_t stride, const x86::Gp &cellPointer, const x86::Gp &tempReg, const x86::Vec &genVec0, const x86::Vec &genVec1, bool forward) {
+        const Label skip = assembler.new_label();
+        const uint8_t numCellsInStride = 1 + 15 / stride;
+        const std::int32_t windowAdvance = stride * numCellsInStride;
+        uint32_t bitMask = 0;
+        for (uint32_t i = 0; i < numCellsInStride; ++i) {
+            bitMask |= 1 << (forward ? i * stride : 15 - i * stride);
+        }
+        assembler.pxor(genVec0, genVec0);
+        const Label loop = assembler.new_label();
+        assembler.bind(loop);
+        assembler.movdqu(genVec1, x86::xmmword_ptr(cellPointer, forward ? 0 : -15));
+        assembler.pcmpeqb(genVec1, genVec0);
+        assembler.pmovmskb(tempReg.r32(), genVec1);
+        if (forward) {
+            assembler.add(cellPointer, windowAdvance);
+        }
+        else {
+            assembler.sub(cellPointer, windowAdvance);
+        }
+        assembler.and_(tempReg.r32(), bitMask);
+        assembler.jz(loop);
+
+        if (forward) {
+            assembler.bsf(tempReg.r32(), tempReg.r32());
+            assembler.lea(cellPointer, x86::ptr(cellPointer, tempReg, 0, -windowAdvance));
+        }
+        else {
+            assembler.bsr(tempReg.r32(), tempReg.r32());
+            assembler.lea(cellPointer, x86::ptr(cellPointer, tempReg, 0, windowAdvance - 15));
+        }
+
+        assembler.bind(skip);
     }
 }

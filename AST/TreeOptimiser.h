@@ -9,6 +9,7 @@
 #include "NodeReadWriteVisitor.h"
 #include "NodeReadOnlyVisitor.h"
 #include "SyntacticMetadata.h"
+#include "../Token.h"
 
 namespace TapeWorm::AST {
     /**

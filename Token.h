@@ -31,6 +31,8 @@ namespace TapeWorm::InterWorm {
             JumpIfZero,  //Equivalent to brainfuck '['
             JumpNotZero, //Equivalent to brainfuck ']'
             EndOfFile,
+            ScanForward,
+            ScanBackward,
             Error
         };
 

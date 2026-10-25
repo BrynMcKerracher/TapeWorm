@@ -62,7 +62,6 @@ namespace TapeWorm::AST::Debug {
         std::string str = "{";
         switch (node->metaType) {
             case MetaTerminalNode::Generic:  str += "GEN"; break;
-            case MetaTerminalNode::Move:     str += "MOV"; break;
             case MetaTerminalNode::Multiply: str += "MUL"; break;
             default: break;
         }

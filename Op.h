@@ -29,8 +29,9 @@ namespace TapeWorm::InterWorm {
             AddPointerExtended,
             SubPointer,
             SubPointerExtended,
-            VectorAdd,
             Multiply,
+            ScanForward,
+            ScanBackward,
             Count
         };
 

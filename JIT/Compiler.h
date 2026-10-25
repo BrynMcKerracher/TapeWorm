@@ -14,6 +14,7 @@
 
 namespace TapeWorm::JIT {
     using MainEntry = void(*)(uintptr_t);
+
     using LabelPair = std::pair<asmjit::Label, asmjit::Label>;
 
     class Compiler {
@@ -22,6 +23,7 @@ namespace TapeWorm::JIT {
         ~Compiler();
     private:
         constexpr static std::size_t RuntimeMemorySize = 30000;
+        constexpr static std::size_t PaddingSize = 128;
         asmjit::JitRuntime runtime;
         asmjit::CodeHolder code;
         asmjit::x86::Assembler assembler;
@@ -35,6 +37,9 @@ namespace TapeWorm::JIT {
 
         uint16_t ReadWord();
         uint8_t ReadByte();
+
+        void VectorScanNoStride(const asmjit::x86::Gp& cellPointer, const asmjit::x86::Gp& tempReg, const asmjit::x86::Vec& genVec0, const asmjit::x86::Vec& genVec1);
+        void VectorScan(const uint8_t stride, const asmjit::x86::Gp& cellPointer, const asmjit::x86::Gp& tempReg, const asmjit::x86::Vec& genVec0, const asmjit::x86::Vec& genVec1, bool forward = true);
     };
 }
 

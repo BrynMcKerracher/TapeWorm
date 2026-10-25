@@ -4,6 +4,7 @@
  **/
 #include "TreeOptimiser.h"
 #include "SyntacticMetadata.h"
+#include "TerminalNode.h"
 #include <algorithm>
 #include <iostream>
 
@@ -23,7 +24,22 @@ namespace TapeWorm::AST {
                 subNode.reset(newNode);
             }
         }
-        //Post-order analysis
+
+        if (node->subNodes.size() == 1 and node->subNodes[0]->type == NodeBase::Terminal) {
+            const TerminalNode* terminal = dynamic_cast<const TerminalNode*>(node->subNodes[0].get());
+            if (terminal->token.type == InterWorm::Token::IncPointer) {
+                InterWorm::Token token = terminal->token;
+                token.type = InterWorm::Token::Type::ScanForward;
+                return new TerminalNode(token);
+            }
+
+            if (terminal->token.type == InterWorm::Token::DecPointer) {
+                InterWorm::Token token = terminal->token;
+                token.type = InterWorm::Token::Type::ScanBackward;
+                return new TerminalNode(token);
+            }
+        }
+
         if (const SyntacticMetadata metadata(node); metadata.type != MetaTerminalNode::Generic) {
             return CreateMetaTerminal(node, metadata);
         }

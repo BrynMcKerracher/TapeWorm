@@ -17,7 +17,14 @@ namespace TapeWorm::AST {
 
     bool SyntacticMetadata::IsMetaTerminal(const SyntacticNode *node) {
         return std::ranges::none_of(node->subNodes, [&](const auto& subNode) {
-            return subNode->type != NodeBase::Terminal;
+            if (subNode->type != NodeBase::Terminal) return true;
+
+            TerminalNode* terminal = dynamic_cast<TerminalNode*>(subNode.get());
+            switch (terminal->token.type) {
+                case InterWorm::Token::ScanForward:
+                case InterWorm::Token::ScanBackward: return true;
+            }
+            return false;
         });
     }
 
