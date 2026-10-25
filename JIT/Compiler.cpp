@@ -168,6 +168,7 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::Scan: {
+                    //Get stride and calculate the direction of the scan
                     int8_t stride = static_cast<int8_t>(ReadByte());
                     const int8_t direction = stride < 0 ? -1 : 1;
                     stride = static_cast<int8_t>(std::abs(stride));
@@ -193,6 +194,7 @@ namespace TapeWorm::JIT {
                         bitMask |= 1 << (direction > 0 ? i * stride : 15 - i * stride);
                     }
 
+                    //Zero the vector-zero register so we can use it to compare against our 16 bytes in the window
                     assembler.pxor(vecRegister0, vecRegister0);
 
                     const Label loop = assembler.new_label();
