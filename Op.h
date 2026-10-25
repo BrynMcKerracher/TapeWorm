@@ -30,8 +30,7 @@ namespace TapeWorm::InterWorm {
             SubPointer,
             SubPointerExtended,
             Multiply,
-            ScanForward,
-            ScanBackward,
+            Scan,
             Count
         };
 

@@ -72,13 +72,13 @@ namespace TapeWorm::AST {
             case InterWorm::Token::InputCell:   WriteOp(InterWorm::Op::Type::InputCell); break;
             case InterWorm::Token::OutputCell:  WriteOp(InterWorm::Op::Type::OutputCell); break;
             case InterWorm::Token::ScanForward: {
-                WriteOp(InterWorm::Op::Type::ScanForward);
-                WriteData(data);
+                WriteOp(InterWorm::Op::Type::Scan);
+                WriteData(static_cast<int8_t>(data));
                 break;
             }
             case InterWorm::Token::ScanBackward: {
-                WriteOp(InterWorm::Op::Type::ScanBackward);
-                WriteData(data);
+                WriteOp(InterWorm::Op::Type::Scan);
+                WriteData(static_cast<int8_t>(data) * -1);
                 break;
             }
             default: break;
