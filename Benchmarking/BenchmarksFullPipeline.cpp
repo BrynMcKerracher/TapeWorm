@@ -14,15 +14,28 @@ static void RunBenchmark(const std::string& testFile, const std::string& testNam
     TapeWorm::AST::Serialiser compilerVisitor;
 
     const std::string fileString = TapeWorm::Util::BrainFuckFileToString(testFile);
-    const auto tokens = scanner.Scan(fileString);
-    auto ast = treeBuilder.BuildAST(tokens);
+    std::vector<TapeWorm::InterWorm::Token> tokens;
+    ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).run(testName + ": Scanning", [&] {
+        tokens = scanner.Scan(fileString);
+    });
+    TapeWorm::AST::Global ast;
+    ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).run(testName + ": Build AST", [&] {
+        ast = treeBuilder.BuildAST(tokens);
+    });
     TapeWorm::AST::TreeOptimiser treeOptimiser;
-    ast = treeOptimiser.Optimise(ast);
-    auto ops = compilerVisitor.Visit(ast);
+    ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).run(testName + ": AST Optimise", [&] {
+        ast = treeOptimiser.Optimise(ast);
+    });
+    std::vector<TapeWorm::InterWorm::Op::Type> ops;
+    ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).run(testName + ": Serialise", [&] {
+        ops = compilerVisitor.Visit(ast);
+    });
     TapeWorm::InterWorm::IROptimiser irOptimiser;
-    ops = irOptimiser.Optimise(ops);
+    ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).run(testName + ": IR Optimise", [&] {
+        ops = irOptimiser.Optimise(ops);
+    });
 
-    ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).run(testName, [&] {
+    ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).warmup(2).relative(true).run(testName + ": Run", [&] {
         TapeWorm::Test::TestEnvironmentSetup setup;
         TapeWorm::JIT::Compiler jitCompiler;
         jitCompiler.Compile(ops);
