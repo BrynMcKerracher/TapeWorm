@@ -1,6 +1,7 @@
 #ifndef TAPEWORMTESTS_TESTENVIRONMENTSETUP_H
 #define TAPEWORMTESTS_TESTENVIRONMENTSETUP_H
 
+#include <cstdint>
 #include <sstream>
 
 namespace TapeWorm::Test {
@@ -9,10 +10,13 @@ namespace TapeWorm::Test {
         TestEnvironmentSetup();
         ~TestEnvironmentSetup();
 
+        void CreateInputFromFile(const std::string& inputFileName);
         std::string GetProgramOutput() const;
     private:
-        std::stringstream stream;
-        std::streambuf* buffer;
+        std::stringstream coutStream;
+        std::stringstream cinStream;
+        std::streambuf* coutBuffer;
+        std::streambuf* cinBuffer;
     };
 } // TapeWorm
 
