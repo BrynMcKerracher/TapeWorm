@@ -3,6 +3,8 @@
  * @author Bryn McKerracher
  **/
 #include "MetaTerminalNode.h"
+
+#include "NodeAnyVisitor.h"
 #include "NodeReadWriteVisitor.h"
 #include "NodeReadOnlyVisitor.h"
 
@@ -17,5 +19,9 @@ namespace TapeWorm::AST {
 
     NodeBase *MetaTerminalNode::AcceptReadWriteVisitor(NodeReadWriteVisitor *editor) {
         return editor->VisitMetaTerminal(this);
+    }
+
+    std::any MetaTerminalNode::AcceptAnyVisitor(NodeAnyVisitor* visitor) {
+        return visitor->VisitMetaTerminal(this);
     }
 } // TapeWorm

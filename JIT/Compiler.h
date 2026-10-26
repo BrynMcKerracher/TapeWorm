@@ -14,6 +14,7 @@
 
 namespace TapeWorm::JIT {
     using MainEntry = void(*)(uintptr_t);
+
     using LabelPair = std::pair<asmjit::Label, asmjit::Label>;
 
     class Compiler {
@@ -22,14 +23,20 @@ namespace TapeWorm::JIT {
         ~Compiler();
     private:
         constexpr static std::size_t RuntimeMemorySize = 30000;
+        constexpr static std::size_t PaddingSize = 128;
         asmjit::JitRuntime runtime;
         asmjit::CodeHolder code;
         asmjit::x86::Assembler assembler;
         std::vector<uint8_t> runtimeMemory;
         MainEntry mainEntry = nullptr;
+        std::size_t streamIndex = 0;
+        std::vector<InterWorm::Op::Type> opStream;
 
         static void WriteCharacter(uint8_t character);
         static uint8_t ReadCharacter();
+
+        uint16_t ReadWord();
+        uint8_t ReadByte();
     };
 }
 

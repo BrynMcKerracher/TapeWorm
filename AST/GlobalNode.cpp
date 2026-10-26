@@ -3,6 +3,8 @@
  * @author Bryn McKerracher
  **/
 #include "GlobalNode.h"
+
+#include "NodeAnyVisitor.h"
 #include "NodeReadWriteVisitor.h"
 #include "NodeReadOnlyVisitor.h"
 
@@ -17,5 +19,9 @@ namespace TapeWorm::AST {
 
     NodeBase* GlobalNode::AcceptReadWriteVisitor(NodeReadWriteVisitor *editor) {
         return editor->VisitGlobal(this);
+    }
+
+    std::any GlobalNode::AcceptAnyVisitor(NodeAnyVisitor* visitor) {
+        return visitor->VisitGlobal(this);
     }
 } // TapeWorm

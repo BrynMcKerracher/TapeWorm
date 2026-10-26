@@ -15,7 +15,6 @@ namespace TapeWorm::AST {
     struct MetaTerminalNode final : NodeBase {
         enum MetaTerminalType : uint8_t {
             Generic = 0,
-            Move,
             Multiply,
             Count
         };
@@ -27,6 +26,7 @@ namespace TapeWorm::AST {
 
         void AcceptReadOnlyVisitor(NodeReadOnlyVisitor *visitor) override;
         NodeBase* AcceptReadWriteVisitor(NodeReadWriteVisitor *editor) override;
+        std::any AcceptAnyVisitor(NodeAnyVisitor* visitor) override;
     };
     typedef std::unique_ptr<MetaTerminalNode> MetaTerminal;
 } // TapeWorm

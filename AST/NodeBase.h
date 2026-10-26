@@ -6,6 +6,7 @@
 #define TAPEWORM_NODEBASE_H
 
 #include <memory>
+#include <any>
 
 namespace TapeWorm::AST {
     /**
@@ -29,7 +30,6 @@ namespace TapeWorm::AST {
             Syntactic,    /// In the formal grammatical sense.
             Global,       /// AST root node type.
             MetaTerminal, /// Syntactic node containing ONLY terminal statements.
-            MoveTerminal, /// Move from one cell to another.
         };
 
         /**
@@ -51,8 +51,14 @@ namespace TapeWorm::AST {
          * @return An updated node to replace this node.
          */
         virtual NodeBase* AcceptReadWriteVisitor(struct NodeReadWriteVisitor* editor) = 0;
-    };
 
+        /**
+         * @brief Visitor pattern entry method for traversing the AST and returning any type.
+         * @param visitor The visitor object that is traversing the AST
+         * @return A std::any object related to this NodeBase.
+         */
+        virtual std::any AcceptAnyVisitor(struct NodeAnyVisitor* visitor) = 0;
+    };
     typedef std::unique_ptr<NodeBase> Node;
 }
 

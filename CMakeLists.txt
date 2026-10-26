@@ -59,6 +59,7 @@ add_executable(TapeWorm
         IROptimiser.h
         AST/SyntacticMetadata.cpp
         AST/SyntacticMetadata.h
+        AST/NodeAnyVisitor.h
 )
 
 target_link_libraries(TapeWorm asmjit::asmjit)

@@ -17,7 +17,14 @@ namespace TapeWorm::AST {
 
     bool SyntacticMetadata::IsMetaTerminal(const SyntacticNode *node) {
         return std::ranges::none_of(node->subNodes, [&](const auto& subNode) {
-            return subNode->type != NodeBase::Terminal;
+            if (subNode->type != NodeBase::Terminal) return true;
+
+            TerminalNode* terminal = dynamic_cast<TerminalNode*>(subNode.get());
+            switch (terminal->token.type) {
+                case InterWorm::Token::ScanForward:
+                case InterWorm::Token::ScanBackward: return true;
+            }
+            return false;
         });
     }
 
@@ -63,20 +70,18 @@ namespace TapeWorm::AST {
                     addresses[relativeAddress] -= terminal->token.length;
                     break;
                 }
+                case InterWorm::Token::ClearCell: {
+                    addresses[relativeAddress] = 0;
+                    break;
+                }
                 default: break;
             }
         }
     }
 
     MetaTerminalNode::MetaTerminalType SyntacticMetadata::DetermineType(const SyntacticNode *node) {
-        if (isReadWriteNode) return MetaTerminalNode::Generic;
-        if (volatility == 0 and addresses[0] == 0xFF) {
-            if (addresses.size() == 2 and (++addresses.begin())->second == 1) {
-                return MetaTerminalNode::Move;
-            }
-            if (addresses.size() > 1) {
-                return MetaTerminalNode::Multiply;
-            }
+        if (!isReadWriteNode and volatility == 0 and addresses[0] == 0xFF) {
+            return MetaTerminalNode::Multiply;
         }
         return MetaTerminalNode::Generic;
     }

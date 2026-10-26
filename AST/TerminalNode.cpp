@@ -3,6 +3,8 @@
  * @author Bryn McKerracher
  **/
 #include "TerminalNode.h"
+
+#include "NodeAnyVisitor.h"
 #include "NodeReadWriteVisitor.h"
 #include "NodeReadOnlyVisitor.h"
 
@@ -22,5 +24,9 @@ namespace TapeWorm::AST {
 
     NodeBase* TerminalNode::AcceptReadWriteVisitor(NodeReadWriteVisitor *editor) {
         return editor->VisitTerminal(this);
+    }
+
+    std::any TerminalNode::AcceptAnyVisitor(NodeAnyVisitor *visitor) {
+        return visitor->VisitTerminal(this);
     }
 }

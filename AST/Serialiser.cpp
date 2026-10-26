@@ -71,6 +71,16 @@ namespace TapeWorm::AST {
             case InterWorm::Token::ClearCell:   WriteOp(InterWorm::Op::Type::ClearCell); break;
             case InterWorm::Token::InputCell:   WriteOp(InterWorm::Op::Type::InputCell); break;
             case InterWorm::Token::OutputCell:  WriteOp(InterWorm::Op::Type::OutputCell); break;
+            case InterWorm::Token::ScanForward: {
+                WriteOp(InterWorm::Op::Type::Scan);
+                WriteData(static_cast<int8_t>(data));
+                break;
+            }
+            case InterWorm::Token::ScanBackward: {
+                WriteOp(InterWorm::Op::Type::Scan);
+                WriteData(static_cast<int8_t>(data) * -1);
+                break;
+            }
             default: break;
         }
     }
@@ -93,11 +103,6 @@ namespace TapeWorm::AST {
         if (node->addresses.empty()) return;
 
         switch (node->metaType) {
-            case MetaTerminalNode::Move: {
-                WriteOp(InterWorm::Op::Move);
-                WriteOp(static_cast<InterWorm::Op::Type>((++node->addresses.begin())->first));
-                break;
-            }
             case MetaTerminalNode::Multiply: {
                 node->addresses.erase(0);
                 WriteOp(InterWorm::Op::Multiply);

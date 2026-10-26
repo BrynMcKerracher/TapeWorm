@@ -16,7 +16,7 @@ namespace TapeWorm::JIT {
 
     void Compiler::Compile(const std::vector<InterWorm::Op::Type> &interwormStream) {
         if (interwormStream.empty()) return;
-
+        opStream = interwormStream;
         std::stack<LabelPair> controlFlowPairs;
 
         code.init(runtime.environment(), runtime.cpu_features());
@@ -26,11 +26,17 @@ namespace TapeWorm::JIT {
         constexpr x86::Gp cellPointer = x86::r15;
         constexpr x86::Gp scratchRegister = x86::r14;
         constexpr x86::Gp tr1Register = x86::r13;
+        constexpr x86::Gp tr2Register = x86::r12;
 
+        //We reserve xmm1 as a zero-register for vector operations.
+        constexpr x86::Vec vecRegister1 = x86::xmm1;
+        constexpr x86::Vec vecRegister0 = x86::xmm0;
+
+        //We preserve the register values and restore them after jitting
+        assembler.push(tr2Register);
         assembler.push(tr1Register);
         assembler.push(scratchRegister);
         assembler.push(cellPointer);
-        assembler.sub(x86::rsp, 8);
 
         //Calling conventions decide which registers to use for syscalls
         #if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
@@ -41,9 +47,10 @@ namespace TapeWorm::JIT {
 
         //Move the memory location of our runtime starting block into r15.
         assembler.mov(cellPointer, firstArgRegister);
+        assembler.add(cellPointer, PaddingSize);
 
-        for (std::size_t i = 0; i < interwormStream.size(); ++i) {
-            switch (interwormStream[i]) {
+        for (streamIndex = 0; streamIndex < opStream.size(); ++streamIndex) {
+            switch (opStream[streamIndex]) {
                 case InterWorm::Op::IncPointer: assembler.inc(cellPointer); break;
                 case InterWorm::Op::DecPointer: assembler.dec(cellPointer); break;
                 case InterWorm::Op::IncCell: assembler.inc(x86::byte_ptr(cellPointer)); break;
@@ -100,106 +107,143 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::AddImmediate: {
-                    assembler.add(x86::byte_ptr(cellPointer),interwormStream[i + 1]);
-                    i++;
+                    assembler.add(x86::byte_ptr(cellPointer), ReadByte());
                     break;
                 }
                 case InterWorm::Op::AddImmediateExtended: {
-                    const uint32_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
-                    assembler.add(x86::word_ptr(cellPointer), offset);
-                    i += 2;
+                    assembler.add(x86::word_ptr(cellPointer), ReadWord());
                     break;
                 }
                 case InterWorm::Op::SubImmediate: {
-                    assembler.sub(x86::byte_ptr(cellPointer), interwormStream[i + 1]);
-                    i++;
+                    assembler.sub(x86::byte_ptr(cellPointer), ReadByte());
                     break;
                 }
                 case InterWorm::Op::SubImmediateExtended: {
-                    const uint32_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
-                    assembler.sub(x86::word_ptr(cellPointer), offset);
-                    i += 2;
+                    assembler.sub(x86::word_ptr(cellPointer), ReadWord());
                     break;
                 }
                 case InterWorm::Op::AddPointer: {
-                    assembler.add(cellPointer, interwormStream[i + 1]);
-                    i++;
+                    assembler.add(cellPointer, ReadByte());
                     break;
                 }
                 case InterWorm::Op::AddPointerExtended: {
-                    const uint64_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
-                    assembler.add(cellPointer, offset);
-                    i += 2;
+                    assembler.add(cellPointer, ReadWord());
                     break;
                 }
                 case InterWorm::Op::SubPointer: {
-                    assembler.sub(cellPointer, interwormStream[i + 1]);
-                    i++;
+                    assembler.sub(cellPointer, ReadByte());
                     break;
                 }
                 case InterWorm::Op::SubPointerExtended: {
-                    const uint64_t offset = interwormStream[i + 1] | (static_cast<uint64_t>(interwormStream[i + 2]) << 8);
-                    assembler.sub(cellPointer, offset);
-                    i += 2;
-                    break;
-                }
-                case InterWorm::Op::Move: {
-                    Label skip = assembler.new_label();
-                    const int8_t offset = static_cast<int8_t>(interwormStream[i + 1]);
-                    assembler.cmp(x86::byte_ptr(cellPointer), 0);
-                    assembler.jz(skip);
-
-                    assembler.mov(scratchRegister, cellPointer);
-                    assembler.add(scratchRegister, offset);
-                    assembler.mov(x86::rax, x86::byte_ptr(cellPointer));
-                    assembler.add(x86::byte_ptr(scratchRegister), x86::al);
-                    assembler.mov(x86::byte_ptr(cellPointer), 0);
-
-                    assembler.bind(skip);
-                    i++;
+                    assembler.sub(cellPointer, ReadWord());
                     break;
                 }
                 case InterWorm::Op::Multiply: {
                     Label skip = assembler.new_label();
-                    const uint8_t numAddresses = static_cast<uint8_t>(interwormStream[i + 1]);
+                    const uint8_t numAddresses = static_cast<uint8_t>(opStream[streamIndex + 1]);
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
                     assembler.jz(skip);
 
+                    assembler.movzx(tr1Register, x86::byte_ptr(cellPointer));
+
                     for (uint8_t k = 0; k < numAddresses; k++) {
-                        const int8_t offset = static_cast<int8_t>(interwormStream[i + 2 * k + 2]);
-                        const uint8_t factor = static_cast<uint8_t>(interwormStream[i + 2 * k + 3]);
+                        const int8_t offset = static_cast<int8_t>(opStream[streamIndex + 2 * k + 2]);
+                        const uint8_t factor = static_cast<uint8_t>(opStream[streamIndex + 2 * k + 3]);
 
-                        //if (offset == 0) continue;
-
-                        //Set relative address
-                        assembler.mov(scratchRegister, cellPointer);
-                        assembler.add(scratchRegister, offset);
-
-                        //Multiply
-                        assembler.movzx(tr1Register.r32(), x86::byte_ptr(cellPointer));
-                        assembler.imul(tr1Register.r32(), tr1Register.r32(), factor);
-                        assembler.add(x86::byte_ptr(scratchRegister), tr1Register.r8());
+                        if (factor == 0) {
+                            //Factor == 0 is a special case that we interpret as 'clear this cell'
+                            assembler.mov(x86::byte_ptr(cellPointer, offset), 0);
+                        }
+                        else {
+                            //Multiply & Add
+                            assembler.imul(tr2Register, tr1Register, factor);
+                            assembler.add(x86::byte_ptr(cellPointer, offset), tr2Register.r8());
+                        }
                     }
                     //Set control cell to zero
                     assembler.mov(x86::byte_ptr(cellPointer), 0);
 
                     assembler.bind(skip);
-                    i += numAddresses * 2 + 1;
+                    streamIndex += numAddresses * 2 + 1;
+                    break;
+                }
+                case InterWorm::Op::Scan: {
+                    //Get stride and calculate the direction of the scan
+                    int8_t stride = static_cast<int8_t>(ReadByte());
+                    const int8_t direction = stride < 0 ? -1 : 1;
+                    stride = static_cast<int8_t>(std::abs(stride));
+
+                    //If the current cell is zero we're done and skip the rest of the checks
+                    Label skip = assembler.new_label();
+                    assembler.cmp(x86::byte_ptr(cellPointer), 0);
+                    assembler.jz(skip);
+
+                    //Then we use a scalar look-ahead to check nearby cells
+                    constexpr uint32_t MaxLookAhead = 3;
+                    for (uint32_t k = 0; k < MaxLookAhead; k++) {
+                        assembler.add(cellPointer, direction * stride);
+                        assembler.cmp(x86::byte_ptr(cellPointer), 0);
+                        assembler.jz(skip);
+                    }
+
+                    //We only use vector ops if the stride is less than 16, other we'd need a bigger window
+                    //Maybe I'll revisit this later for AVX2 and check 32-cells at a time where available
+                    //Also the stride <= 8 here is a little arbitrary and should be tuned to benchmarks, but any more than
+                    //8 per stride means we'd only check a single cell per window and probably loses to the single-cell check
+                    //because of vectorisation overhead
+                    if (stride <= 8) {
+                        //Now we use vector ops to check in parallel
+                        const uint8_t numCellsInStride = 1 + 15 / stride;
+                        const std::int32_t windowAdvance = stride * numCellsInStride;
+                        uint32_t bitMask = 0;
+                        for (uint32_t i = 0; i < numCellsInStride; ++i) {
+                            bitMask |= 1 << (direction > 0 ? i * stride : 15 - i * stride);
+                        }
+
+                        //Zero the vector-zero register so we can use it to compare against our 16 bytes in the window
+                        assembler.pxor(vecRegister0, vecRegister0);
+
+                        const Label loop = assembler.new_label();
+                        //Grab the bytes from the 16-byte window and check if they're zero, then compare against our stride mask
+                        assembler.bind(loop);
+                        assembler.movdqu(vecRegister1, x86::xmmword_ptr(cellPointer, direction > 0 ? 0 : -15));
+                        assembler.pcmpeqb(vecRegister1, vecRegister0);
+                        assembler.pmovmskb(tr1Register.r32(), vecRegister1);
+                        assembler.add(cellPointer, windowAdvance * direction);
+                        assembler.and_(tr1Register.r32(), bitMask);
+                        assembler.jz(loop);
+
+                        //Calculate the offset for moving our cellPointer
+                        if (direction > 0) assembler.bsf(tr1Register.r32(), tr1Register.r32());
+                        else assembler.bsr(tr1Register.r32(), tr1Register.r32());
+
+                        //Move the pointer
+                        assembler.lea(cellPointer, x86::ptr(cellPointer, tr1Register, 0, direction > 0 ? -windowAdvance : windowAdvance - 15));
+                    }
+                    else {
+                        //If we can't use vectorisation, then we just loop single-cell checks until we hit a zero
+                        Label loop = assembler.new_label();
+                        assembler.bind(loop);
+                        assembler.add(cellPointer, direction * stride);
+                        assembler.cmp(x86::byte_ptr(cellPointer), 0);
+                        assembler.jnz(loop);
+                    }
+                    assembler.bind(skip);
                     break;
                 }
                 default: break;
             }
         }
-        assembler.add(x86::rsp, 8);
         assembler.pop(cellPointer);
         assembler.pop(scratchRegister);
         assembler.pop(tr1Register);
+        assembler.pop(tr2Register);
 
         assembler.ret();
         assembler.finalize();
 
         runtime.add(&mainEntry, &code);
-        runtimeMemory = std::vector<uint8_t>(RuntimeMemorySize, 0);
+        runtimeMemory = std::vector<uint8_t>(RuntimeMemorySize + 2 * PaddingSize, 0);
         mainEntry(reinterpret_cast<uintptr_t>(&runtimeMemory[0]));
     }
 
@@ -214,5 +258,15 @@ namespace TapeWorm::JIT {
 
     uint8_t Compiler::ReadCharacter() {
         return std::getchar();
+    }
+
+    uint16_t Compiler::ReadWord() {
+        const uint16_t word = opStream[streamIndex + 1] | (static_cast<uint16_t>(opStream[streamIndex + 2]) << 8);
+        streamIndex += 2;
+        return word;
+    }
+
+    uint8_t Compiler::ReadByte() {
+        return opStream[++streamIndex];
     }
 }

@@ -8,54 +8,64 @@
 
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 
 namespace TapeWorm::AST::Debug {
     void Analyser::Analyse(const Global &globalNode) {
         blockMap.clear();
-        globalNode->AcceptReadOnlyVisitor(this);
+        globalNode->AcceptAnyVisitor(this);
     }
 
-    void Analyser::VisitTerminal(TerminalNode *node) {
+    std::any Analyser::VisitTerminal(TerminalNode *node) {
         nodesVisited++;
-        std::cout << InterWorm::Token::ToString(node->token);
+
+        std::stringstream ss;
+        ss << node->token.length;
+
+        return InterWorm::Token::ToString(node->token) + ss.str();
     }
 
-    void Analyser::VisitSyntactic(SyntacticNode *node) {
+    std::any Analyser::VisitSyntactic(SyntacticNode *node) {
         nodesVisited++;
         std::string block = "[";
         for (const Node& subNode : node->subNodes) {
-            subNode->AcceptReadOnlyVisitor(this);
+            block += std::any_cast<std::string>(subNode->AcceptAnyVisitor(this));
         }
         block += ']';
         blockMap[block]++;
-        std::cout << block;
+        return std::string("#");
     }
 
-    void Analyser::VisitGlobal(GlobalNode *node) {
+    std::any Analyser::VisitGlobal(GlobalNode *node) {
         nodesVisited++;
         for (const Node& subNodes : node->subNodes) {
-            subNodes->AcceptReadOnlyVisitor(this);
-        }
-        std::size_t totalBlocks = 0;
-        std::vector<std::pair<std::string, std::size_t>> pairs;
-        for (auto & itr : blockMap) {
-            pairs.emplace_back(itr);
-            totalBlocks += itr.second;
+            subNodes->AcceptAnyVisitor(this);
         }
 
-        std::ranges::sort(pairs, [=](const std::pair<std::string, std::size_t>& a, const std::pair<std::string, std::size_t>& b)
-        {
-            return a.second > b.second;
+        std::vector<std::pair<std::string, uint64_t> > sorted;
+        for (auto& i : blockMap) {
+            sorted.emplace_back(i);
+        }
+        std::ranges::sort(sorted, [&](auto& x, auto& y) -> bool {
+            return x.second < y.second;
         });
 
-        std::cout << "Block: \tCount:\tPercentage:\n";
-        for (const auto& [block, frequency] : pairs) {
-            std::cout << block << "\t" << frequency << "\t" << (100.f * static_cast<float>(frequency) / static_cast<float>(totalBlocks)) << "%\n";
+        std::cout << "Count:\tBlock:\n";
+        for (const auto& [block, frequency] : sorted) {
+            std::cout << frequency << "\t" << block << "\n";
         }
         std::cout << "ASTAnalysis visited " << nodesVisited << " nodes\n";
+        return std::string("");
     }
 
-    void Analyser::VisitMetaTerminal(MetaTerminalNode *node) {
-
+    std::any Analyser::VisitMetaTerminal(MetaTerminalNode *node) {
+        std::string str = "{";
+        switch (node->metaType) {
+            case MetaTerminalNode::Generic:  str += "GEN"; break;
+            case MetaTerminalNode::Multiply: str += "MUL"; break;
+            default: break;
+        }
+        str += "}";
+        return str;
     }
 }

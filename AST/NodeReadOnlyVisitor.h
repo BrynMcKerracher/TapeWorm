@@ -10,7 +10,7 @@
 namespace TapeWorm::AST {
     /**
      * @struct NodeReadOnlyVisitor
-     * @brief Visitor-pattern AST visitor with red-only capability.
+     * @brief Visitor-pattern AST visitor with read-only capability.
      *
      * This pattern is primarily for converting the AST into another form,
      * e.g., an intermediate language.
