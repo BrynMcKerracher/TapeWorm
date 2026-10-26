@@ -25,6 +25,7 @@ namespace TapeWorm::AST {
             }
         }
 
+
         if (node->subNodes.size() == 1 and node->subNodes[0]->type == NodeBase::Terminal) {
             const TerminalNode* terminal = dynamic_cast<const TerminalNode*>(node->subNodes[0].get());
             if (terminal->token.type == InterWorm::Token::IncPointer) {

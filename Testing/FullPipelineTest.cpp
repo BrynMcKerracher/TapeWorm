@@ -100,4 +100,46 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
 
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 8767153718336888328u);
     }
+    SECTION("Tic-Tac-Toe") {
+        testEnvironment.CreateInputFromFile("../Programs/tictactoe.bi");
+        const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Programs/tictactoe.b");
+        const auto tokens = scanner.Scan(fileString);
+        auto ast = treeBuilder.BuildAST(tokens);
+        const auto optimisedAST = treeOptimiser.Optimise(ast);
+        const auto ops = compilerVisitor.Visit(optimisedAST);
+        jitCompiler.Compile(ops);
+
+        REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 6775292296733711763u);
+    }
+    SECTION("ROT13") {
+        testEnvironment.CreateInputFromFile("../Programs/rot13.bi");
+        const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Programs/rot13.b");
+        const auto tokens = scanner.Scan(fileString);
+        auto ast = treeBuilder.BuildAST(tokens);
+        const auto optimisedAST = treeOptimiser.Optimise(ast);
+        const auto ops = compilerVisitor.Visit(optimisedAST);
+        jitCompiler.Compile(ops);
+
+        REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 15443748615009530974u);
+    }
+    SECTION("Bit Width") {
+        const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Programs/bitwidth.b");
+        const auto tokens = scanner.Scan(fileString);
+        auto ast = treeBuilder.BuildAST(tokens);
+        const auto optimisedAST = treeOptimiser.Optimise(ast);
+        const auto ops = compilerVisitor.Visit(optimisedAST);
+        jitCompiler.Compile(ops);
+
+        REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 0x4fe3f16f029c6f00);
+    }
+    SECTION("X-Mas Tree") {
+        const std::string fileString = TapeWorm::Util::BrainFuckFileToString("../Programs/xmastree.b");
+        const auto tokens = scanner.Scan(fileString);
+        auto ast = treeBuilder.BuildAST(tokens);
+        const auto optimisedAST = treeOptimiser.Optimise(ast);
+        const auto ops = compilerVisitor.Visit(optimisedAST);
+        jitCompiler.Compile(ops);
+
+        REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 0x7e7be07b4abe035);
+    }
 }

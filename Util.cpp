@@ -10,11 +10,9 @@
 namespace TapeWorm {
     std::string Util::BrainFuckFileToString(const std::string &fileName) {
         std::ifstream sourceFile(fileName);
-
         if (!sourceFile.is_open()) {
             throw std::ios_base::failure("Unable to open source file '" + fileName + "'\n");
         }
-
         std::stringstream fileBuffer;
         fileBuffer << sourceFile.rdbuf();
 
@@ -25,7 +23,16 @@ namespace TapeWorm {
                 temp += c;
             }
         }
-
         return temp;
+    }
+
+    std::string Util::FileToString(const std::string &fileName) {
+        std::ifstream sourceFile(fileName);
+        if (!sourceFile.is_open()) {
+            throw std::ios_base::failure("Unable to open source file '" + fileName + "'\n");
+        }
+        std::stringstream fileBuffer;
+        fileBuffer << sourceFile.rdbuf();
+        return fileBuffer.str();
     }
 } // TapeWorm

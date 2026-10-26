@@ -23,7 +23,7 @@ namespace TapeWorm::JIT {
         ~Compiler();
     private:
         constexpr static std::size_t RuntimeMemorySize = 30000;
-        constexpr static std::size_t PaddingSize = 128;
+        constexpr static std::size_t PaddingSize = 32;
         asmjit::JitRuntime runtime;
         asmjit::CodeHolder code;
         asmjit::x86::Assembler assembler;

@@ -257,7 +257,9 @@ namespace TapeWorm::JIT {
     }
 
     uint8_t Compiler::ReadCharacter() {
-        return std::getchar();
+        uint8_t character = 0;
+        std::cin >> character;
+        return character;
     }
 
     uint16_t Compiler::ReadWord() {
