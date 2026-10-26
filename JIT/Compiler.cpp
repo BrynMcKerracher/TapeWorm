@@ -186,33 +186,48 @@ namespace TapeWorm::JIT {
                         assembler.jz(skip);
                     }
 
-                    //Now we use vector ops to check in parallel
-                    const uint8_t numCellsInStride = 1 + 15 / stride;
-                    const std::int32_t windowAdvance = stride * numCellsInStride;
-                    uint32_t bitMask = 0;
-                    for (uint32_t i = 0; i < numCellsInStride; ++i) {
-                        bitMask |= 1 << (direction > 0 ? i * stride : 15 - i * stride);
+                    //We only use vector ops if the stride is less than 16, other we'd need a bigger window
+                    //Maybe I'll revisit this later for AVX2 and check 32-cells at a time where available
+                    //Also the stride <= 8 here is a little arbitrary and should be tuned to benchmarks, but any more than
+                    //8 per stride means we'd only check a single cell per window and probably loses to the single-cell check
+                    //because of vectorisation overhead
+                    if (stride <= 8) {
+                        //Now we use vector ops to check in parallel
+                        const uint8_t numCellsInStride = 1 + 15 / stride;
+                        const std::int32_t windowAdvance = stride * numCellsInStride;
+                        uint32_t bitMask = 0;
+                        for (uint32_t i = 0; i < numCellsInStride; ++i) {
+                            bitMask |= 1 << (direction > 0 ? i * stride : 15 - i * stride);
+                        }
+
+                        //Zero the vector-zero register so we can use it to compare against our 16 bytes in the window
+                        assembler.pxor(vecRegister0, vecRegister0);
+
+                        const Label loop = assembler.new_label();
+                        //Grab the bytes from the 16-byte window and check if they're zero, then compare against our stride mask
+                        assembler.bind(loop);
+                        assembler.movdqu(vecRegister1, x86::xmmword_ptr(cellPointer, direction > 0 ? 0 : -15));
+                        assembler.pcmpeqb(vecRegister1, vecRegister0);
+                        assembler.pmovmskb(tr1Register.r32(), vecRegister1);
+                        assembler.add(cellPointer, windowAdvance * direction);
+                        assembler.and_(tr1Register.r32(), bitMask);
+                        assembler.jz(loop);
+
+                        //Calculate the offset for moving our cellPointer
+                        if (direction > 0) assembler.bsf(tr1Register.r32(), tr1Register.r32());
+                        else assembler.bsr(tr1Register.r32(), tr1Register.r32());
+
+                        //Move the pointer
+                        assembler.lea(cellPointer, x86::ptr(cellPointer, tr1Register, 0, direction > 0 ? -windowAdvance : windowAdvance - 15));
                     }
-
-                    //Zero the vector-zero register so we can use it to compare against our 16 bytes in the window
-                    assembler.pxor(vecRegister0, vecRegister0);
-
-                    const Label loop = assembler.new_label();
-                    //Grab the bytes from the 16-byte window and check if they're zero, then compare against our stride mask
-                    assembler.bind(loop);
-                    assembler.movdqu(vecRegister1, x86::xmmword_ptr(cellPointer, direction > 0 ? 0 : -15));
-                    assembler.pcmpeqb(vecRegister1, vecRegister0);
-                    assembler.pmovmskb(tr1Register.r32(), vecRegister1);
-                    assembler.add(cellPointer, windowAdvance * direction);
-                    assembler.and_(tr1Register.r32(), bitMask);
-                    assembler.jz(loop);
-
-                    //Calculate the offset for moving our cellPointer
-                    if (direction > 0) assembler.bsf(tr1Register.r32(), tr1Register.r32());
-                    else assembler.bsr(tr1Register.r32(), tr1Register.r32());
-
-                    //Move the pointer
-                    assembler.lea(cellPointer, x86::ptr(cellPointer, tr1Register, 0, direction > 0 ? -windowAdvance : windowAdvance - 15));
+                    else {
+                        //If we can't use vectorisation, then we just loop single-cell checks until we hit a zero
+                        Label loop = assembler.new_label();
+                        assembler.bind(loop);
+                        assembler.add(cellPointer, direction * stride);
+                        assembler.cmp(x86::byte_ptr(cellPointer), 0);
+                        assembler.jnz(loop);
+                    }
                     assembler.bind(skip);
                     break;
                 }
