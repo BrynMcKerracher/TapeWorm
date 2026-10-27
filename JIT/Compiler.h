@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <iostream>
+#include <map>
 
 namespace TapeWorm::JIT {
     using MainEntry = void(*)(uintptr_t);
@@ -31,12 +32,18 @@ namespace TapeWorm::JIT {
         MainEntry mainEntry = nullptr;
         std::size_t streamIndex = 0;
         std::vector<InterWorm::Op::Type> opStream;
+        int32_t cellPointerAggregate = 0;
+        std::map<int32_t, int32_t> aggregates;
 
         static void WriteCharacter(uint8_t character);
         static uint8_t ReadCharacter();
 
         uint16_t ReadWord();
         uint8_t ReadByte();
+
+        void FlushCellAggregation();
+        void FlushCellPointer();
+        void FlushCurrentCellValue();
     };
 }
 

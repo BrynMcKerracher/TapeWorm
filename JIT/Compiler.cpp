@@ -51,16 +51,30 @@ namespace TapeWorm::JIT {
 
         for (streamIndex = 0; streamIndex < opStream.size(); ++streamIndex) {
             switch (opStream[streamIndex]) {
-                case InterWorm::Op::IncPointer: assembler.inc(cellPointer); break;
-                case InterWorm::Op::DecPointer: assembler.dec(cellPointer); break;
-                case InterWorm::Op::IncCell: assembler.inc(x86::byte_ptr(cellPointer)); break;
-                case InterWorm::Op::DecCell: assembler.dec(x86::byte_ptr(cellPointer)); break;
+                case InterWorm::Op::IncPointer: {
+                    cellPointerAggregate++;
+                    break;
+                }
+                case InterWorm::Op::DecPointer: {
+                    cellPointerAggregate--;
+                    break;
+                }
+                case InterWorm::Op::IncCell: {
+                    aggregates[cellPointerAggregate]++;
+                    break;
+                }
+                case InterWorm::Op::DecCell: {
+                    aggregates[cellPointerAggregate]--;
+                    break;
+                }
                 case InterWorm::Op::ClearCell: {
+                    FlushCellAggregation();
                     assembler.mov(x86::byte_ptr(cellPointer), 0);
                     break;
                 }
 #if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
                 case InterWorm::Op::OutputCell: {
+                    FlushCurrentCellValue();
                     assembler.sub(x86::rsp, 32);
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
                     assembler.call(WriteCharacter);
@@ -69,6 +83,7 @@ namespace TapeWorm::JIT {
                 }
 #else
                 case InterWorm::Op::OutputCell: {
+                    FlushCurrentCellValue();
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
                     assembler.call(WriteCharacter);
                     break;
@@ -76,6 +91,7 @@ namespace TapeWorm::JIT {
 #endif
 #if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
                 case InterWorm::Op::InputCell: {
+                    FlushCurrentCellValue();
                     assembler.sub(x86::rsp, 32);
                     assembler.call(ReadCharacter);
                     assembler.mov(x86::byte_ptr(cellPointer), x86::al);
@@ -84,12 +100,14 @@ namespace TapeWorm::JIT {
                 }
 #else
                 case InterWorm::Op::InputCell: {
+                    FlushCurrentCellValue();
                     assembler.call(ReadCharacter);
                     assembler.mov(x86::byte_ptr(cellPointer), x86::al);
                     break;
                 }
 #endif
                 case InterWorm::Op::JumpIfZero: {
+                    FlushCellAggregation();
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
                     Label open = assembler.new_label();
                     Label close = assembler.new_label();
@@ -99,6 +117,7 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::JumpNotZero: {
+                    FlushCellAggregation();
                     LabelPair labels = controlFlowPairs.top();
                     controlFlowPairs.pop();
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
@@ -107,38 +126,40 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::AddImmediate: {
-                    assembler.add(x86::byte_ptr(cellPointer), ReadByte());
+                    aggregates[cellPointerAggregate] += ReadByte();
                     break;
                 }
                 case InterWorm::Op::AddImmediateExtended: {
-                    assembler.add(x86::word_ptr(cellPointer), ReadWord());
+                    aggregates[cellPointerAggregate] += ReadWord();
                     break;
                 }
                 case InterWorm::Op::SubImmediate: {
-                    assembler.sub(x86::byte_ptr(cellPointer), ReadByte());
+                    aggregates[cellPointerAggregate] -= ReadByte();
                     break;
                 }
                 case InterWorm::Op::SubImmediateExtended: {
-                    assembler.sub(x86::word_ptr(cellPointer), ReadWord());
+                    aggregates[cellPointerAggregate] -= ReadWord();
                     break;
                 }
                 case InterWorm::Op::AddPointer: {
-                    assembler.add(cellPointer, ReadByte());
+                    cellPointerAggregate += ReadByte();
                     break;
                 }
                 case InterWorm::Op::AddPointerExtended: {
-                    assembler.add(cellPointer, ReadWord());
+                    cellPointerAggregate += ReadWord();
                     break;
                 }
                 case InterWorm::Op::SubPointer: {
-                    assembler.sub(cellPointer, ReadByte());
+                    cellPointerAggregate -= ReadByte();
                     break;
                 }
                 case InterWorm::Op::SubPointerExtended: {
-                    assembler.sub(cellPointer, ReadWord());
+                    cellPointerAggregate -= ReadWord();
                     break;
                 }
                 case InterWorm::Op::Multiply: {
+                    FlushCellAggregation();
+
                     Label skip = assembler.new_label();
                     const uint8_t numAddresses = static_cast<uint8_t>(opStream[streamIndex + 1]);
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
@@ -168,6 +189,8 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::Scan: {
+                    FlushCellAggregation();
+
                     //Get stride and calculate the direction of the scan
                     int8_t stride = static_cast<int8_t>(ReadByte());
                     const int8_t direction = stride < 0 ? -1 : 1;
@@ -270,5 +293,37 @@ namespace TapeWorm::JIT {
 
     uint8_t Compiler::ReadByte() {
         return opStream[++streamIndex];
+    }
+
+    void Compiler::FlushCellAggregation() {
+        for (auto& [offset, aggregate] : aggregates) {
+            if (aggregate == 0) continue;
+            assembler.add(x86::byte_ptr(x86::r15, offset), aggregate);
+        }
+        aggregates.clear();
+        FlushCellPointer();
+    }
+
+    void Compiler::FlushCellPointer() {
+        if (cellPointerAggregate == 0) return;
+
+        assembler.add(x86::r15, cellPointerAggregate);
+
+        std::map<int32_t, int32_t> adjusted;
+        for (auto& [offset, aggregate] : aggregates) {
+            adjusted[offset - cellPointerAggregate] = aggregate;
+        }
+        aggregates = adjusted;
+
+        cellPointerAggregate = 0;
+    }
+
+    void Compiler::FlushCurrentCellValue() {
+        const int32_t cellValueAggregate = aggregates[cellPointerAggregate];
+        if (cellValueAggregate != 0) {
+            assembler.add(x86::byte_ptr(x86::r15, cellPointerAggregate), cellValueAggregate);
+        }
+        aggregates.erase(cellPointerAggregate);
+        FlushCellPointer();
     }
 }
