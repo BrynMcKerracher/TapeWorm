@@ -72,6 +72,12 @@ add_executable(TapeWormBenches
         ../TapeWorm.h
         ../AST/SyntacticMetadata.cpp
         ../AST/SyntacticMetadata.h
+        ../JIT/VirtualTape.cpp
+        ../JIT/VirtualTape.h
+        ../JIT/RegisterContext.cpp
+        ../JIT/RegisterContext.h
+        ../JIT/VirtualCell.cpp
+        ../JIT/VirtualCell.h
 )
 
 target_link_libraries(TapeWormBenches PRIVATE asmjit::asmjit nanobench)

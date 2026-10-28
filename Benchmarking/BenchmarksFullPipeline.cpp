@@ -7,6 +7,7 @@
 
 #include <filesystem>
 #include <nanobench.h>
+#include <chrono>
 
 static void RunBenchmark(const std::string& testFile, const std::string& testName) {
     TapeWorm::InterWorm::Scanner scanner;
@@ -36,12 +37,18 @@ static void RunBenchmark(const std::string& testFile, const std::string& testNam
     });
     TapeWorm::JIT::Compiler jitCompiler;
     ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).run(testName + ": Assembly Compile", [&] {
-       jitCompiler.Compile(ops);
-   });
-    ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).warmup(2).relative(true).run(testName + ": Run", [&] {
-        TapeWorm::Test::TestEnvironmentSetup setup;
-        jitCompiler.Run();
+        jitCompiler.Compile(ops);
     });
+
+    TapeWorm::JIT::Compiler jitCompiler2;
+    jitCompiler2.Compile(ops);
+    const auto t1 = std::chrono::high_resolution_clock::now();
+    {
+        TapeWorm::Test::TestEnvironmentSetup testEnvironment;
+        jitCompiler2.Run();
+    }
+    const auto t2 = std::chrono::high_resolution_clock::now();
+    std::cout << testName << ": Executed in " << std::chrono::duration_cast<std::chrono::duration<float>>(t2 - t1) << "\n\n";
 }
 
 int main() {

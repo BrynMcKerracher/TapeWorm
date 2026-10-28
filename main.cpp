@@ -60,6 +60,7 @@ int main(const int argc, char** argv) {
         ops = irOptimiser.Optimise(ops);
     }
     jitCompiler.Compile(ops);
+    jitCompiler.Run();
 
     return 0;
 }

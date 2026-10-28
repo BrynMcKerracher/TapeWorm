@@ -60,6 +60,12 @@ add_executable(TapeWorm
         AST/SyntacticMetadata.cpp
         AST/SyntacticMetadata.h
         AST/NodeAnyVisitor.h
+        ../JIT/VirtualTape.cpp
+        ../JIT/VirtualTape.h
+        ../JIT/RegisterContext.cpp
+        ../JIT/RegisterContext.h
+        ../JIT/VirtualCell.cpp
+        ../JIT/VirtualCell.h
 )
 
 target_link_libraries(TapeWorm asmjit::asmjit)
