@@ -101,11 +101,11 @@ namespace TapeWorm::JIT {
         assembler.mov(x86::byte_ptr(registers.CellPointer(), pointerAggregate), 0);
     }
 
-    void VirtualTape::writeCharacter(const Cell character) {
+    void VirtualTape::WriteCharacter(const Cell character) {
         std::cout << character;
     }
 
-    Cell VirtualTape::readCharacter() {
+    Cell VirtualTape::ReadCharacter() {
         Cell cell;
         std::cin >> cell;
         return cell;

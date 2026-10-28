@@ -4,9 +4,13 @@
 #include "RegisterContext.h"
 #include "VirtualCell.h"
 #include <asmjit/x86.h>
+#include <vector>
+#include <cstdint>
 #include <map>
 
 namespace TapeWorm::JIT {
+    using Cell = uint8_t;
+
     class VirtualTape {
     public:
         explicit VirtualTape(x86::Assembler& _assembler);
@@ -26,9 +30,10 @@ namespace TapeWorm::JIT {
         void FlushCell();
         void ClearCell();
 
-        static void writeCharacter(Cell character);
-        static Cell readCharacter();
+        static void WriteCharacter(Cell character);
+        static Cell ReadCharacter();
     private:
+        std::vector<Cell> memory;
         std::map<int32_t, VirtualCell> virtualMemory;
         x86::Assembler& assembler;
         RegisterContext registers;

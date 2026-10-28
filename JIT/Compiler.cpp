@@ -275,7 +275,7 @@ namespace TapeWorm::JIT {
 
     void Compiler::Run() {
         if (!mainEntry) {
-            std::cerr << "Error: Main entry point not found (Did you forget to compile?).\n";
+            std::cerr << "Error: Main entry point not found.\n";
             return;
         }
         mainEntry(reinterpret_cast<uintptr_t>(&runtimeMemory[0]));
