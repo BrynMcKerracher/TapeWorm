@@ -34,11 +34,13 @@ static void RunBenchmark(const std::string& testFile, const std::string& testNam
     ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).run(testName + ": IR Optimise", [&] {
         ops = irOptimiser.Optimise(ops);
     });
-
+    TapeWorm::JIT::Compiler jitCompiler;
+    ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).run(testName + ": Assembly Compile", [&] {
+       jitCompiler.Compile(ops);
+   });
     ankerl::nanobench::Bench().epochs(11).minEpochIterations(1).warmup(2).relative(true).run(testName + ": Run", [&] {
         TapeWorm::Test::TestEnvironmentSetup setup;
-        TapeWorm::JIT::Compiler jitCompiler;
-        jitCompiler.Compile(ops);
+        jitCompiler.Run();
     });
 }
 

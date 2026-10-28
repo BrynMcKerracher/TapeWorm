@@ -3,6 +3,7 @@
  * @author Bryn McKerracher
  **/
 #include "Compiler.h"
+#include "VirtualTape.h"
 
 #include <iostream>
 #include <fstream>
@@ -21,6 +22,8 @@ namespace TapeWorm::JIT {
 
         code.init(runtime.environment(), runtime.cpu_features());
         code.attach(assembler._emitter());
+
+        VirtualTape tape(assembler);
 
         //Registers R15-R12 are non-volatile on x86, any will do for the cell pointer
         constexpr x86::Gp cellPointer = x86::r15;
@@ -51,16 +54,29 @@ namespace TapeWorm::JIT {
 
         for (streamIndex = 0; streamIndex < opStream.size(); ++streamIndex) {
             switch (opStream[streamIndex]) {
-                case InterWorm::Op::IncPointer: assembler.inc(cellPointer); break;
-                case InterWorm::Op::DecPointer: assembler.dec(cellPointer); break;
-                case InterWorm::Op::IncCell: assembler.inc(x86::byte_ptr(cellPointer)); break;
-                case InterWorm::Op::DecCell: assembler.dec(x86::byte_ptr(cellPointer)); break;
+                case InterWorm::Op::IncPointer: {
+                    tape.IncPointer();
+                    break;
+                }
+                case InterWorm::Op::DecPointer: {
+                    tape.DecPointer();
+                    break;
+                }
+                case InterWorm::Op::IncCell: {
+                    tape.Inc();
+                    break;
+                }
+                case InterWorm::Op::DecCell: {
+                    tape.Dec();
+                    break;
+                }
                 case InterWorm::Op::ClearCell: {
-                    assembler.mov(x86::byte_ptr(cellPointer), 0);
+                    tape.ClearCell();
                     break;
                 }
 #if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
                 case InterWorm::Op::OutputCell: {
+                    tape.FlushCell();
                     assembler.sub(x86::rsp, 32);
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
                     assembler.call(WriteCharacter);
@@ -69,6 +85,7 @@ namespace TapeWorm::JIT {
                 }
 #else
                 case InterWorm::Op::OutputCell: {
+                    tape.FlushCell();
                     assembler.movzx(firstArgRegister, x86::byte_ptr(cellPointer));
                     assembler.call(WriteCharacter);
                     break;
@@ -76,6 +93,7 @@ namespace TapeWorm::JIT {
 #endif
 #if defined (_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
                 case InterWorm::Op::InputCell: {
+                    tape.FlushCell();
                     assembler.sub(x86::rsp, 32);
                     assembler.call(ReadCharacter);
                     assembler.mov(x86::byte_ptr(cellPointer), x86::al);
@@ -84,12 +102,14 @@ namespace TapeWorm::JIT {
                 }
 #else
                 case InterWorm::Op::InputCell: {
+                    tape.FlushCell();
                     assembler.call(ReadCharacter);
                     assembler.mov(x86::byte_ptr(cellPointer), x86::al);
                     break;
                 }
 #endif
                 case InterWorm::Op::JumpIfZero: {
+                    tape.Flush();
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
                     Label open = assembler.new_label();
                     Label close = assembler.new_label();
@@ -99,6 +119,7 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::JumpNotZero: {
+                    tape.Flush();
                     LabelPair labels = controlFlowPairs.top();
                     controlFlowPairs.pop();
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
@@ -107,38 +128,40 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::AddImmediate: {
-                    assembler.add(x86::byte_ptr(cellPointer), ReadByte());
+                    tape.Add(ReadByte());
                     break;
                 }
                 case InterWorm::Op::AddImmediateExtended: {
-                    assembler.add(x86::word_ptr(cellPointer), ReadWord());
+                    tape.Add(ReadWord());
                     break;
                 }
                 case InterWorm::Op::SubImmediate: {
-                    assembler.sub(x86::byte_ptr(cellPointer), ReadByte());
+                    tape.Sub(ReadByte());
                     break;
                 }
                 case InterWorm::Op::SubImmediateExtended: {
-                    assembler.sub(x86::word_ptr(cellPointer), ReadWord());
+                    tape.Sub(ReadWord());
                     break;
                 }
                 case InterWorm::Op::AddPointer: {
-                    assembler.add(cellPointer, ReadByte());
+                    tape.AddPointer(ReadByte());
                     break;
                 }
                 case InterWorm::Op::AddPointerExtended: {
-                    assembler.add(cellPointer, ReadWord());
+                    tape.AddPointer(ReadWord());
                     break;
                 }
                 case InterWorm::Op::SubPointer: {
-                    assembler.sub(cellPointer, ReadByte());
+                    tape.SubPointer(ReadByte());
                     break;
                 }
                 case InterWorm::Op::SubPointerExtended: {
-                    assembler.sub(cellPointer, ReadWord());
+                    tape.SubPointer(ReadWord());
                     break;
                 }
                 case InterWorm::Op::Multiply: {
+                    tape.Flush();
+
                     Label skip = assembler.new_label();
                     const uint8_t numAddresses = static_cast<uint8_t>(opStream[streamIndex + 1]);
                     assembler.cmp(x86::byte_ptr(cellPointer), 0);
@@ -168,6 +191,8 @@ namespace TapeWorm::JIT {
                     break;
                 }
                 case InterWorm::Op::Scan: {
+                    tape.Flush();
+
                     //Get stride and calculate the direction of the scan
                     int8_t stride = static_cast<int8_t>(ReadByte());
                     const int8_t direction = stride < 0 ? -1 : 1;
@@ -242,14 +267,22 @@ namespace TapeWorm::JIT {
         assembler.ret();
         assembler.finalize();
 
+        code.detach(assembler._emitter());
+
         runtime.add(&mainEntry, &code);
         runtimeMemory = std::vector<uint8_t>(RuntimeMemorySize + 2 * PaddingSize, 0);
+    }
+
+    void Compiler::Run() {
+        if (!mainEntry) {
+            std::cerr << "Error: Main entry point not found (Did you forget to compile?).\n";
+            return;
+        }
         mainEntry(reinterpret_cast<uintptr_t>(&runtimeMemory[0]));
     }
 
     Compiler::~Compiler() {
         runtime.release(mainEntry);
-        code.detach(assembler._emitter());
     }
 
     void Compiler::WriteCharacter(const uint8_t character) {

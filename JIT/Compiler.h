@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <iostream>
+#include <map>
 
 namespace TapeWorm::JIT {
     using MainEntry = void(*)(uintptr_t);
@@ -20,10 +21,11 @@ namespace TapeWorm::JIT {
     class Compiler {
     public:
         void Compile(const std::vector<InterWorm::Op::Type>& interwormStream);
+        void Run();
         ~Compiler();
     private:
         constexpr static std::size_t RuntimeMemorySize = 30000;
-        constexpr static std::size_t PaddingSize = 32;
+        constexpr static std::size_t PaddingSize = 32; //Minimum of 16 bytes due to vectorisation window, should be larger (min. 32) if AVX2 features added
         asmjit::JitRuntime runtime;
         asmjit::CodeHolder code;
         asmjit::x86::Assembler assembler;
@@ -31,6 +33,8 @@ namespace TapeWorm::JIT {
         MainEntry mainEntry = nullptr;
         std::size_t streamIndex = 0;
         std::vector<InterWorm::Op::Type> opStream;
+        int32_t cellPointerAggregate = 0;
+        std::map<int32_t, int32_t> aggregates;
 
         static void WriteCharacter(uint8_t character);
         static uint8_t ReadCharacter();

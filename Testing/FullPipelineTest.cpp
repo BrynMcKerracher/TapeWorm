@@ -37,6 +37,7 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         const auto optimisedAST = treeOptimiser.Optimise(ast);
         const auto ops = compilerVisitor.Visit(optimisedAST);
         jitCompiler.Compile(ops);
+        jitCompiler.Run();
 
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 14695981039346656037u);
     }
@@ -47,6 +48,7 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         const auto optimisedAST = treeOptimiser.Optimise(ast);
         const auto ops = compilerVisitor.Visit(optimisedAST);
         jitCompiler.Compile(ops);
+        jitCompiler.Run();
 
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 11208743478092974376u);
     }
@@ -57,6 +59,7 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         const auto optimisedAST = treeOptimiser.Optimise(ast);
         const auto ops = compilerVisitor.Visit(optimisedAST);
         jitCompiler.Compile(ops);
+        jitCompiler.Run();
 
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 4686367950102506177u);
     }
@@ -67,6 +70,7 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         const auto optimisedAST = treeOptimiser.Optimise(ast);
         const auto ops = compilerVisitor.Visit(optimisedAST);
         jitCompiler.Compile(ops);
+        jitCompiler.Run();
 
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 10922714458512192041u);
     }
@@ -77,6 +81,7 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         const auto optimisedAST = treeOptimiser.Optimise(ast);
         const auto ops = compilerVisitor.Visit(optimisedAST);
         jitCompiler.Compile(ops);
+        jitCompiler.Run();
 
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 5884179497606717719u);
     }
@@ -87,6 +92,7 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         const auto optimisedAST = treeOptimiser.Optimise(ast);
         const auto ops = compilerVisitor.Visit(optimisedAST);
         jitCompiler.Compile(ops);
+        jitCompiler.Run();
 
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 12914509490304531892u);
     }
@@ -97,6 +103,7 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         const auto optimisedAST = treeOptimiser.Optimise(ast);
         const auto ops = compilerVisitor.Visit(optimisedAST);
         jitCompiler.Compile(ops);
+        jitCompiler.Run();
 
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 8767153718336888328u);
     }
@@ -108,6 +115,7 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         const auto optimisedAST = treeOptimiser.Optimise(ast);
         const auto ops = compilerVisitor.Visit(optimisedAST);
         jitCompiler.Compile(ops);
+        jitCompiler.Run();
 
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 6775292296733711763u);
     }
@@ -119,6 +127,7 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         const auto optimisedAST = treeOptimiser.Optimise(ast);
         const auto ops = compilerVisitor.Visit(optimisedAST);
         jitCompiler.Compile(ops);
+        jitCompiler.Run();
 
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 15443748615009530974u);
     }
@@ -129,6 +138,7 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         const auto optimisedAST = treeOptimiser.Optimise(ast);
         const auto ops = compilerVisitor.Visit(optimisedAST);
         jitCompiler.Compile(ops);
+        jitCompiler.Run();
 
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 0x4fe3f16f029c6f00);
     }
@@ -139,6 +149,7 @@ TEST_CASE("Full Pipeline Tests", "[FullPipeline]") {
         const auto optimisedAST = treeOptimiser.Optimise(ast);
         const auto ops = compilerVisitor.Visit(optimisedAST);
         jitCompiler.Compile(ops);
+        jitCompiler.Run();
 
         REQUIRE(fnv1a64(testEnvironment.GetProgramOutput()) == 0x7e7be07b4abe035);
     }
