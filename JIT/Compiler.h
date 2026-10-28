@@ -21,10 +21,11 @@ namespace TapeWorm::JIT {
     class Compiler {
     public:
         void Compile(const std::vector<InterWorm::Op::Type>& interwormStream);
+        void Run();
         ~Compiler();
     private:
         constexpr static std::size_t RuntimeMemorySize = 30000;
-        constexpr static std::size_t PaddingSize = 32;
+        constexpr static std::size_t PaddingSize = 32; //Minimum of 16 bytes due to vectorisation window, should be larger (min. 32) if AVX2 features added
         asmjit::JitRuntime runtime;
         asmjit::CodeHolder code;
         asmjit::x86::Assembler assembler;
@@ -40,10 +41,6 @@ namespace TapeWorm::JIT {
 
         uint16_t ReadWord();
         uint8_t ReadByte();
-
-        void FlushCellAggregation();
-        void FlushCellPointer();
-        void FlushCurrentCellValue();
     };
 }
 
